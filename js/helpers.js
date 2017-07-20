@@ -263,16 +263,16 @@ Oscilloscope.prototype.draw = function() {
 };
 
 //Stolen from somewhere
-createWhiteNoise = function(data,volume){
+let createWhiteNoise = function(data,volume){
   for (i = 0; i < data.length; i++) {
     data[i] = (Math.random() - 0.5) * 2*volume;
   }
   return data
 }
-createPinkNoise = function(data,volume){
+let createPinkNoise = function(data,volume){
   let b0, b1, b2, b3, b4, b5, b6;
       b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
-  for (i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
         let white = Math.random() * 2 - 1;
         b0 = 0.99886 * b0 + white * 0.0555179;
         b1 = 0.99332 * b1 + white * 0.0750759;
@@ -286,9 +286,9 @@ createPinkNoise = function(data,volume){
     }
     return data
 }
-createBrownianNoise = function(data,volume){
+let createBrownianNoise = function(data,volume){
   let lastOut = 0.0;
-  for (i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
         let white = Math.random() * 2 - 1;
             data[i] = (lastOut + (0.02 * white)) / 1.02;
             lastOut = data[i];
@@ -296,7 +296,7 @@ createBrownianNoise = function(data,volume){
     }
     return data
 }
-noiseBuffer = function(context) {
+let noiseBuffer = function(context) {
   let bufferSize = context.sampleRate;
   let buffer = context.createBuffer(1, bufferSize, context.sampleRate);
   let output = buffer.getChannelData(0);

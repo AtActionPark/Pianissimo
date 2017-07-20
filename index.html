@@ -10,15 +10,14 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script  src="js/instrument.js"></script>
-    <script  src="js/voice.js"></script>
-    <script  src="js/helpers.js"></script>
-    <script  src="js/intervals.js"></script>
-    <script  src="js/script.js"></script>
+
+    <!--<script  src="js/helpers.js"></script>
+    <script  src="js/script.js"></script>-->
+    <script  src="js/transcompiledscript.js"></script>
   </head>
 
   <body>
-  <script src="https://jsconsole.com/js/remote.js?081c617f-1436-4d0b-9f1c-d96a9d3dca87"></script>
+
     <div id="sidebar-black" class="sidebar-nav">
       <nav id="navbar-black" class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
@@ -45,7 +44,7 @@
               <a href="javascript:void(0);" class="dropdown-toggle"><i class="glyphicon glyphicon-record"></i> OPTIONS <b class="caret"></b></a>
               <ul class="dropdown-menu"> 
                 <div id="params">
-                  Repetitions: <input id='nbOfTimePlayed'  class="bg" value = '1' type=number min=1 max=10 /></br>
+                  Repetitions: <input id='nbOfTimePlayed'  class="bg" value = '3' type=number min=1 max=10 /></br>
                   Time btw reps: <input id='timeBetweenRepetitions'  class="bg" value = '3' type=number min=0.1 max=10 /></br>
                   Time btw notes: <input id='timeBetweenNotes'  class="bg" value = '0.9' type=number min=0 max=10 /></br>
                   Note Duration: <input id='noteDuration'  class="bg" value = '1.5' type=number min=0.1 max=10 /></br>
