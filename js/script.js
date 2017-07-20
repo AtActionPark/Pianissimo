@@ -78,16 +78,19 @@ $(document).ready(function(){
 		initOsc();
 	}	
 
-	$('.dropdown-toggle').on('click', function (event) {
-	    $(this).parent().toggleClass('open');
-	    $('body').on('click', function (e) {
-		    if (!$('.dropdown-toggle').is(e.target) 
-		        && $('.dropdown-toggle').has(e.target).length === 0 
-		        && $('.open').has(e.target).length === 0){
-		      $('.dropdown-toggle').removeClass('open');
-			}
-		});
-	});
+  //bootstrap toggles closes automatically on click - recreate the open/close behaviour manually
+  $('.dropdown-toggle').on('click', function (event) {
+    $(this).parent().toggleClass('open');
+  });
+
+  $('body').on('click', function (e) {
+    if (!$('.dropdown-toggle').is(e.target) 
+        && $('.dropdown-toggle').has(e.target).length === 0 
+        && $('.open').has(e.target).length === 0){
+      $('.dropdown-toggle').removeClass('open');
+    }
+  });
+
 });
 
 let start = function(){

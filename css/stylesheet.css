@@ -217,21 +217,7 @@ li.hidden-xs.startDiv{
     text-align: center;
     width:210px;
 }
-#pauseDiv{
-    display:inline-block;
-    text-align: center;
-    margin:auto;
-}
 
-#tempoDiv{
-    display:inline-block;
-    margin-top:-5px;
-    font-weight: bold;
-    margin:auto;
-}
-.visible-xs #tempoDiv{
-    margin-left:20px;
-}
 #start{
     color:black;
     background-color: white;
@@ -261,21 +247,6 @@ li.hidden-xs.startDiv{
     border-bottom: 0;
 }
 
-#loadSeed, #pause{
-    color:black;
-    background-color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 12px;
-    font-weight: bold;
-    margin: 10px;
-}
-#pause{
-    border: 1px solid black;
-}
 .sidebar-nav #githubDiv img{
     text-align:center;
     width:50px;
@@ -284,20 +255,11 @@ li.hidden-xs.startDiv{
     left:85px;
 }
 
-.arrow{
-    margin-left:10px;
-    margin-right:10px;
-}
-
 button:focus, button:active{
     outline:none !important;
 }
 
-.random{
 
-    width:600px;
-    border: 1px solid white;
-}
 .black{
     color: #111 !important;
 }
