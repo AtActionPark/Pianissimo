@@ -1,6 +1,6 @@
 "use strict";
 
-let context = new AudioContext;
+let context;
 let mixNode;
 let compressor;
 let compressorThreshold = -24;
@@ -62,10 +62,11 @@ function iosHandler(e){
 $(document).ready(function(){ 
 	const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   	window.AudioContext = window.AudioContext || window.webkitAudioContext;
+  	context = new AudioContext();
+  	context.suspend() 
 
   	if(iOS){
 	    window.addEventListener("touchend",iosHandler , false);
-	    alert(' IOS')
 	  }
 	resetContext();
 	instr = new Instrument();

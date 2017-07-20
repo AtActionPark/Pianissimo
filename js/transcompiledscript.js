@@ -45,6 +45,8 @@ let aug4ToTritone = true;
 let changedPreset = false;
 let locked = true;
 
+
+
 function iosHandler(e) {
   if (locked) {
     alert("unlocked");
@@ -65,10 +67,9 @@ $(document).ready(function () {
   context = new AudioContext()
   context.suspend()
 
-  if (iOS) {
+  if (iOS) 
     window.addEventListener("touchend", iosHandler, false);
-    alert(' IOS');
-  }
+  
   resetContext();
   instr = new Instrument();
 
