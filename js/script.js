@@ -27,7 +27,7 @@ let keysDown = {};
 let keyPressed;
 
 let debug = true;
-let displayOsc = false;
+let displayOsc = true;
 
 let intervals = [];
 
