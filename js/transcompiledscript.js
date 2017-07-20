@@ -44,6 +44,10 @@ let pause = true;
 let aug4ToTritone = true;
 let changedPreset = false;
 let locked = true;
+let globalMsg = '';
+let globalTime= 0;
+
+    
 
 
 
@@ -224,15 +228,27 @@ function getUserParams() {
   if ($("#majorFourteenth").is(":checked")) intervals.push('M14');
   if ($("#doubleOctave").is(":checked")) intervals.push('P15');
 }
+function speech_text(){
+  var msg = new SpeechSynthesisUtterance(globalMsg);
+  window.speechSynthesis.speak(msg)
+}
 function speak(message, time) {
   if (aug4ToTritone && message == 'augmented fourth') message = 'tritone';
   if (aug4ToTritone && message == 'augmented eleventh') message = 'octave tritone';
 
-  var msg = new SpeechSynthesisUtterance(message);
-  //msg.lang = 'en-US';
+  globalTime = time;
+  globalMsg = message;
+
+  
   setTimeout(function () {
-    window.speechSynthesis.speak(msg);
+    $('#trigger_me').trigger('click');;
   }, time);
+
+  //var msg = new SpeechSynthesisUtterance(message);
+  //msg.lang = 'en-US';
+  //setTimeout(function () {
+  //  window.speechSynthesis.speak(msg);
+  //}, time);
 }
 function playRandomInterval() {
   if (pause) return;
