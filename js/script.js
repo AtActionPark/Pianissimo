@@ -60,6 +60,9 @@ function iosHandler(e){
   }
 }
 
+window.onerror = function(error) {
+    alert(error);
+};
 
 $(document).ready(function(){ 
 	const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
