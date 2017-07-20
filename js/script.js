@@ -61,6 +61,7 @@ function iosHandler(e){
 
 $(document).ready(function(){ 
 	const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+	console.log(iOS)
   	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
   	if(iOS){
