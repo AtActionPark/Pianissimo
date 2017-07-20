@@ -43,6 +43,7 @@ let intervalParams = {
 let pause = true;
 let aug4ToTritone = true;
 let changedPreset = false;
+let locked = true;
 function iosHandler(e){
   if (locked){
     alert("unlocked");
