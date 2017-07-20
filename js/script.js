@@ -44,6 +44,7 @@ let pause = true;
 let aug4ToTritone = true;
 let changedPreset = false;
 let locked = true;
+
 function iosHandler(e){
   if (locked){
     alert("unlocked");
@@ -54,9 +55,6 @@ function iosHandler(e){
     source.buffer = buffer;
     source.connect(context.destination);
     source.noteOn(0);
-
-    loadSamples();
-    readURL();
   }
 }
 
