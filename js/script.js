@@ -58,9 +58,6 @@ function iosHandler(e){
   }
 }
 
-window.onerror = function(error) {
-    alert(error);
-};
 
 $(document).ready(function(){ 
 	const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -81,17 +78,67 @@ $(document).ready(function(){
 	}	
 
   //bootstrap toggles closes automatically on click - recreate the open/close behaviour manually
-  $('.dropdown-toggle').on('click', function (event) {
-    $(this).parent().toggleClass('open');
-  });
+	$('.dropdown-toggle').on('click', function (event) {
+		$(this).parent().toggleClass('open');
+	});
 
-  $('body').on('click', function (e) {
-    if (!$('.dropdown-toggle').is(e.target) 
-        && $('.dropdown-toggle').has(e.target).length === 0 
-        && $('.open').has(e.target).length === 0){
-      $('.dropdown-toggle').removeClass('open');
-    }
-  });
+	$('body').on('click', function (e) {
+		if (!$('.dropdown-toggle').is(e.target) 
+		    && $('.dropdown-toggle').has(e.target).length === 0 
+		    && $('.open').has(e.target).length === 0){
+		  $('.dropdown-toggle').removeClass('open');
+		}
+	});
+	if(iOS)
+		return;
+	document.onkeydown = function(evt) {
+	    keyPressed = evt.keyCode || window.event;
+	    if(keyPressed in keysDown)
+	    	return;
+
+	    keysDown[keyPressed] = true
+
+
+	    let pressed = String.fromCharCode(keyPressed)
+
+	    if (!(pressed in keysMap))
+	    	return;
+
+	    let freq = getFrequency(keysMap[pressed])
+
+	    now = context.currentTime
+
+    	//find free voice if possible
+	    for(let i = 0;i<instr.voices.length;i++){
+	    	if(instr.voices[i].status == "notPlaying"){
+	    		instr.voices[i].start(freq,now);
+	    		instr.voices[i].status = "playing";
+	    		instr.voices[i].name = freq;
+	    		break;
+	    	}
+	    }
+	};
+	document.onkeyup = function(evt) {
+		keyPressed = evt.keyCode || window.event;
+
+	    delete keysDown[keyPressed];
+
+	    let pressed = String.fromCharCode(keyPressed)
+	    if (!(pressed in keysMap))
+	    	return;
+	    let freq = getFrequency(keysMap[pressed])
+	    now = context.currentTime
+
+	    //find voice playing the released note
+	    for(let i = 0;i<instr.voices.length;i++){
+	    	if(instr.voices[i].status == "playing" && instr.voices[i].name == freq){
+	    		instr.voices[i].stop(now);
+	    		instr.voices[i].status = "notPlaying";
+	    		instr.voices[i].name = "empty";
+	    		break;
+	    	}
+	    }
+	};
 
 });
 
@@ -253,54 +300,7 @@ function changePreset(){
 	instr.changePreset(preset)
 	changedPreset = true;
 }
-document.onkeydown = function(evt) {
-    keyPressed = evt.keyCode || window.event;
-    if(keyPressed in keysDown)
-    	return;
 
-    keysDown[keyPressed] = true
-
-
-    let pressed = String.fromCharCode(keyPressed)
-
-    if (!(pressed in keysMap))
-    	return;
-
-    let freq = getFrequency(keysMap[pressed])
-
-    now = context.currentTime
-
-    //find free voice if possible
-    for(let i = 0;i<instr.voices.length;i++){
-    	if(instr.voices[i].status == "notPlaying"){
-    		instr.voices[i].start(freq,now);
-    		instr.voices[i].status = "playing";
-    		instr.voices[i].name = freq;
-    		break;
-    	}
-    }
-};
-document.onkeyup = function(evt) {
-	keyPressed = evt.keyCode || window.event;
-
-    delete keysDown[keyPressed];
-
-    let pressed = String.fromCharCode(keyPressed)
-    if (!(pressed in keysMap))
-    	return;
-    let freq = getFrequency(keysMap[pressed])
-    now = context.currentTime
-
-    //find voice playing the released note
-    for(let i = 0;i<instr.voices.length;i++){
-    	if(instr.voices[i].status == "playing" && instr.voices[i].name == freq){
-    		instr.voices[i].stop(now);
-    		instr.voices[i].status = "notPlaying";
-    		instr.voices[i].name = "empty";
-    		break;
-    	}
-    }
-};
 function initCanvas(){
 	canvas = $('<canvas width="' + oscWidth + '" height="' + oscHeight + '"></canvas>');
     $('#osc').append(canvas);
