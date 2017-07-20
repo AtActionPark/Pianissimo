@@ -65,8 +65,10 @@ window.onerror = function(error) {
 $(document).ready(function(){ 
 	const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   	window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
   	if(iOS){
 	    window.addEventListener("touchend",iosHandler , false);
+	    alert(' IOS')
 	  }
 	resetContext();
 	instr = new Instrument();
