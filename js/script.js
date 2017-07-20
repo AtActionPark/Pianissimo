@@ -43,10 +43,29 @@ let intervalParams = {
 let pause = true;
 let aug4ToTritone = true;
 let changedPreset = false;
+function iosHandler(e){
+  if (locked){
+    alert("unlocked");
+    locked = false;
+    // create empty buffer
+    let buffer = context.createBuffer(1, 1, 22050);
+    let source = context.createBufferSource();
+    source.buffer = buffer;
+    source.connect(context.destination);
+    source.noteOn(0);
 
+    loadSamples();
+    readURL();
+  }
+}
 
 
 $(document).ready(function(){ 
+	const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  	window.AudioContext = window.AudioContext || window.webkitAudioContext;
+  	if(iOS){
+	    window.addEventListener("touchend",iosHandler , false);
+	  }
 	resetContext();
 	instr = new Instrument();
 	
