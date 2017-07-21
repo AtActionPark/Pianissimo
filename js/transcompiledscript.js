@@ -677,19 +677,18 @@ function speak(message, time) {
   if (aug4ToTritone && message == 'augmented fourth') message = 'tritone';
   if (aug4ToTritone && message == 'augmented eleventh') message = 'octave tritone';
 
+  globalMessage = message;
   
   //msg.lang = 'en-US';
   setTimeout(function () {
     if (pause) return;
-    globalMessage = message;
-
-    $('#trigger_me').trigger('click'
+    
+    $('#trigger_me').trigger('click')},time);
     //window.speechSynthesis.speak(msg)}, time);
-    );
-  }, time);
 }
 function speech_text() {
   var msg = new SpeechSynthesisUtterance(globalMessage);
+  msg.lang = 'en-US';
   window.speechSynthesis.speak(msg);
 }
 
