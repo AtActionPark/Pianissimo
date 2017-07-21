@@ -677,11 +677,11 @@ function speak(message, time) {
   if (aug4ToTritone && message == 'augmented fourth') message = 'tritone';
   if (aug4ToTritone && message == 'augmented eleventh') message = 'octave tritone';
 
-  var msg = new SpeechSynthesisUtterance(message);
+  
   //msg.lang = 'en-US';
   setTimeout(function () {
     if (pause) return;
-    globalMessage = msg;
+    globalMessage = message;
 
     $('#trigger_me').trigger('click'
     //window.speechSynthesis.speak(msg)}, time);
@@ -689,7 +689,8 @@ function speak(message, time) {
   }, time);
 }
 function speech_text() {
-  window.speechSynthesis.speak(globalMessage);
+  var msg = new SpeechSynthesisUtterance(globalMessage);
+  window.speechSynthesis.speak(msg);
 }
 
 function playRandomInterval() {
