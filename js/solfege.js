@@ -337,6 +337,8 @@
     console.log("Interval : " + this.order + " " + this.qualityText + " " + this.numberText ) 
   }
 
+  //test
+
 
   function getIntervalInSemitones(note1,note2){
     let oct1 = note1.slice(-1);
