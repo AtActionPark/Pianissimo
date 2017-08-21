@@ -188,19 +188,16 @@
 
     return note+octave
   }
-  //Returns an interval name from 2 notes
-  Solfege.prototype.getIntervalFromNotes = function(n1,n2){
-
-    return new IntervalFromNotes(n1,n2)
-  }
   //Takes a note and an interval, and computes the second note
   //Returns an array with the initial note, the resulting note, and the interval as text
-  Solfege.prototype.getNoteFromInterval = function(note,interval,intervalOrder){
+  Solfege.prototype.getNoteFromInterval = function(note,intervalName,intervalOrder){
     let oct = parseInt(note.slice(-1));
     let rootNote = note.slice(0, -1);
+    
+    let interval = new Interval(intervalName, intervalOrder)
 
-    let intervalNumber = parseInt(interval.substring(1));
-    let intervalQuality = interval.substring(0,1);
+    let intervalNumber = interval.number
+    let intervalQuality = interval.quality
 
     let order = intervalOrder == "ascending"? 1 : -1
 
@@ -213,7 +210,7 @@
 
     let resultNoteName = getKeyByValue(wholeNotesOrder, resultNote);
 
-    let semitones = order*intervalsDict[interval]
+    let semitones = order*intervalsDict[intervalName]
 
     let resultOctave = oct;
 
@@ -279,7 +276,7 @@
 
     if(debug){
       console.log("Notes : " + note + " - " + result)
-      console.log("Distance : " + order*intervalsDict[interval] + " semitones")
+      console.log("Distance : " + semitones + " semitones")
       console.log("Interval : " + intervalOrder + " " + answer)
     }
     
@@ -312,38 +309,30 @@
     }
     return [root,third,fifth];
   }
-
-  IntervalFromNotes = function(n1,n2){
+  //Returns an interval name from 2 notes
+  Solfege.prototype.getIntervalFromNotes = function(n1,n2){
     this.n1 = n1
     this.n2 = n2
     this.order = getIntervalOrder(n1,n2);
     this.quality = getIntervalQuality(n1,n2);
     this.number = getIntervalNumber(n1,n2);
-    this.semitones = getIntervalInSemitones(n1,n2)
 
-    this.qualityText = qualityDict[this.quality];
-    this.numberText = numberDict[this.number];
+    return new Interval(''+this.quality+''+this.number,this.order)
   }
-  IntervalFromNotes.prototype.display = function(){
-    console.log("Notes : " + this.n1 + " - " + this.n2)
-    console.log("Distance : " + this.semitones + " semitones")
-    console.log("Interval : " + this.order + " " + this.qualityText + " " + this.numberText ) 
-  }
-  IntervalFromName = function(name, order){
+ 
+  Interval = function(name, order){
     this.name = name
     this.order = order;
+    console.log(this.name)
 
-    this.number = parseInt(name.substring(1));
-    this.quality = name.substring(0,1);
+    this.number = parseInt(this.name.substring(1));
+    this.quality = this.name.substring(0,1);
     this.semitones =  (this.order == "ascending"? 1 : -1)*intervalsDict[name]
-
-    this.semitones = getIntervalInSemitones(n1,n2)
 
     this.qualityText = qualityDict[this.quality];
     this.numberText = numberDict[this.number];
   }
-  IntervalFromName.prototype.display = function(){
-    console.log("Notes : " + this.n1 + " - " + this.n2)
+  Interval.prototype.display = function(){
     console.log("Distance : " + this.semitones + " semitones")
     console.log("Interval : " + this.order + " " + this.qualityText + " " + this.numberText ) 
   }
