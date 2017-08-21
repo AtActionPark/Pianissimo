@@ -3,122 +3,15 @@
   <head>
     <meta http-equiv="content-type" name="apple-mobile-web-app-capable" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ear Training app test</title>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <title>Solfege</title>
     <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
-    <!--<script  src="js/helpers.js"></script>
-    <script  src="js/script.js"></script>-->
-   <script  src="js/transcompiledscript.js"></script>
+    <script  src="js/solfege.js"></script>
+    <script  src="js/script.js"></script>
   </head>
 
   <body>
-    <a id="trigger_me" onclick="speech_text()"></a>
-    <div id="sidebar-black" class="sidebar-nav">
-      <nav id="navbar-black" class="navbar navbar-default" role="navigation">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <span class="visible-xs"><div class="navbar-brand" href="/">EAR TRAINING</div></span>
-        </div>
-        <span class="visible-xs">
-          <button id="start" class="btn start" onClick="start()">Start</button> 
-        </span>
-        <div class="navbar-collapse collapse sidebar-navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="hidden-xs"><div class="navbar-brand" href="/">EAR TRAINING</div></li>
-
-            <li class="hidden-xs startDiv">
-              <button id="start" class="btn start" onClick="start()">Start</button> 
-            </li>
-
-            <li class="dropdown">
-              <a href="javascript:void(0);" class="dropdown-toggle"><i class="glyphicon glyphicon-record"></i> OPTIONS <b class="caret"></b></a>
-              <ul class="dropdown-menu"> 
-                <div id="params">
-                  Repetitions: <input id='nbOfTimePlayed'  class="bg" value = '3' type=number min=1 max=10 /></br>
-                  Time btw reps: <input id='timeBetweenRepetitions'  class="bg" value = '3' type=number min=0.1 max=10 /></br>
-                  Time btw notes: <input id='timeBetweenNotes'  class="bg" value = '0.9' type=number min=0 max=10 /></br>
-                  Note Duration: <input id='noteDuration'  class="bg" value = '1.5' type=number min=0.1 max=10 /></br>
-                  Order: 
-                  <select class=" inline" id="order" onchange="getUserParams()" >
-                    <option value="ascending">Ascending</option>
-                    <option value="descending">Descending</option>
-                    <option value="both" selected="selected">Both</option>
-                  </select> 
-                  <div id="talkDiv">Announce answer: <input id="talk"  type="checkbox" checked></div>
-                </div>
-              </ul>
-            </li>
-                   
-            <li class="dropdown">
-              <a href="javascript:void(0);" class="dropdown-toggle" ><i class="glyphicon glyphicon-record"></i> INTERVALS <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <div id="intervals">
-                All/None : <input id="allNone" type="checkbox" onchange="allNone()"></br></br> 
-                Unison : <input id="unison" type="checkbox" checked onchange="getUserParams()"></br>   
-                Minor second : <input id="minorSecond" type="checkbox" onchange="getUserParams()"></br> 
-                Major second : <input id="majorSecond" type="checkbox" onchange="getUserParams()"></br>  
-                Minor third : <input id="minorThird" type="checkbox" checked onchange="getUserParams()"></br>  
-                Major third : <input id="majorThird" type="checkbox" checked onchange="getUserParams()"></br>  
-                Perfect fourth : <input id="perfectFourth" type="checkbox" checked onchange="getUserParams()"></br>  
-                Tritone : <input id="tritone" type="checkbox" onchange="getUserParams()"></br>  
-                Perfect fifth : <input id="perfectFifth" type="checkbox" checked onchange="getUserParams()"></br>  
-                Minor sixth : <input id="minorSixth" type="checkbox" onchange="getUserParams()"></br>  
-                Major sixth : <input id="majorSixth" type="checkbox" onchange="getUserParams()"></br>  
-                Minor seventh : <input id="minorSeventh" type="checkbox" onchange="getUserParams()"></br>  
-                Major seventh : <input id="majorSeventh" type="checkbox" onchange="getUserParams()"></br>  
-                Octave : <input id="octave" type="checkbox" checked onchange="getUserParams()"></br>  
-                Minor ninth : <input id="minorNinth" type="checkbox" onchange="getUserParams()"></br>  
-                Major ninth : <input id="majorNinth" type="checkbox" onchange="getUserParams()"></br>  
-                Minor tenth : <input id="minorTenth" type="checkbox" onchange="getUserParams()"></br>  
-                Major tenth : <input id="majorTenth" type="checkbox" onchange="getUserParams()"></br>  
-                Perfect eleventh : <input id="perfectEleventh" type="checkbox" onchange="getUserParams()"></br>  
-                Octave tritone : <input id="octaveTritone" type="checkbox" onchange="getUserParams()"></br>  
-                Perfect twelfth : <input id="perfectTwelfth" type="checkbox" onchange="getUserParams()"></br>  
-                Minor thirteenth : <input id="minorThirteenth" type="checkbox" onchange="getUserParams()"></br>  
-                Major thirteenth : <input id="majorThirteenth" type="checkbox" onchange="getUserParams()"></br>  
-                Minor fourteenth : <input id="minorFourteenth" type="checkbox" onchange="getUserParams()"></br>  
-                Major fourteenth : <input id="majorFourteenth" type="checkbox" onchange="getUserParams()"></br>  
-                Double Octave : <input id="doubleOctave" type="checkbox" onchange="getUserParams()"></br>  
-                </div>
-              </ul>
-            </li>
-                 
-            <li class="dropdown">
-              <a href="javascript:void(0);" class="dropdown-toggle" ><i class="glyphicon glyphicon-record"></i> SYNTH <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <div id="seedDiv">
-                Synth Preset: 
-                <select  id="synthPreset"  onchange="changePreset()">
-                  <option value="1" selected="selected">1</option>
-                  <option value="2">2</option>
-                </select></br>
-                <button onClick = "randomize()" id='random'>Randomize</button>
-              </div>           
-              </ul>
-            </li>
-
-            <li class="hidden-xs" id="githubDiv">
-              <a href="https://github.com/AtActionPark/EarTraining"> <img id="github" src="img/github.png"></a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </div>
     
-    
-    <main id="page-wrapper">
-      <div id="wrapper"> 
-        <div  id='osc'></div>
-        <div id='keyboard'></div>
   </body>
 </html>
