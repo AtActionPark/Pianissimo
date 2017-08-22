@@ -253,7 +253,7 @@
     //looking for triple alteration - start again with a new root note (ex G# doesnt have a D2 but F# does)
     if(d>=3 || d <=-3){
       console.log('Can not build a ' +interval.order + ' ' +interval.name + " on " + note + '. Picking a new random note')
-      return getNoteFromInterval(getRandomNoteFull(3,4), interval)
+      return this.getNoteFromInterval(this.getRandomNoteFull(3,4), interval)
     }
 
     let result = resultNoteName + mod + octave
@@ -302,6 +302,7 @@
     this.name = name
     this.order = order;
     if(name != undefined){
+
       this.number = parseInt(this.name.substring(1));
       this.quality = this.name.substring(0,1);
       this.semitones =  (this.order == "ascending"? 1 : -1)*intervalsDict[name]

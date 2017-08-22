@@ -5,8 +5,9 @@ $(document).ready(function(){
 
   let randomNote = s.getRandomNoteFull(3,4);
   let randomOrder = Math.random()<0.5? 'ascending': 'descending'
-  let randomIntervalName = s.getRandomInterval()
 
+  let randomIntervalName = s.getRandomInterval()
+  
   let randomInterval = new Interval(randomIntervalName, randomOrder)
 
   randomInterval.display()
@@ -19,6 +20,8 @@ $(document).ready(function(){
 
   //console.log(s.buildTriad('C3', 'minor'))
 });
+
+//check ascending augmented 14th on C#3
 
 
 
