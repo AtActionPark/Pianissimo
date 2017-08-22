@@ -1,5 +1,4 @@
 (function(){
-  let debug = true;
 
   let rootNotes = {
     'C': 261.626,
@@ -190,18 +189,13 @@
   }
   //Takes a note and an interval, and computes the second note
   //Returns an array with the initial note, the resulting note, and the interval as text
-  Solfege.prototype.getNoteFromInterval = function(note,intervalName,intervalOrder){
-    let oct = parseInt(note.slice(-1));
+  Solfege.prototype.getNoteFromInterval = function(note,interval){
+    let octave = parseInt(note.slice(-1));
     let rootNote = note.slice(0, -1);
-    
-    let interval = new Interval(intervalName, intervalOrder)
 
-    let intervalNumber = interval.number
-    let intervalQuality = interval.quality
+    let order = interval.order == "ascending"? 1 : -1
 
-    let order = intervalOrder == "ascending"? 1 : -1
-
-    let resultNote = (wholeNotesOrder[rootNote.substring(0,1)] + order*(intervalNumber-1))%7;
+    let resultNote = (wholeNotesOrder[rootNote.substring(0,1)] + order*(interval.number-1))%7;
 
     if(resultNote == 0)
       resultNote = 7;
@@ -210,35 +204,32 @@
 
     let resultNoteName = getKeyByValue(wholeNotesOrder, resultNote);
 
-    let semitones = order*intervalsDict[intervalName]
-
-    let resultOctave = oct;
+    let semitones = interval.semitones
 
     while(semitones > 12){
-      resultOctave+=1;
+      octave+=1;
       semitones-=12
     }
     while(semitones < -12){
-      resultOctave-=1;
+      octave-=1;
       semitones+=12
     }
     if(semitones == 12)
-      resultOctave+=1
+      octave+=1
     if(semitones == -12)
-      resultOctave-=1
-
+      octave-=1
 
     let diffFromNames = (notesOrder[resultNoteName] - notesOrder[rootNote])*order
 
     if (diffFromNames<0 || Math.sign(diffFromNames) == -0){
       diffFromNames+=12
-      resultOctave+=order*1
+      octave+=order*1
 
       //horrible
-      if((intervalNumber == 1 || intervalNumber == 8 || intervalNumber == 15) && intervalQuality != 'd'  )
-        resultOctave-=1*order
-      if((intervalNumber == 7 || intervalNumber == 14) && intervalQuality == 'A'  )
-        resultOctave-=1*order
+      if((interval.number == 1 || interval.number == 8 || interval.number == 15) && interval.quality != 'd'  )
+        octave-=1*order
+      if((interval.number == 7 || interval.number == 14) && interval.quality == 'A'  )
+        octave-=1*order
     }
 
     let d = order*diffFromNames-semitones
@@ -261,26 +252,13 @@
 
     //looking for triple alteration - start again with a new root note (ex G# doesnt have a D2 but F# does)
     if(d>=3 || d <=-3){
-      console.log('Can not build a ' +intervalOrder + ' ' +interval + " on " + note + '. Picking a new random note')
-      return getNoteFromInterval(getRandomNoteFull(), interval, intervalOrder)
+      console.log('Can not build a ' +interval.order + ' ' +interval.name + " on " + note + '. Picking a new random note')
+      return getNoteFromInterval(getRandomNoteFull(3,4), interval)
     }
 
-    let result = resultNoteName + mod + resultOctave
+    let result = resultNoteName + mod + octave
 
-    let qualityText = qualityDict[intervalQuality];
-    let numberText = numberDict[intervalNumber];
-    if(interval == "P1" || interval == "d2")
-      intervalOrder = ''
-
-    let answer =  qualityText + " " + numberText
-
-    if(debug){
-      console.log("Notes : " + note + " - " + result)
-      console.log("Distance : " + semitones + " semitones")
-      console.log("Interval : " + intervalOrder + " " + answer)
-    }
-    
-    return [note, result,answer];
+    return result
   }
   Solfege.prototype.buildTriad = function(root, quality){
     let third
@@ -309,38 +287,53 @@
     }
     return [root,third,fifth];
   }
-  //Returns an interval name from 2 notes
+  //Returns an interval from 2 notes
   Solfege.prototype.getIntervalFromNotes = function(n1,n2){
-    this.n1 = n1
-    this.n2 = n2
-    this.order = getIntervalOrder(n1,n2);
-    this.quality = getIntervalQuality(n1,n2);
-    this.number = getIntervalNumber(n1,n2);
+    let interval = new Interval()
+    interval.computeFromNotes(n1,n2)
 
-    return new Interval(''+this.quality+''+this.number,this.order)
+    return interval
+  }
+  Solfege.prototype.getRandomInterval = function(){
+    return pickRandomProperty(intervalsDict)
   }
  
   Interval = function(name, order){
     this.name = name
     this.order = order;
-    console.log(this.name)
+    if(name != undefined){
+      this.number = parseInt(this.name.substring(1));
+      this.quality = this.name.substring(0,1);
+      this.semitones =  (this.order == "ascending"? 1 : -1)*intervalsDict[name]
 
-    this.number = parseInt(this.name.substring(1));
-    this.quality = this.name.substring(0,1);
-    this.semitones =  (this.order == "ascending"? 1 : -1)*intervalsDict[name]
+      this.qualityText = qualityDict[this.quality];
+      this.numberText = numberDict[this.number];
+    }
+  }
+  Interval.prototype.computeFromNotes = function(n1,n2){
+    this.order = this.getIntervalOrder(n1,n2);
+    this.quality = this.getIntervalQuality(n1,n2);
+    this.number = this.getIntervalNumber(n1,n2);
+    this.name = ''+this.quality+''+this.number
+
+    this.semitones =  (this.order == "ascending"? 1 : -1)*intervalsDict[this.name]
 
     this.qualityText = qualityDict[this.quality];
     this.numberText = numberDict[this.number];
   }
   Interval.prototype.display = function(){
     console.log("Distance : " + this.semitones + " semitones")
-    console.log("Interval : " + this.order + " " + this.qualityText + " " + this.numberText ) 
+    console.log("Interval : " + this.displayNameAsText() ) 
+    return this
   }
+  Interval.prototype.displayNameAsText = function(){
+    let order = this.order
+    if(this.name == "P1" || this.name == "d2")
+      order = ''
 
-  //test
-
-
-  function getIntervalInSemitones(note1,note2){
+    return  order + " " + this.qualityText + " " + this.numberText
+  }
+  Interval.prototype.getIntervalInSemitones = function(note1,note2){
     let oct1 = note1.slice(-1);
     let rootNote1 = note1.slice(0, -1);
     if(notesOrder[rootNote1]==undefined)
@@ -355,7 +348,7 @@
     return diff
   }
   //Returns the interval's numbery (2nd,third...)
-  function getIntervalNumber(note1, note2){
+  Interval.prototype.getIntervalNumber = function(note1, note2){
     let oct1 = note1.slice(-1);
     let rootNote1 = note1.slice(0, 1);
     if(notesOrder[rootNote1]==undefined)
@@ -374,15 +367,15 @@
       return  (2-diff)
   }
   //Returns the interval's quality (minor, major, perfect...)
-  function getIntervalQuality(note1,note2){
+  Interval.prototype.getIntervalQuality = function(note1,note2){
     let oct1 = note1.slice(-1);
     let rootNote1 = note1.slice(0, -1);
 
     let oct2 = note2.slice(-1);
     let rootNote2 = note2.slice(0, -1);
 
-    let nb = Math.abs(getIntervalNumber(note1,note2))
-    let semitones = Math.abs(getIntervalInSemitones(note1,note2))
+    let nb = Math.abs(this.getIntervalNumber(note1,note2))
+    let semitones = Math.abs(this.getIntervalInSemitones(note1,note2))
     let quality;
 
     switch (semitones){
@@ -533,16 +526,17 @@
           quality = 'd';
         break;
       case 24:
-        if(nb == 48)
+        if(nb == 48 || nb == 15)
           quality = 'P';
         else if(nb == 14)
           quality = 'A';
+
         break;
     }
     return  quality 
   }
-  function getIntervalOrder(note1,note2){
-    let interval  = getIntervalInSemitones(note1,note2)
+  Interval.prototype.getIntervalOrder = function(note1,note2){
+    let interval  = this.getIntervalInSemitones(note1,note2)
     if (interval>0)
       return 'ascending'
     else if (interval < 0)
@@ -550,12 +544,12 @@
     else
       return ''
   }
+
   function getNextNote(note){
     let oct = note.slice(-1);
     let rootNote = note.slice(0, -1);
 
     let octResult = (rootNote == 'B')? parseInt(oct) + 1 : oct
-
 
     let notes = Object.keys(rootNotes)
     let n = notes.indexOf(rootNote) + 1
