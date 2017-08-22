@@ -1,6 +1,3 @@
-# earTraining
-Ear training app test
+# Solfege
 
-Endless serie of interval + answer for ear training 
-
-
+Helpers for interval, chords and scales building
