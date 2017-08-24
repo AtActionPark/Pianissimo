@@ -1,3 +1,4 @@
+"use strict";
 (function(){
 
   let rootNotes = {
@@ -39,29 +40,44 @@
     'B##': 'C#',
     'Bbb': 'A',
   }
+  let fullNotesList = ['C','C#','Db','D','D#','Eb','E','F','F#','Gb','G','G#','Ab','A','A#','Bb','B']
   ///INTERVALS///
   let notesOrder = {
+    'Cbb':-2,
     'Cb':-1,
     'C':0,
     'C#':1,
+    'C##':2,
+    'Dbb':0,
     'Db':1,
     'D':2,
     'D#':3,
+    'D##':4,
+    'Ebb':2,
     'Eb':3,
     'E':4,
     'E#':5,
+    'E##':6,
+    'Fbb':3,
     'Fb':4,
     'F':5,
     'F#':6,
+    'F##':7,
+    'Gbb':5,
     'Gb':6,
     'G':7,
     'G#':8,
+    'G##':9,
+    'Abb':7,
     'Ab':8,
     'A':9,
     'A#':10,
+    'A##':11,
+    'Bbb':9,
     'Bb':10,
     'B':11,
-    'B#':12
+    'B#':12,
+    'B##':13
   }
   let wholeNotesOrder = {
     'C':1,
@@ -77,7 +93,8 @@
     M: "major",
     P: "perfect",
     A: "augmented",
-    d: "diminished"
+    d: "diminished",
+    $: "magical"
   }
   let numberDict = {
     1: "unison",
@@ -150,7 +167,7 @@
     'A14': 24
   }
 
-  Solfege = function(settings){
+  let Solfege = function(settings){
   }
   //Returns the frequency in Hz of a named note + octave (ex: C3, D#2, ...)
   Solfege.prototype.getFrequency = function(note){
@@ -182,7 +199,7 @@
   //Returns a random note between octave 1 and 2
   //Natural, sharps and flats
   Solfege.prototype.getRandomNoteFull = function(octave1,octave2){
-    let note =  pickRandomProperty(notesOrder)
+    let note =  pickRandomArray(fullNotesList)
     let octave = getRandomInt(octave1,octave2)
 
     return note+octave
@@ -190,22 +207,28 @@
   //Takes a note and an interval, and computes the second note
   //Returns an array with the initial note, the resulting note, and the interval as text
   Solfege.prototype.getNoteFromInterval = function(note,interval){
-    let octave = parseInt(note.slice(-1));
+    if(interval.quality == '$')
+      return 'impossible to compute'
+    //console.log('-----' )
+    let initialOctave = parseInt(note.slice(-1));
+    let octave = initialOctave;
     let rootNote = note.slice(0, -1);
+    let rootNoteBaseNoteName = rootNote.substring(0,1);
+    let rootNoteMod = note.slice(1, -1);
+    let order = (interval.order == "ascending"||  interval.order == '')? 1 : -1
 
-    let order = interval.order == "ascending"? 1 : -1
-
-    let resultNote = (wholeNotesOrder[rootNote.substring(0,1)] + order*(interval.number-1))%7;
-
-    if(resultNote == 0)
-      resultNote = 7;
-    if(resultNote < 0)
-      resultNote += 7;
-
-    let resultNoteName = getKeyByValue(wholeNotesOrder, resultNote);
-
+    //Add the interval number to the root note to find the result note
+    //We dont care about alterations, just about the note index in the wholeNotesOrder list
+    let resultNoteIndex = (wholeNotesOrder[rootNoteBaseNoteName] + order*(interval.number-1))%7;
+    // 4 + 1*(2-1) = 5
+    //console.log(interval)
+    if(resultNoteIndex == 0)
+      resultNoteIndex = 7;
+    if(resultNoteIndex < 0)
+      resultNoteIndex += 7;
+    let resultNoteName = getKeyByValue(wholeNotesOrder, resultNoteIndex);
     let semitones = interval.semitones
-
+    //console.log('ResultNoteName: ' + resultNoteName)
     while(semitones > 12){
       octave+=1;
       semitones-=12
@@ -218,46 +241,64 @@
       octave+=1
     if(semitones == -12)
       octave-=1
-
+    //console.log('NewSemitones: ' + semitones)
+    
     let diffFromNames = (notesOrder[resultNoteName] - notesOrder[rootNote])*order
-
+    if(diffFromNames!=0 && rootNote.substring(0,1) == resultNoteName){
+      diffFromNames =  (octave-initialOctave)*7
+      if(rootNoteMod == '#')
+        semitones+=1
+      if(rootNoteMod == 'b')
+        semitones-=1
+    }
+     
+    //console.log('rootOrder: ' + notesOrder[rootNote])
+   // console.log('resultOrder: ' + notesOrder[resultNoteName])
+    //console.log('DiffFromName: ' + diffFromNames)
     if (diffFromNames<0 || Math.sign(diffFromNames) == -0){
       diffFromNames+=12
       octave+=order*1
-
-      //horrible
-      if((interval.number == 1 || interval.number == 8 || interval.number == 15) && interval.quality != 'd'  )
-        octave-=1*order
-      if((interval.number == 7 || interval.number == 14) && interval.quality == 'A'  )
-        octave-=1*order
     }
+    //console.log('DiffFromName: ' + diffFromNames)
+    
+    //console.log('Octave: ' + octave)
+
+    if((interval.number % 7 == 1 ) && interval.quality != 'd'  )
+      octave-=1*order
+      
+    if((interval.number % 7 == 0) && interval.quality == 'A'  )
+      octave-=1*order
 
     let d = order*diffFromNames-semitones
+    //console.log('D: ' + d)
     if(d>2)
       d-=12
     if(d<-2)
       d+=12
 
+    //console.log(d)
 
     let mod = ''
     if(d == 1)
       mod = 'b'
     if(d == -1)
-      mod = '#'
+      mod = '#' 
 
     if(d == 2 )
       mod = 'bb'
     if(d == -2)
       mod = '##'
 
+
     //looking for triple alteration - start again with a new root note (ex G# doesnt have a D2 but F# does)
     if(d>=3 || d <=-3){
       console.log('Can not build a ' +interval.order + ' ' +interval.name + " on " + note + '. Picking a new random note')
+      return undefined
       return this.getNoteFromInterval(this.getRandomNoteFull(3,4), interval)
     }
-
+    
     let result = resultNoteName + mod + octave
-
+    //console.log('-----')
     return result
   }
   Solfege.prototype.buildTriad = function(root, quality){
@@ -298,11 +339,12 @@
     return pickRandomProperty(intervalsDict)
   }
  
-  Interval = function(name, order){
+  //Interval object can be created with name and order or with no arguments
+  // if thats the case, the properties will be computed later 
+  let Interval = function(name, order){
     this.name = name
     this.order = order;
     if(name != undefined){
-
       this.number = parseInt(this.name.substring(1));
       this.quality = this.name.substring(0,1);
       this.semitones =  (this.order == "ascending"? 1 : -1)*intervalsDict[name]
@@ -311,13 +353,16 @@
       this.numberText = numberDict[this.number];
     }
   }
+  //if the interval is not defined, all the properties can be computed
+  // by specifying the 2 notes that form the interval
   Interval.prototype.computeFromNotes = function(n1,n2){
-    this.order = this.getIntervalOrder(n1,n2);
-    this.quality = this.getIntervalQuality(n1,n2);
-    this.number = this.getIntervalNumber(n1,n2);
-    this.name = ''+this.quality+''+this.number
+    this.setIntervalInSemitones(n1,n2)
+    this.setIntervalOrder(n1,n2);
+    this.setIntervalNumber(n1,n2);
+    this.setIntervalQuality(n1,n2);
 
-    this.semitones =  (this.order == "ascending"? 1 : -1)*intervalsDict[this.name]
+    if(this.quality == undefined) this.quality = '$'
+    this.name = ''+this.quality+''+this.number
 
     this.qualityText = qualityDict[this.quality];
     this.numberText = numberDict[this.number];
@@ -331,25 +376,22 @@
     let order = this.order
     if(this.name == "P1" || this.name == "d2")
       order = ''
-
+    if(this.numberText == undefined)
+      return '?'
     return  order + " " + this.qualityText + " " + this.numberText
   }
-  Interval.prototype.getIntervalInSemitones = function(note1,note2){
+  Interval.prototype.setIntervalInSemitones = function(note1,note2){
     let oct1 = note1.slice(-1);
     let rootNote1 = note1.slice(0, -1);
-    if(notesOrder[rootNote1]==undefined)
-      rootNote1 = enharmonics[rootNote1]
-
+      
     let oct2 = note2.slice(-1);
     let rootNote2 = note2.slice(0, -1);
-    if(notesOrder[rootNote2]==undefined)
-      rootNote2 = enharmonics[rootNote2]
 
     let diff = notesOrder[rootNote2] - notesOrder[rootNote1] + (oct2-oct1)*12
-    return diff
+    this.semitones = diff
   }
-  //Returns the interval's numbery (2nd,third...)
-  Interval.prototype.getIntervalNumber = function(note1, note2){
+  //Sets the interval's numbery (2nd,third...)
+  Interval.prototype.setIntervalNumber = function(note1, note2){
     let oct1 = note1.slice(-1);
     let rootNote1 = note1.slice(0, 1);
     if(notesOrder[rootNote1]==undefined)
@@ -362,21 +404,28 @@
 
     let diff = wholeNotesOrder[rootNote2] - wholeNotesOrder[rootNote1] + 1 + (oct2-oct1)*7
 
-    if (oct2>oct1 || (oct2 == oct1 && wholeNotesOrder[rootNote2] >= wholeNotesOrder[rootNote1]))
-      return  diff 
-    else
-      return  (2-diff)
+    //special case for ##
+    if(oct1 == oct2 && diff>7)
+      diff-=7
+
+    if (oct2>oct1 || (oct2 == oct1 && wholeNotesOrder[rootNote2] >= wholeNotesOrder[rootNote1])){
+      this.number = diff 
+    }
+    else{
+      //console.log(2-diff)
+      this.number =  (2-diff)
+    } 
   }
-  //Returns the interval's quality (minor, major, perfect...)
-  Interval.prototype.getIntervalQuality = function(note1,note2){
+  //Sets the interval's quality (minor, major, perfect...)
+  Interval.prototype.setIntervalQuality = function(note1,note2){
     let oct1 = note1.slice(-1);
     let rootNote1 = note1.slice(0, -1);
 
     let oct2 = note2.slice(-1);
     let rootNote2 = note2.slice(0, -1);
 
-    let nb = Math.abs(this.getIntervalNumber(note1,note2))
-    let semitones = Math.abs(this.getIntervalInSemitones(note1,note2))
+    let nb = Math.abs(this.number)
+    let semitones = Math.abs(this.semitones)
     let quality;
 
     switch (semitones){
@@ -527,39 +576,40 @@
           quality = 'd';
         break;
       case 24:
-        if(nb == 48 || nb == 15)
+        if(nb == 15)
           quality = 'P';
         else if(nb == 14)
           quality = 'A';
-
+        else if(nb == 16)
+          quality = 'd';
         break;
     }
-    return  quality 
+    this.quality =   quality 
   }
-  Interval.prototype.getIntervalOrder = function(note1,note2){
-    let interval  = this.getIntervalInSemitones(note1,note2)
+  //Sets the interval order (ascending, descending)
+  Interval.prototype.setIntervalOrder = function(note1,note2){
+    let interval = this.semitones
     if (interval>0)
-      return 'ascending'
+      this.order =  'ascending'
     else if (interval < 0)
-      return 'descending'
-    else
-      return ''
+      this.order =  'descending'
+    else{
+      this.order = ''
+      let note1BaseName =note1.substring(0,1)
+      let note2BaseName =note2.substring(0,1)
+
+      let diff = wholeNotesOrder[note2BaseName] - wholeNotesOrder[note1BaseName] 
+      if(diff<-7)
+        diff+=7
+      if(diff>7)
+        diff-=7
+      this.order = diff>0?'ascending':'descending'
+      //console.log('Diff = ' + diff)
+    }
+      
   }
 
-  function getNextNote(note){
-    let oct = note.slice(-1);
-    let rootNote = note.slice(0, -1);
-
-    let octResult = (rootNote == 'B')? parseInt(oct) + 1 : oct
-
-    let notes = Object.keys(rootNotes)
-    let n = notes.indexOf(rootNote) + 1
-    let rootNoteResult = (rootNote == 'B')? 'C': notes[n]
-
-    return rootNoteResult + octResult
-  }
-
-  //Helpers random
+  //Helpers
   function getRandomInt(a,b){
 
     return Math.floor(Math.random()*(b - a + 1)) + a;
@@ -577,5 +627,4 @@
     return Object.keys(object).find(key => object[key] === value);
   }
 })();
-
 
