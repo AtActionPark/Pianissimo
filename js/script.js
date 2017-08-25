@@ -1,21 +1,18 @@
 $(document).ready(function(){ 
+  let s = new Solfege()
+  let note = 'B3'
 
-  //let randomNote = s.getRandomNoteFull(3,4);
-  //randomNote = 'C#3'
-  //let randomOrder = Math.random()<0.5? 'ascending': 'descending'
+  let interval = new Interval('P8', 'ascending' )
 
- // let randomIntervalName = s.getRandomInterval()
-  //randomIntervalName = 'A14'
-  
-  //let randomInterval = new Interval(randomIntervalName, randomOrder)
-  //randomInterval.display()
-  //let note1PlusInterval = s.getNoteFromInterval(randomNote, randomInterval, randomOrder)
-  //s.getIntervalFromNotes(randomNote,note1PlusInterval).display()
+  let resultNote = s.getNoteFromInterval(note, interval)
 
-  //console.log('Notes: '+ randomNote + ' - ' + note1PlusInterval)
-
-  //console.log(s.buildTriad('C3', 'minor'))
-  //runTest()
+  let resultInterval = s.getIntervalFromNotes(note, resultNote)
+ 
+  //console.log('-----')
+  //console.log(note)
+  //console.log(resultNote)
+  //console.log(resultInterval.name)
+  runTest()
 });
 
 

@@ -1,6 +1,5 @@
-"use strict";
-(function(){
 
+(function(){
   let rootNotes = {
     'C': 261.626,
     'C#':277.183,
@@ -167,7 +166,7 @@
     'A14': 24
   }
 
-  let Solfege = function(settings){
+  Solfege = function(settings){
   }
   //Returns the frequency in Hz of a named note + octave (ex: C3, D#2, ...)
   Solfege.prototype.getFrequency = function(note){
@@ -209,7 +208,7 @@
   Solfege.prototype.getNoteFromInterval = function(note,interval){
     if(interval.quality == '$')
       return 'impossible to compute'
-    //console.log('-----' )
+
     let initialOctave = parseInt(note.slice(-1));
     let octave = initialOctave;
     let rootNote = note.slice(0, -1);
@@ -219,16 +218,12 @@
 
     //Add the interval number to the root note to find the result note
     //We dont care about alterations, just about the note index in the wholeNotesOrder list
-    let resultNoteIndex = (wholeNotesOrder[rootNoteBaseNoteName] + order*(interval.number-1))%7;
-    // 4 + 1*(2-1) = 5
-    //console.log(interval)
-    if(resultNoteIndex == 0)
-      resultNoteIndex = 7;
-    if(resultNoteIndex < 0)
-      resultNoteIndex += 7;
-    let resultNoteName = getKeyByValue(wholeNotesOrder, resultNoteIndex);
+    let resultNoteName = this.findNoteNameFromInterval(note, interval)
+
     let semitones = interval.semitones
-    //console.log('ResultNoteName: ' + resultNoteName)
+
+    //Find the octave of the resulting note
+    //for each 12 semitones, add one octave
     while(semitones > 12){
       octave+=1;
       semitones-=12
@@ -237,46 +232,41 @@
       octave-=1;
       semitones+=12
     }
+
     if(semitones == 12)
       octave+=1
     if(semitones == -12)
       octave-=1
-    //console.log('NewSemitones: ' + semitones)
-    
+
+    //Find the difference in semitones
     let diffFromNames = (notesOrder[resultNoteName] - notesOrder[rootNote])*order
-    if(diffFromNames!=0 && rootNote.substring(0,1) == resultNoteName){
-      diffFromNames =  (octave-initialOctave)*7
+
+    //special case for unisons,octaves and double octaves
+    if(rootNoteBaseNoteName == resultNoteName){
+      diffFromNames =  -order*(octave-initialOctave)*12
       if(rootNoteMod == '#')
         semitones+=1
       if(rootNoteMod == 'b')
         semitones-=1
     }
-     
-    //console.log('rootOrder: ' + notesOrder[rootNote])
-   // console.log('resultOrder: ' + notesOrder[resultNoteName])
-    //console.log('DiffFromName: ' + diffFromNames)
+    if((interval.number % 7 == 1 ) && interval.quality != 'd'  )
+      octave-=1*order
+    if((interval.number % 7 == 0) && interval.quality == 'A'  )
+      octave-=1*order
+    
     if (diffFromNames<0 || Math.sign(diffFromNames) == -0){
       diffFromNames+=12
       octave+=order*1
     }
-    //console.log('DiffFromName: ' + diffFromNames)
-    
-    //console.log('Octave: ' + octave)
 
-    if((interval.number % 7 == 1 ) && interval.quality != 'd'  )
-      octave-=1*order
-      
-    if((interval.number % 7 == 0) && interval.quality == 'A'  )
-      octave-=1*order
-
+    // we checked the difference between the full initial note name and the target note name without alteration
+    // if there is a difference, we need to alterate the result note
     let d = order*diffFromNames-semitones
-    //console.log('D: ' + d)
+
     if(d>2)
       d-=12
     if(d<-2)
       d+=12
-
-    //console.log(d)
 
     let mod = ''
     if(d == 1)
@@ -289,38 +279,38 @@
     if(d == -2)
       mod = '##'
 
-
-    //looking for triple alteration - start again with a new root note (ex G# doesnt have a D2 but F# does)
+    //looking for impossible intervals/triple alteration (ex cant build an ascending D2 on Ab)
     if(d>=3 || d <=-3){
       console.log('Can not build a ' +interval.order + ' ' +interval.name + " on " + note + '. Picking a new random note')
       return undefined
-      return this.getNoteFromInterval(this.getRandomNoteFull(3,4), interval)
     }
     
     let result = resultNoteName + mod + octave
-    //console.log('-----')
     return result
   }
   Solfege.prototype.buildTriad = function(root, quality){
     let third
     let fifth
 
+    let m3 = new Interval('m3', 'ascending')
+    let M3 = new Interval('M3', 'ascending')
+
     switch (quality){
       case 'major':
-        third = this.getNoteFromInterval(root,'M3','ascending')[1]
-        fifth = this.getNoteFromInterval(third,'m3','ascending')[1]
+        third = this.getNoteFromInterval(root,M3)
+        fifth = this.getNoteFromInterval(third,m3)
         break;
       case 'minor':
-        third = this.getNoteFromInterval(root,'m3','ascending')[1]
-        fifth = this.getNoteFromInterval(third,'M3','ascending')[1]
+        third = this.getNoteFromInterval(root,m3)
+        fifth = this.getNoteFromInterval(third,M3)
         break;
       case 'diminished':
-        third = this.getNoteFromInterval(root,'m3','ascending')[1]
-        fifth = this.getNoteFromInterval(third,'m3','ascending')[1]
+        third = this.getNoteFromInterval(root,m3)
+        fifth = this.getNoteFromInterval(third,m3)
         break;
       case 'augmented':
-        third = this.getNoteFromInterval(root,'M3','ascending')[1]
-        fifth = this.getNoteFromInterval(third,'M3','ascending')[1]
+        third = this.getNoteFromInterval(root,M3)
+        fifth = this.getNoteFromInterval(third,M3)
         break;
       default:
         console.log('Unrecognized argument: quality')
@@ -338,10 +328,26 @@
   Solfege.prototype.getRandomInterval = function(){
     return pickRandomProperty(intervalsDict)
   }
+  Solfege.prototype.findNoteNameFromInterval=function(note,interval){
+    //Add the interval number to the root note to find the result note
+    //We dont care about alterations, just about the note index in the wholeNotesOrder list
+    let rootNote = note.slice(0, -1);
+    let rootNoteBaseNoteName = rootNote.substring(0,1);
+    let order = (interval.order == "ascending"||  interval.order == '')? 1 : -1
+    let resultNoteIndex = (wholeNotesOrder[rootNoteBaseNoteName] + order*(interval.number-1))%7;
+
+    if(resultNoteIndex == 0)
+      resultNoteIndex = 7;
+    if(resultNoteIndex < 0)
+      resultNoteIndex += 7;
+    let resultNoteName = getKeyByValue(wholeNotesOrder, resultNoteIndex);
+
+    return resultNoteName
+  }
  
   //Interval object can be created with name and order or with no arguments
   // if thats the case, the properties will be computed later 
-  let Interval = function(name, order){
+  Interval = function(name, order){
     this.name = name
     this.order = order;
     if(name != undefined){
@@ -627,4 +633,3 @@
     return Object.keys(object).find(key => object[key] === value);
   }
 })();
-
