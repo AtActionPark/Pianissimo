@@ -23,7 +23,7 @@ function startTest(){
             let note = s.getRandomNoteFull(3,4) 
             let order = Math.random()<0.5 ? 'ascending':'descending'
             let intervalName = s.getRandomInterval()
-            let interval = new Interval(intervalName, order)
+            let interval = new Interval({name:intervalName, order:order})
             
             let targetNote = s.getNoteFromInterval(note, interval)
             if(targetNote == undefined)
@@ -35,7 +35,7 @@ function startTest(){
             assert.equal( interval.semitones ,computedInterval.semitones, "rootNote: " + note + '-' + targetNote + ' -  intervalNameBasic: '+ interval.name + ' -  intervalNameComputed: '+ computedInterval.name);
         }
     });
-      QUnit.test( "Notes to Interval", function( assert ) {
+    QUnit.test( "Notes to Interval", function( assert ) {
         let s = new Solfege()
         for(let i = 0;i<100;i++){
             let note1 = s.getRandomNoteFull(3,4) 
@@ -53,7 +53,7 @@ function startTest(){
         let s = new Solfege()
         for(let i = 0;i<100;i++){
             let note = s.getRandomNoteFull(3,4) 
-            let triad = s.buildTriad(note, 'minor')
+            let triad = s.buildTriad(note, 'Minor')
             let interval = s.getIntervalFromNotes(triad[0], triad[1])
             assert.equal(interval.semitones, 3)
         }

@@ -165,6 +165,26 @@
     'P15': 24,
     'A14': 24
   }
+  let chordsDict = {
+    'Minor': ['m3','P5'],
+    'Major': ['M3','P5'],
+    'Augmented': ['M3','A5'],
+    'Dimished': ['m3','D5'],
+
+    'MinorSixth': ['M3','P5','M6'],
+
+    'DominantSeventh': ['M3','P5','m7'],
+    'MinorSeventh': ['m3','P5','m7'],
+    'MajorSeventh': ['M3','P5','M7'],
+
+    'AugmentedDominantSeventh': ['M3','A5','m7'],
+    'AugmentedMinorSeventh': ['m3','A5','m7'],
+    'AugmentedMajorSeventh': ['M3','A5','M7'],
+
+    'DiminishedSeventh': ['m3','d5','d7'],
+    'HalfDiminishedSeventh': ['m3','d5','m7']
+  }
+
 
   Solfege = function(settings){
   }
@@ -216,8 +236,7 @@
     let rootNoteMod = note.slice(1, -1);
     let order = (interval.order == "ascending"||  interval.order == '')? 1 : -1
 
-    //Add the interval number to the root note to find the result note
-    //We dont care about alterations, just about the note index in the wholeNotesOrder list
+    
     let resultNoteName = this.findNoteNameFromInterval(note, interval)
 
     let semitones = interval.semitones
@@ -288,46 +307,8 @@
     let result = resultNoteName + mod + octave
     return result
   }
-  Solfege.prototype.buildTriad = function(root, quality){
-    let third
-    let fifth
-
-    let m3 = new Interval('m3', 'ascending')
-    let M3 = new Interval('M3', 'ascending')
-
-    switch (quality){
-      case 'major':
-        third = this.getNoteFromInterval(root,M3)
-        fifth = this.getNoteFromInterval(third,m3)
-        break;
-      case 'minor':
-        third = this.getNoteFromInterval(root,m3)
-        fifth = this.getNoteFromInterval(third,M3)
-        break;
-      case 'diminished':
-        third = this.getNoteFromInterval(root,m3)
-        fifth = this.getNoteFromInterval(third,m3)
-        break;
-      case 'augmented':
-        third = this.getNoteFromInterval(root,M3)
-        fifth = this.getNoteFromInterval(third,M3)
-        break;
-      default:
-        console.log('Unrecognized argument: quality')
-        return [root]
-    }
-    return [root,third,fifth];
-  }
-  //Returns an interval from 2 notes
-  Solfege.prototype.getIntervalFromNotes = function(n1,n2){
-    let interval = new Interval()
-    interval.computeFromNotes(n1,n2)
-
-    return interval
-  }
-  Solfege.prototype.getRandomInterval = function(){
-    return pickRandomProperty(intervalsDict)
-  }
+  //Add the interval number to the root note to find the result note
+  //We dont care about alterations, just about the note index in the wholeNotesOrder list
   Solfege.prototype.findNoteNameFromInterval=function(note,interval){
     //Add the interval number to the root note to find the result note
     //We dont care about alterations, just about the note index in the wholeNotesOrder list
@@ -344,20 +325,49 @@
 
     return resultNoteName
   }
+  //Returns an interval from 2 notes
+  Solfege.prototype.getIntervalFromNotes = function(n1,n2){
+    
+    return new Interval({n1:n1,n2:n2})
+  }
+  Solfege.prototype.getRandomInterval = function(){
+    
+    return pickRandomProperty(intervalsDict)
+  }
+  Solfege.prototype.buildChord = function(root, quality){
+    let q = chordsDict[quality]
+    let result = [root]
+    for(let i = 0;i<q.length;i++){
+      result.push(this.getNoteFromInterval(root,new Interval({name:q[i], order:'ascending'})))
+    }
+    return result
+  }
+  
  
-  //Interval object can be created with name and order or with no arguments
-  // if thats the case, the properties will be computed later 
-  Interval = function(name, order){
-    this.name = name
-    this.order = order;
-    if(name != undefined){
+   //The interval can be specified by givin a name (m2, P5, M9...) and order (ascending, descending)
+  // or by giving 2 notes
+  Interval = function(args){
+    this.name =args.name
+    this.order = args.order;
+    this.n1 = args.n1;
+    this.n2 = args.n2;
+
+    if(this.name && this.order){
       this.number = parseInt(this.name.substring(1));
       this.quality = this.name.substring(0,1);
-      this.semitones =  (this.order == "ascending"? 1 : -1)*intervalsDict[name]
-
+      this.semitones =  (this.order == "ascending"? 1 : -1)*intervalsDict[this.name]
       this.qualityText = qualityDict[this.quality];
       this.numberText = numberDict[this.number];
     }
+    if(this.n1 && this.n2){
+      //record semitones, in case it was already computed
+      let tempSemitones = this.semitones
+      this.computeFromNotes(this.n1,this.n2)
+      //if no match, the arguments are not consistent, the specified notes will prevail
+      if(this.semitones != tempSemitones && tempSemitones != undefined)
+        console.log('Inconsistent arguments during interval creation - name and order ignored')
+    }
+
   }
   //if the interval is not defined, all the properties can be computed
   // by specifying the 2 notes that form the interval
@@ -613,6 +623,12 @@
       //console.log('Diff = ' + diff)
     }
       
+  }
+  Interval.prototype.invert = function(){
+
+  }
+  Interval.prototype.computeCompound = function(){
+
   }
 
   //Helpers
