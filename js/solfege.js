@@ -166,23 +166,63 @@
     'A14': 24
   }
   let chordsDict = {
-    'Minor': ['m3','P5'],
     'Major': ['M3','P5'],
-    'Augmented': ['M3','A5'],
-    'Dimished': ['m3','D5'],
 
-    'MinorSixth': ['M3','P5','M6'],
+    'Minor': ['m3','P5'],
+    'm': ['m3','P5'],
+    
+    'Augmented': ['M3','A5'],
+    'aug': ['M3','A5'],
+    '+': ['M3','A5'],
+
+    'Dimished': ['m3','D5'],
+    'dim': ['m3','D5'],
+    '°': ['m3','D5'],
+
+    'SuspendedFourth': ['P4','P5'],
+    'sus4': ['P4','P5'],
+    'SuspendedSecond': ['M2','P5'],
+    'sus2': ['M2','P5'],
+
+    'MinorSixth': ['m3','P5','M6'],
+    'm6': ['m3','P5','M6'],
+    'MajorSixth': ['M3','P5','M6'],
+    '6': ['M3','P5','M6'],
+    'SixthAddNinth': ['M3','P5','M6','M9'],
+    '6add9': ['M3','P5','M6','M9'],
+    'Ninth': ['M3','P5','m7','M9'],
+    '9': ['M3','P5','m7','M9'],
+    'MinorNinth': ['m3','P5','m7','M9'],
+    'm9': ['m3','P5','m7','M9'],
+    'MajorNinth': ['M3','P5','M7','M9'],
+    'm9': ['M3','P5','M7','M9'],
 
     'DominantSeventh': ['M3','P5','m7'],
+    '7': ['M3','P5','m7'],
     'MinorSeventh': ['m3','P5','m7'],
+    'm7': ['m3','P5','m7'],
     'MajorSeventh': ['M3','P5','M7'],
+    'M7': ['M3','P5','M7'],
 
     'AugmentedDominantSeventh': ['M3','A5','m7'],
+    'aug7': ['M3','A5','m7'],
+    '+7': ['M3','A5','m7'],
     'AugmentedMinorSeventh': ['m3','A5','m7'],
+    'augm7': ['m3','A5','m7'],
+    '+m7': ['m3','A5','m7'],
     'AugmentedMajorSeventh': ['M3','A5','M7'],
+    'augM7': ['M3','A5','M7'],
+    '+M7': ['M3','A5','M7'],
 
+    //dimished 7s
     'DiminishedSeventh': ['m3','d5','d7'],
-    'HalfDiminishedSeventh': ['m3','d5','m7']
+    'dim7': ['m3','d5','d7'],
+    '°7': ['m3','d5','d7'],
+    // half dimished
+    'MinorSeventhFlatFifth': ['m3','d5','m7'],
+    'HalfDiminishedSeventh': ['m3','d5','m7'],
+    'm7b5': ['m3','d5','m7'],
+    'ø': ['m3','d5','m7'],
   }
 
 
@@ -342,7 +382,15 @@
     }
     return result
   }
-  
+
+  Note = function(){
+    this.name
+    this.root
+    this.octave
+    this.frequency
+    this.duration
+    this.alteration
+  }
  
    //The interval can be specified by givin a name (m2, P5, M9...) and order (ascending, descending)
   // or by giving 2 notes
@@ -628,7 +676,12 @@
 
   }
   Interval.prototype.computeCompound = function(){
-
+  }
+  Chords = function(args){
+    this.root = args.root;
+    this.quality = args.quality;
+    this.notes = notes;
+    this.name = name;
   }
 
   //Helpers
