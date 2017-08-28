@@ -1,0 +1,19 @@
+{
+  "name": "solfege",
+  "version": "1.0.0",
+  "description": "Helpers for notes, intervals, chords and scales building",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AtActionPark/Solfege.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AtActionPark/Solfege/issues"
+  },
+  "homepage": "https://github.com/AtActionPark/Solfege#readme"
+}

@@ -1,3 +1,3 @@
 # Solfege
 
-Helpers for interval, chords and scales building
+Set of solfege helpers for notes, intervals, chords and scales
