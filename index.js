@@ -41,10 +41,9 @@ let interval = solfege.randomInterval()
 let result = note.plusInterval(interval)
 let computedInterval = solfege.interval(note,result)
 
-//console.log('Root note: ' + note.name)
-//console.log('Interval :' + interval.order + ' ' + interval.name)
-//console.log('Computed Interval :' + computedInterval.order + ' ' + computedInterval.name)
-//console.log('Result note: ' + result.name)
-
+console.log('Root note: ' + note.name)
+console.log('Interval :' + interval.order + ' ' + interval.name)
+console.log('Computed Interval :' + computedInterval.order + ' ' + computedInterval.name)
+console.log('Result note: ' + result.name)
 
 
