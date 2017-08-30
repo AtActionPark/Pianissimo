@@ -24,6 +24,9 @@ function getRandomInterval(){
   
     return new Interval(intervalName, intervalOrder)
 }
+function setA4(frequency){
+    Theory.A4Freq = frequency
+}
 
 let solfege = {
     note:noteConstructor,
@@ -36,8 +39,12 @@ let solfege = {
 }
 exports = module.exports = solfege
 
-let note = solfege.randomNote(3,4)
-let interval = solfege.randomInterval()
+/* let note = solfege.randomNote(3,4)
+let interval = solfege.randomInterval() */
+
+let note = solfege.note('C#3')
+let interval = solfege.interval('P15', 'descending')
+
 let result = note.plusInterval(interval)
 let computedInterval = solfege.interval(note,result)
 
@@ -45,5 +52,4 @@ console.log('Root note: ' + note.name)
 console.log('Interval :' + interval.order + ' ' + interval.name)
 console.log('Computed Interval :' + computedInterval.order + ' ' + computedInterval.name)
 console.log('Result note: ' + result.name)
-
 

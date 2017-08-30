@@ -1,6 +1,8 @@
 'use strict';
 
 var solfege = require('../index');
+
+//Note
 QUnit.test( "noteCreate", function( assert ) {
     let note;
 
@@ -71,20 +73,45 @@ QUnit.test( "noteCreate", function( assert ) {
         "Sil is not a valid alteration"
     );
 });
-
-QUnit.test( "getFrequency", function( assert ) {
+QUnit.test( "note.getFrequency", function( assert ) {
     let noteFreq, note2Freq;
 
-    noteFreq = solfege.note("A3").getFrequency()
-    assert.equal( noteFreq ,440,"A3 - 440hz");
-
     noteFreq = solfege.note("A4").getFrequency()
-    assert.equal( noteFreq ,880,"A4 - 880hz");
+    assert.equal( noteFreq ,440,"A4 - 440hz");
+
+    noteFreq = solfege.note("La5").getFrequency()
+    assert.equal( noteFreq ,880,"La5 - 880hz");
 
     noteFreq = solfege.note("C#3").getFrequency()
-    note2Freq = solfege.note("Db3").getFrequency()
+    note2Freq = solfege.note("Reb3").getFrequency()
     assert.equal( noteFreq ,note2Freq,"C#3 = Bb3");
 });
+QUnit.test( "note.plusInterval", function( assert ) {
+    let note, interval
+    
+    note = solfege.note('C3')
+    interval = solfege.interval('m3', 'ascending')
+    assert.equal(note.plusInterval(interval).name, 'Eb3')
+
+    note = solfege.note('C3')
+    interval = solfege.interval('P5', 'descending')
+    assert.equal(note.plusInterval(interval).name, 'F2')
+
+    note = solfege.note('Db3')
+    interval = solfege.interval('m2', 'ascending')
+    assert.equal(note.plusInterval(interval).name, 'Ebb3')
+
+    note = solfege.note('F#5')
+    interval = solfege.interval('P15', 'descending')
+    assert.equal(note.plusInterval(interval).name, 'F#3')
+
+    note = solfege.note('Solb2')
+    interval = solfege.interval('P8', 'ascending')
+    assert.equal(note.plusInterval(interval).name, 'Solb3')
+});
+
+
+
 
 //100 random tests to try to find forgotten edge cases
 QUnit.test( "Interval to notes", function( assert ) {
