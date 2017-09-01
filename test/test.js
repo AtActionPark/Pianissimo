@@ -193,6 +193,54 @@ QUnit.test( "intervalComputeFromNotes", function( assert ) {
     assert.equal( interval.semitones ,'-6');
     assert.equal( interval.qualityText ,'diminished');
     assert.equal( interval.numberText ,'fifth');
+
+    note1 = solfege.note('C3')
+    note2 = solfege.note('C5')
+    interval = solfege.interval(note1,note2)
+    assert.equal( interval.name ,'P15');
+    assert.equal( interval.order ,'ascending');
+    assert.equal( interval.number ,'15');
+    assert.equal( interval.quality ,'P');
+    assert.equal( interval.semitones ,'24');
+    assert.equal( interval.qualityText ,'perfect');
+    assert.equal( interval.numberText ,'fifteenth');
+
+    note1 = solfege.note('C3')
+    note2 = solfege.note('C6')
+    interval = solfege.interval(note1,note2)
+    assert.equal( interval.name ,'P22');
+    assert.equal( interval.order ,'ascending');
+    assert.equal( interval.number ,'22');
+    assert.equal( interval.quality ,'P');
+    assert.equal( interval.semitones ,'36');
+    assert.equal( interval.qualityText ,'perfect');
+    assert.equal( interval.numberText ,'22th');
+});
+QUnit.test( "intervalInvert", function( assert ) {
+    let interval;
+
+    let note1,note2
+    note1 = solfege.note('C3')
+    note2 = solfege.note('G3')
+    interval = solfege.interval(note1,note2).invert()
+    assert.equal( interval.name ,'P4');
+    assert.equal( interval.order ,'ascending');
+    assert.equal( interval.number ,'4');
+    assert.equal( interval.quality ,'P');
+    assert.equal( interval.semitones ,'5');
+    assert.equal( interval.qualityText ,'perfect');
+    assert.equal( interval.numberText ,'fourth');
+
+    note1 = solfege.note('G3')
+    note2 = solfege.note('C3')
+    interval = solfege.interval(note1,note2).invert()
+    assert.equal( interval.name ,'P4');
+    assert.equal( interval.order ,'descending');
+    assert.equal( interval.number ,'4');
+    assert.equal( interval.quality ,'P');
+    assert.equal( interval.semitones ,'-5');
+    assert.equal( interval.qualityText ,'perfect');
+    assert.equal( interval.numberText ,'fourth');
 });
 
 

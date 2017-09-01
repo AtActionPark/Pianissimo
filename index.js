@@ -60,8 +60,9 @@ console.log(note.getFrequency()) */
 
 
 let note1 = solfege.note('C4')
-let note2 = solfege.note('G4')
+let note2 = solfege.note('A6')
 let interval2 = solfege.interval(note1, note2)
+console.log(interval2)
 interval2.invert()
 console.log(interval2)
 
