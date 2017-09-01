@@ -33,6 +33,7 @@ let solfege = {
     interval:intervalConstructor,
     randomNote:getRandomNote,
     randomInterval:getRandomInterval,
+    setA4:setA4,
     Note:Note,
     Interval:Interval,
     Chord:Chord,
@@ -42,8 +43,8 @@ exports = module.exports = solfege
 /* let note = solfege.randomNote(3,4)
 let interval = solfege.randomInterval() */
 
-let note = solfege.note('C#3')
-let interval = solfege.interval('P15', 'descending')
+/* let note = solfege.note('C4')
+let interval = solfege.interval('A14', 'ascending')
 
 let result = note.plusInterval(interval)
 let computedInterval = solfege.interval(note,result)
@@ -52,4 +53,15 @@ console.log('Root note: ' + note.name)
 console.log('Interval :' + interval.order + ' ' + interval.name)
 console.log('Computed Interval :' + computedInterval.order + ' ' + computedInterval.name)
 console.log('Result note: ' + result.name)
+
+
+console.log(note.getFrequency()) */
+
+
+
+let note1 = solfege.note('C4')
+let note2 = solfege.note('G4')
+let interval2 = solfege.interval(note1, note2)
+interval2.invert()
+console.log(interval2)
 
