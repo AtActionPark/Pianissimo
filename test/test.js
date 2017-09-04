@@ -1,6 +1,7 @@
 'use strict';
 
 var solfege = require('../index');
+var Helpers = require('../lib/helper');
 
 //Note
 QUnit.test( "noteCreate", function( assert ) {
@@ -114,6 +115,23 @@ QUnit.test( "note.plusInterval", function( assert ) {
     assert.equal(note.plusInterval(interval).name, 'Solb3')
 
 });
+QUnit.test( "note.toChord", function( assert ) {
+    let note, scale,result
+    
+    note = solfege.note('C3')
+    scale = note.toScale('major')
+    assert.equal(scale.getNotes().length, 8)
+    assert.equal(scale.getNotes().length, 8)
+    assert.equal(Helpers.isNote(scale.getNotes()[5]), true)
+    assert.equal(scale.getNotes()[5].name, 'A3')
+
+    note = solfege.note('Sol3')
+    scale = note.toScale('minor')
+    assert.equal(scale.getNotes().length, 8)
+    assert.equal(scale.getNotes().length, 8)
+    assert.equal(Helpers.isNote(scale.getNotes()[5]), true)
+    assert.equal(scale.getNotes()[5].name, 'Mib4')
+});
 
 //Interval
 QUnit.test( "intervalCreate", function( assert ) {
@@ -165,6 +183,28 @@ QUnit.test( "intervalCreate", function( assert ) {
     assert.equal( interval.semitones ,'0');
     assert.equal( interval.qualityText ,'diminished');
     assert.equal( interval.numberText ,'second');
+
+     //creation with notes
+     let note1 = solfege.note('C3')
+     let note2 = solfege.note('G3')
+     interval = solfege.interval(note1,note2)
+     assert.equal( interval.name ,'P5');
+     assert.equal( interval.order ,'ascending');
+     assert.equal( interval.number ,'5');
+     assert.equal( interval.quality ,'P');
+     assert.equal( interval.semitones ,'7');
+     assert.equal( interval.qualityText ,'perfect');
+     assert.equal( interval.numberText ,'fifth');
+
+     //short hand creation with notes
+     interval = solfege.interval('C3','G3')
+     assert.equal( interval.name ,'P5');
+     assert.equal( interval.order ,'ascending');
+     assert.equal( interval.number ,'5');
+     assert.equal( interval.quality ,'P');
+     assert.equal( interval.semitones ,'7');
+     assert.equal( interval.qualityText ,'perfect');
+     assert.equal( interval.numberText ,'fifth');
 
     
 });
@@ -241,6 +281,26 @@ QUnit.test( "intervalInvert", function( assert ) {
     assert.equal( interval.semitones ,'-5');
     assert.equal( interval.qualityText ,'perfect');
     assert.equal( interval.numberText ,'fourth');
+});
+
+//Scale
+QUnit.test( "scaleCreate", function( assert ) {
+    let scale,note;
+    note = solfege.note('C3')
+
+    //Basic creation
+    scale = solfege.scale(note,'major')
+    assert.equal(scale.getTonic() ,note);
+    assert.equal(scale.getType() ,'major');
+    assert.equal(scale.getNotes()[0] ,note);
+    assert.equal(scale.getNotes()[4].name ,'G3');
+
+    //Short hand creation
+    scale = solfege.scale('C3','minor')
+    assert.equal(scale.getTonic().name ,'C3');
+    assert.equal(scale.getType() ,'minor');
+    assert.equal(scale.getNotes()[0].name ,note.name);
+    assert.equal(scale.getNotes()[4].name ,'G3');
 });
 
 

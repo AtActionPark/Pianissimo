@@ -3,14 +3,20 @@
 var Note = require('./lib/note');
 var Interval = require('./lib/interval');
 var Chord = require('./lib/chord');
+var Scale = require('./lib/scale');
 var Helpers = require('./lib/helper');
 var Theory = require('./lib/theory');
+
+
 
 function noteConstructor(name){
     return new Note(name)
 }
 function intervalConstructor(arg1,arg2){
     return new Interval(arg1,arg2)
+}
+function scaleConstructor(tonic,type){
+    return new Scale(tonic,type)
 }
 function getRandomNote(octave1,octave2){
     let note =  Helpers.pickRandomArray(Theory.fullNotesList)
@@ -31,21 +37,18 @@ function setA4(frequency){
 let solfege = {
     note:noteConstructor,
     interval:intervalConstructor,
+    scale:scaleConstructor,
     randomNote:getRandomNote,
     randomInterval:getRandomInterval,
     setA4:setA4,
     Note:Note,
     Interval:Interval,
     Chord:Chord,
+    Scale:Scale,
 }
 exports = module.exports = solfege
 
 
-let note1 = solfege.note('E4')
-let note2 = solfege.note('Bb3')
-
-let interval = solfege.interval(note1,note2)
-console.log(interval)
 
 
 
