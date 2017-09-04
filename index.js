@@ -40,29 +40,12 @@ let solfege = {
 }
 exports = module.exports = solfege
 
-/* let note = solfege.randomNote(3,4)
-let interval = solfege.randomInterval() */
 
-/* let note = solfege.note('C4')
-let interval = solfege.interval('A14', 'ascending')
+let note1 = solfege.note('E4')
+let note2 = solfege.note('Bb3')
 
-let result = note.plusInterval(interval)
-let computedInterval = solfege.interval(note,result)
-
-console.log('Root note: ' + note.name)
-console.log('Interval :' + interval.order + ' ' + interval.name)
-console.log('Computed Interval :' + computedInterval.order + ' ' + computedInterval.name)
-console.log('Result note: ' + result.name)
+let interval = solfege.interval(note1,note2)
+console.log(interval)
 
 
-console.log(note.getFrequency()) */
-
-
-
-let note1 = solfege.note('C4')
-let note2 = solfege.note('A6')
-let interval2 = solfege.interval(note1, note2)
-console.log(interval2)
-interval2.invert()
-console.log(interval2)
 
