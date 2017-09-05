@@ -8,7 +8,6 @@ var Helpers = require('./lib/helper');
 var Theory = require('./lib/theory');
 
 
-
 function noteConstructor(name){
     return new Note(name)
 }
@@ -48,11 +47,17 @@ let solfege = {
 }
 exports = module.exports = solfege
 
-let scale = solfege.note('C3').toScale('major',1)
+let n = solfege.note('Solb2')
+console.log(n.getName())
+
+let n2 = n.plusInterval('P8')
+console.log(n2.getName())
+
+
+let scale = n.toScale('major')
 console.log(scale.getNotesName())
 
-scale.changeMode(2)
-console.log(scale.getNotesName())
+
 
 
 

@@ -8,47 +8,47 @@ QUnit.test( "noteCreate", function( assert ) {
     let note;
 
     note = solfege.note('C3')
-    assert.equal( note.name ,'C3');
-    assert.equal( note.root ,'C');
-    assert.equal( note.octave ,'3');
-    assert.equal( note.alteration ,'');
+    assert.equal( note.getName() ,'C3');
+    assert.equal( note.getRoot() ,'C');
+    assert.equal( note.getOctave() ,'3');
+    assert.equal( note.getAlteration() ,'');
 
     note = solfege.note('Bb6')
-    assert.equal( note.name ,'Bb6');
-    assert.equal( note.root ,'Bb');
-    assert.equal( note.octave ,'6');
-    assert.equal( note.alteration ,'b');
+    assert.equal( note.getName() ,'Bb6');
+    assert.equal( note.getRoot() ,'Bb');
+    assert.equal( note.getOctave() ,'6');
+    assert.equal( note.getAlteration() ,'b');
 
     note = solfege.note('B##6')
-    assert.equal( note.name ,'B##6');
-    assert.equal( note.root ,'B##');
-    assert.equal( note.octave ,'6');
-    assert.equal( note.alteration ,'##');
+    assert.equal( note.getName() ,'B##6');
+    assert.equal( note.getRoot() ,'B##');
+    assert.equal( note.getOctave() ,'6');
+    assert.equal( note.getAlteration() ,'##');
 
     note = solfege.note('Solbb6')
-    assert.equal( note.name ,'Solbb6');
-    assert.equal( note.root ,'Solbb');
-    assert.equal( note.octave ,'6');
-    assert.equal( note.alteration ,'bb');
+    assert.equal( note.getName() ,'Solbb6');
+    assert.equal( note.getRoot() ,'Solbb');
+    assert.equal( note.getOctave() ,'6');
+    assert.equal( note.getAlteration() ,'bb');
 
     note = solfege.note('Do')
-    assert.equal( note.name ,'Do3');
-    assert.equal( note.root ,'Do');
-    assert.equal( note.octave ,'3');
-    assert.equal( note.alteration ,'');
+    assert.equal( note.getName() ,'Do3');
+    assert.equal( note.getRoot() ,'Do');
+    assert.equal( note.getOctave() ,'3');
+    assert.equal( note.getAlteration() ,'');
 
     note = solfege.note('Fab1')
-    assert.equal( note.name ,'Fab1');
-    assert.equal( note.root ,'Fab');
-    assert.equal( note.octave ,'1');
-    assert.equal( note.alteration ,'b');
+    assert.equal( note.getName() ,'Fab1');
+    assert.equal( note.getRoot() ,'Fab');
+    assert.equal( note.getOctave() ,'1');
+    assert.equal( note.getAlteration() ,'b');
 
     //no octave provided, should default to 3
     note = solfege.note('B')
-    assert.equal( note.name ,'B3');
-    assert.equal( note.root ,'B');
-    assert.equal( note.octave ,'3');
-    assert.equal( note.alteration ,'');
+    assert.equal( note.getName() ,'B3');
+    assert.equal( note.getRoot() ,'B');
+    assert.equal( note.getOctave() ,'3');
+    assert.equal( note.getAlteration() ,'');
 
     //bad alteration, should throw error
     assert.throws(function(){
@@ -96,23 +96,23 @@ QUnit.test( "note.plusInterval", function( assert ) {
     
     note = solfege.note('C3')
     interval = solfege.interval('m3', 'ascending')
-    assert.equal(note.plusInterval(interval).name, 'Eb3')
+    assert.equal(note.plusInterval(interval).getName(), 'Eb3')
 
     note = solfege.note('C3')
     interval = solfege.interval('P5', -1)
-    assert.equal(note.plusInterval(interval).name, 'F2')
+    assert.equal(note.plusInterval(interval).getName(), 'F2')
 
     note = solfege.note('Db3')
     interval = solfege.interval('m2', 'ascending')
-    assert.equal(note.plusInterval(interval).name, 'Ebb3')
+    assert.equal(note.plusInterval(interval).getName(), 'Ebb3')
 
     note = solfege.note('F#5')
     interval = solfege.interval('P15', '-')
-    assert.equal(note.plusInterval(interval).name, 'F#3')
+    assert.equal(note.plusInterval(interval).getName(), 'F#3')
 
     note = solfege.note('Solb2')
     interval = solfege.interval('P8', 1)
-    assert.equal(note.plusInterval(interval).name, 'Solb3')
+    assert.equal(note.plusInterval(interval).getName(), 'Solb3')
 
 });
 QUnit.test( "note.toScale", function( assert ) {
@@ -123,14 +123,14 @@ QUnit.test( "note.toScale", function( assert ) {
     assert.equal(scale.getNotes().length, 8)
     assert.equal(scale.getNotes().length, 8)
     assert.equal(Helpers.isNote(scale.getNotes()[5]), true)
-    assert.equal(scale.getNotes()[5].name, 'A3')
+    assert.equal(scale.getNotes()[5].getName(), 'A3')
 
     note = solfege.note('Sol3')
     scale = note.toScale('minor')
     assert.equal(scale.getNotes().length, 8)
     assert.equal(scale.getNotes().length, 8)
     assert.equal(Helpers.isNote(scale.getNotes()[5]), true)
-    assert.equal(scale.getNotes()[5].name, 'Mib4')
+    assert.equal(scale.getNotes()[5].getName(), 'Mib4')
 });
 
 //Interval
@@ -293,14 +293,14 @@ QUnit.test( "scaleCreate", function( assert ) {
     assert.equal(scale.getTonic() ,note);
     assert.equal(scale.getType() ,'major');
     assert.equal(scale.getNotes()[0] ,note);
-    assert.equal(scale.getNotes()[4].name ,'G3');
+    assert.equal(scale.getNotes()[4].getName() ,'G3');
 
     //Short hand creation
     scale = solfege.scale('C3','minor')
-    assert.equal(scale.getTonic().name ,'C3');
+    assert.equal(scale.getTonic().getName() ,'C3');
     assert.equal(scale.getType() ,'minor');
-    assert.equal(scale.getNotes()[0].name ,note.name);
-    assert.equal(scale.getNotes()[4].name ,'G3');
+    assert.equal(scale.getNotes()[0].getName() ,note.getName());
+    assert.equal(scale.getNotes()[4].getName() ,'G3');
 });
 
 
@@ -318,7 +318,7 @@ QUnit.test( "Interval to notes", function( assert ) {
             continue
         
         
-        assert.equal( interval.semitones ,computedInterval.semitones, "rootNote: " + note.name + '-' + targetNote.name + ' -  intervalNameBasic: '+ interval.name + ' -  intervalNameComputed: '+ computedInterval.name);
+        assert.equal( interval.semitones ,computedInterval.semitones, "rootNote: " + note.getName() + '-' + targetNote.getName() + ' -  intervalNameBasic: '+ interval.name + ' -  intervalNameComputed: '+ computedInterval.name);
     } 
 });
 QUnit.test( "Notes to Interval", function( assert ) {
@@ -331,7 +331,7 @@ QUnit.test( "Notes to Interval", function( assert ) {
         let note = note1.plusInterval(interval)
         if(note == 'impossible to compute' ) continue
 
-        assert.equal(note.name, note2.name,'Notes: '+note1.name+'-'+note2.name+' - Interval: ' + interval.name )
+        assert.equal(note.getName(), note2.getName(),'Notes: '+note1.getName()+'-'+note2.getName()+' - Interval: ' + interval.name )
     } 
 });  
 
