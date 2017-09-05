@@ -48,6 +48,12 @@ let solfege = {
 }
 exports = module.exports = solfege
 
+let scale = solfege.note('C3').toScale('major',1)
+console.log(scale.getNotesName())
+
+scale.changeMode(2)
+console.log(scale.getNotesName())
+
 
 
 

@@ -115,7 +115,7 @@ QUnit.test( "note.plusInterval", function( assert ) {
     assert.equal(note.plusInterval(interval).name, 'Solb3')
 
 });
-QUnit.test( "note.toChord", function( assert ) {
+QUnit.test( "note.toScale", function( assert ) {
     let note, scale,result
     
     note = solfege.note('C3')
