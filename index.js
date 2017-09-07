@@ -47,8 +47,8 @@ let solfege = {
 }
 exports = module.exports = solfege
 
-let n1 = solfege.note('Bb3')
-let s = n1.toScale('minor')
+let n1 = solfege.note('sib3')
+let s = n1.toScale('minorPentaTONIC')
 
 console.log(s.getNotesName())
 

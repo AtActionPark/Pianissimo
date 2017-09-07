@@ -43,6 +43,12 @@ QUnit.test( "noteCreate", function( assert ) {
     assert.equal( note.getOctave() ,'1');
     assert.equal( note.getAlteration() ,'b');
 
+    note = solfege.note('fab1')
+    assert.equal( note.getName() ,'fab1');
+    assert.equal( note.getRoot() ,'fab');
+    assert.equal( note.getOctave() ,'1');
+    assert.equal( note.getAlteration() ,'b');
+
     note = solfege.note('Fab12')
     assert.equal( note.getName() ,'Fab12');
     assert.equal( note.getRoot() ,'Fab');
