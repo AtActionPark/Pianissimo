@@ -48,14 +48,9 @@ let solfege = {
 exports = module.exports = solfege
 
 let n1 = solfege.note('Bb3')
-let i = solfege.interval('d8','descending')
-let n2 = n1.plusInterval(i)
-console.log(n2.name())
+let s = n1.toScale('minor')
 
-console.log(i) 
-let computedI = solfege.interval(n1,n2)
-console.log(computedI)
-
+console.log(s.getNotesName())
 
 
 
