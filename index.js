@@ -47,16 +47,16 @@ let solfege = {
 }
 exports = module.exports = solfege
 
-let n1 = solfege.note('Solx2')
-let n2 = solfege.note('Sib2')
-console.log(n1.name())
-
-let i = solfege.interval(n1,n2)
-let s = n1.toScale('minor').getNotesName()
-console.log(s)
-
+let n1 = solfege.note('Bb3')
+let i = solfege.interval('d8','descending')
+let n2 = n1.plusInterval(i)
+console.log(n2.name())
 
 console.log(i) 
+let computedI = solfege.interval(n1,n2)
+console.log(computedI)
+
+
 
 
 
