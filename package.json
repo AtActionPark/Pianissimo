@@ -2,7 +2,7 @@
   "name": "solfege",
   "version": "1.0.0",
   "description": "Helpers for notes, intervals, chords and scales building",
-  "main": "index.js",
+  "main": "solfege.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

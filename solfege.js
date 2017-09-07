@@ -47,10 +47,15 @@ let solfege = {
 }
 exports = module.exports = solfege
 
-let n1 = solfege.note('sib3')
-let s = n1.toScale('minorPentaTONIC')
+let n1 = solfege.note('Do3')
+let n2 = n1.plusInterval('m3',-10)
 
-console.log(s.getNotesName())
+let i = solfege.interval(n1,n2)
+console.log(i)
+
+console.log('--')
+let i2 = new Interval(n1,'C4')
+console.log(i2)
 
 
 

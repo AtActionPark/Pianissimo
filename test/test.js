@@ -1,6 +1,6 @@
 'use strict';
 
-var solfege = require('../index');
+var solfege = require('../solfege');
 var Helpers = require('../lib/helper');
 
 //Note
