@@ -6,7 +6,7 @@ Set of solfege helpers for notes, intervals, chords and scales
 ```javascript
     const solfege = require('../solfege');
 ```
-##### Methods
+#### Methods
 ```javascript
     solfege.note(name);                  //returns a note object from a name
     solfege.interval(name,order);        //returns an interval object from a name and order
@@ -17,7 +17,7 @@ Set of solfege helpers for notes, intervals, chords and scales
     solfege.setA4(frequency);            //sets the frequency of A4 (default: 440Hz)
 ```
 
-##### Examples
+#### Examples
 ```javascript
     const solfege = require('../solfege');
 
