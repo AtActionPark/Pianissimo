@@ -17,8 +17,8 @@ Set of solfege helpers for notes, intervals, chords and scales
     solfege.setA4(frequency);            //sets the frequency of A4 (default: 440Hz)
 ```
 
-#### Notes
-##### Creation
+## Notes
+#### Creation
 Notes are object created through the .note(arg) method
 Argument must be a string of type 'C3', 'C#2', 'Db', 'Solb4', 'fax' ...
 
@@ -29,7 +29,7 @@ Argument must be a string of type 'C3', 'C#2', 'Db', 'Solb4', 'fax' ...
     let note4 = solfege.note('Gx4');      
 ```
 
-##### Getters
+#### Getters
 ```javascript
     note.getName();          // 'C#4'
     note.getRoot();          // 'C#'
@@ -38,7 +38,7 @@ Argument must be a string of type 'C3', 'C#2', 'Db', 'Solb4', 'fax' ...
     note.getOctave();        // 4
     note.getNotationType();  // letter (can be letter or name)
 ```
-##### Methods
+#### Methods
 **.plusInterval(args)** : adds an interval to the note, and returns the resulting note object
 Arguments can be an interval object, an interval name (order will be ascending, or an interval name and order)
 ```javascript
@@ -55,8 +55,8 @@ Arguments can be the name of the scale, and the degree to start on (optional)
     note.toScale(type,degree)      //ex: let scale = note.toScale('locrian',5) 
 ```
 
-#### Interval
-##### Creation
+## Interval
+#### Creation
 Interval are object created through the .interval(arg1,arg2) method
 The first way of creating an interval is by specifying the name and order
 Arg1 is the name of the interval (m3, P5,d18...)
@@ -77,7 +77,7 @@ let interval3 = solfege.note('C3',note2);
 let interval3 = solfege.note(note1,'Sol#');
 ```
 
-##### Getters
+#### Getters
 ```javascript
     interval.getName();         // 'm3'
     interval.getSemitonest();   // '3'
@@ -92,7 +92,7 @@ let interval3 = solfege.note(note1,'Sol#');
     interval.getNotesName();    // returns [note1.getName(),note2.getName()]
 ```
 
-##### Methods
+#### Methods
 **.invert()** : returns the inverted interval. If it was defined with notes, 
 
 ```javascript
@@ -104,8 +104,8 @@ let interval3 = solfege.note(note1,'Sol#');
     interval.getNotesName();                            //['G3', 'C4']
 ```
 
-#### Scale
-##### Creation
+## Scale
+#### Creation
 Scales are object created through the .scale(tonic,type,degree) method
 Degree is optional, with default value 1, and used to start a scale on a different degree
 
@@ -116,7 +116,7 @@ let scale2 = solfege.scale('C3','harmonicMinor',5);    //5th mode of the harmoni
 
 ```
 
-##### Getters
+#### Getters
 ```javascript
     scale.getTonic();       // 'C3'
     scale.getType();        // 'minor'
@@ -126,7 +126,7 @@ let scale2 = solfege.scale('C3','harmonicMinor',5);    //5th mode of the harmoni
 
 ```
 
-##### Methods
+#### Methods
 **.invert()** : returns the inverted interval. If it was defined with notes, 
 
 ```javascript
