@@ -48,11 +48,9 @@ let solfege = {
 exports = module.exports = solfege
 
 let n1 = solfege.note('Do3')
-let n2 = solfege.note('G3')
-
-let i = solfege.interval(n1,n2).invert()
-console.log(i.getName())
-console.log(i.getNotesName())
+let scale = n1.toScale('minor')
+console.log(scale.getDegree())
+console.log(scale.getNotesName())
 
 
 
