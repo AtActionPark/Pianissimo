@@ -289,6 +289,42 @@ QUnit.test( "scaleCreate", function( assert ) {
     assert.equal(scale.getNotes()[4].getName() ,'G3');
 });
 
+//Scale
+QUnit.test( "chordCreate", function( assert ) {
+    let chord,note;
+    note = solfege.note('C3')
+
+    chord = solfege.chord(note,'major')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3'][i])
+    }
+
+    chord = solfege.chord(note,'min')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3'][i])
+    }
+
+    chord = solfege.chord(note,'7b5')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','Gb3','Bb3'][i])
+    }
+
+    chord = solfege.chord(note,'#9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','Bb3','D#4'][i])
+    }
+
+    chord = solfege.chord(note,'13#9b5')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3', 'E3', 'Gb3', 'Bb3', 'D#4', 'F4', 'A4'][i])
+    }
+
+    chord = solfege.chord(note,'7sus4')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3', 'F3', 'G3', 'Bb3'][i])
+    }
+});
+
 
 //100 random tests to try to find forgotten edge cases
 QUnit.test( "Interval to notes", function( assert ) {

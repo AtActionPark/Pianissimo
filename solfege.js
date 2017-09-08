@@ -17,6 +17,9 @@ function intervalConstructor(arg1,arg2){
 function scaleConstructor(tonic,type){
     return new Scale(tonic,type)
 }
+function chordConstructor(arg1,arg2){
+    return new Chord(arg1,arg2)
+}
 function getRandomNote(octave1,octave2){
     let note =  Helpers.pickRandomArray(Theory.fullNotesList)
     let octave = Helpers.getRandomInt(octave1,octave2)
@@ -37,6 +40,7 @@ let solfege = {
     note:noteConstructor,
     interval:intervalConstructor,
     scale:scaleConstructor,
+    chord:chordConstructor,
     randomNote:getRandomNote,
     randomInterval:getRandomInterval,
     setA4:setA4,
@@ -47,10 +51,14 @@ let solfege = {
 }
 exports = module.exports = solfege
 
-let n1 = solfege.note('Do3')
-let scale = n1.toScale('minor')
-console.log(scale.getDegree())
-console.log(scale.getNotesName())
+let note = solfege.note('C3')
+//let chord = solfege.chord(note,'maj7sus4#5b7b12#2add9flat7')
+let chord = solfege.chord(note,'21')
+console.log(chord.getNotesName())
+
+
+
+
 
 
 
