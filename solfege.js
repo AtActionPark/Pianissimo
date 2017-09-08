@@ -48,14 +48,12 @@ let solfege = {
 exports = module.exports = solfege
 
 let n1 = solfege.note('Do3')
-let n2 = n1.plusInterval('m3',-10)
+let n2 = solfege.note('G3')
 
-let i = solfege.interval(n1,n2)
-console.log(i)
+let i = solfege.interval(n1,n2).invert()
+console.log(i.getName())
+console.log(i.getNotesName())
 
-console.log('--')
-let i2 = new Interval(n1,'C4')
-console.log(i2)
 
 
 

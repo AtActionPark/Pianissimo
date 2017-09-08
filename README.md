@@ -6,7 +6,7 @@ Set of solfege helpers for notes, intervals, chords and scales
 ```javascript
 const solfege = require('../solfege');
 ```
-#####Methods
+##### Methods
 ```javascript
 solfege.note(name)                  //returns a note object from a name
 solfege.interval(name,order)        //returns an interval object from a name and order
@@ -18,7 +18,7 @@ solfege.setA4(frequency)            //sets the frequency of A4 (default: 440Hz)
 ```
 
 #### Notes
-#####Creation
+##### Creation
 Notes are object created through the .note(arg) method
 Argument must be a string of type 'C3', 'C#2', 'Db', 'Solb4', 'fax' ...
 
@@ -29,7 +29,7 @@ let note3 = solfege.note('D');        //octave will default to 3
 let note4 = solfege.note('Gx4');      
 ```
 
-#####Getters
+##### Getters
 ```javascript
     note.getName();          // 'C#4'
     note.getRoot();          // 'C#'
@@ -38,7 +38,7 @@ let note4 = solfege.note('Gx4');
     note.getOctave();        // 4
     note.getNotationType();  // letter (can be letter or name)
 ```
-#####Methods
+##### Methods
 .plusInterval(args) : adds an interval to the note, and returns the resulting note object
 Arguments can be an interval object, an interval name (order will be ascending, or an interval name and order)
 ```javascript
@@ -56,7 +56,7 @@ Arguments can be the name of the scale, and the degree to start on (optional)
 ```
 
 #### Interval
-#####Creation
+##### Creation
 Interval are object created through the .interval(arg1,arg2) method
 The first way of creating an interval is by specifying the name and order
 Arg1 is the name of the interval (m3, P5,d18...)
@@ -77,32 +77,29 @@ let interval3 = solfege.note('C3',note2);
 let interval3 = solfege.note(note1,'Sol#');
 ```
 
-#####Getters
+##### Getters
 ```javascript
-    note.getName();         // 'm3'
-    note.getSemitonest();   // '3'
-    note.getOrder());       // 'ascending'
-    note.getNumber();       // 3
-    note.getQuality();      // m
-    note.getQualityText();  // minor
-    note.getNumberText();   // third
-    note.getNote1();        // undefined or the note used to create the interval
-    note.getNote2();        // undefined or the note used to create the interval
+    interval.getName();         // 'm3'
+    interval.getSemitonest();   // '3'
+    interval.getOrder());       // 'ascending'
+    interval.getNumber();       // 3
+    interval.getQuality();      // m
+    interval.getQualityText();  // minor
+    interval.getNumberText();   // third
+    interval.getNote1();        // undefined, or the note used to create the interval
+    interval.getNote2();        // undefined, or the note used to create the interval
+    interval.getNotes();        // returns [note1,note2]
+    interval.getNotesName();    // returns [note1.getName(),note2.getName()]
 ```
 
-#####Methods
-.plusInterval(args) : adds an interval to the note, and returns the resulting note object
-Arguments can be an interval object, an interval name (order will be ascending, or an interval name and order)
-```javascript
-    note.plusInterval(interval)             //ex: let note2 = note.plusInterval(intervalObject) 
-    note.plusInterval(intervalName)         //ex: let note2 = note.plusInterval('P5') 
-    note.plusInterval(intervaName,order)    //ex: let note2 = note.plusInterval('P5', 'descending') 
-                                            //ex: let note2 = note.plusInterval('P5', '-') 
-```
+##### Methods
+.invert() : returns the inverted interval. If it was defined with notes, 
 
-.toScale(args) : returns a scale object built on the current note
-Arguments can be the name of the scale, and the degree to start on (optional)
 ```javascript
-    note.toScale(type)             //ex: let scale = note.toScale('minor') 
-    note.toScale(type,degree)      //ex: let scale = note.toScale('locrian',5) 
+    let interval = new interval('m3').invert();  
+    interval.getName();                                  // M6     
+
+    let interval2 = new interval('C3','G3').invert();   
+    interval.getName();                                 // M6    
+    interval.getNotesName();                            //['G3', 'C4']
 ```
