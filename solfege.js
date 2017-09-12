@@ -53,7 +53,7 @@ exports = module.exports = solfege
 
 let note = solfege.note('C3')
 //let chord = solfege.chord(note,'maj7sus4#5b7b12#2add9flat7')
-let chord = solfege.chord(note,'21')
+let chord = solfege.chord(note,'m(b9b5b7b11')
 console.log(chord.getNotesName())
 
 

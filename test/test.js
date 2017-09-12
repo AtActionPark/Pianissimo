@@ -323,6 +323,28 @@ QUnit.test( "chordCreate", function( assert ) {
     for(let i = 0;i<chord.getNotes().length;i++){
         assert.equal(chord.getNotesName()[i],['C3', 'F3', 'G3', 'Bb3'][i])
     }
+
+    chord = solfege.chord(note,'m(b9b5b7b11)')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3', 'Eb3', 'Gb3', 'Bb3', 'Db4', 'Fb4'][i])
+    }
+
+    chord = solfege.chord(note,'ø')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3', 'Eb3', 'Gb3', 'Bb3'][i])
+    }
+    chord = solfege.chord(note,'mM7')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3', 'Eb3', 'G3', 'B3'][i])
+    }
+    chord = solfege.chord(note,'add9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3', 'E3', 'G3', 'D4'][i])
+    }
+    chord = solfege.chord(note,'o7')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3', 'Eb3', 'Gb3', 'Bb3'][i])
+    }
 });
 
 
