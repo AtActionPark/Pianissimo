@@ -12,6 +12,7 @@ Set of solfege helpers for notes, intervals, chords and scales
     solfege.interval(name,order);        //returns an interval object from a name and order
     solfege.interval(note1,note2);       //returns an interval object from 2 notes
     solfege.scale(tonic,type,degree);    //returns a scale object from a note, a scale name, and a degree (optional)
+    solfege.chord(tonic,name);           //returns a chord object from a note, and a chord name
     solfege.randomNote();                //returns a random note object
     solfege.randomInterval();            //returns a random interval object
     solfege.setA4(frequency);            //sets the frequency of A4 (default: 440Hz)
@@ -33,7 +34,7 @@ Set of solfege helpers for notes, intervals, chords and scales
     let scale = note3.toScale('locrian');
     scale.getNotesName();                           // ['D5,'Eb5','F5','G5','Ab5','Bb5','C6','D6']
 
-    //or, chained:
+    //or, chained, for decreased readability
     let scale = solfege.note('C3').plusInterval('m9').toInterval('F#4').invert().getNotes()[1].toScale('locrian').getNotesName();
     // ['D5,'Eb5','F5','G5','Ab5','Bb5','C6','D6']
 
@@ -172,3 +173,33 @@ let scale  = note.toScale('minor')      // equivalent to solfege.scale('C3','min
     interval.getName();                                 // M6    
     interval.getNotesName();                            //['G3', 'C4']
 ```
+
+## Chord
+#### Creation:
+Chords are object created through the .chord(tonic,name) method.
+The chord constructor will try to parse the name to build the chord on the tonic.
+It should understand most of the usual symols (M,m,Minor,m7,ø,11,add, sus,+,o,dim,aug,...)
+
+```javascript
+let chord1 = solfege.chord('C3','minor');              //C minor
+let chord2 = solfege.chord('C3','ø');                  //C half-diminished
+let chord2 = solfege.chord('C3','m(b9b5b7b11)sus4');   //why not
+```
+
+chords can also be created from a note object:
+
+```javascript
+let note = solfege.note('C3')
+let chord  = note.toChord('minor')      // equivalent to solfege.chord('C3','minor')
+```
+
+#### Getters:
+```javascript
+    scale.getTonic();       // 'C3'
+    scale.getSymbols();     // 'minor'
+    scale.getName();        // 'Cminor'
+    scale.getNotes();       // will return an array of note objects
+    scale.getNotesName();   // will return the name of the notes: ['C3','Eb3','Bb3']
+
+```
+

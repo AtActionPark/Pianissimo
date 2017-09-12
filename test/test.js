@@ -134,11 +134,10 @@ QUnit.test( "note.plusInterval", function( assert ) {
 
 });
 QUnit.test( "note.toScale", function( assert ) {
-    let note, scale,result
+    let note, scale
     
     note = solfege.note('C3')
     scale = note.toScale('major')
-    assert.equal(scale.getNotes().length, 8)
     assert.equal(scale.getNotes().length, 8)
     assert.equal(Helpers.isNote(scale.getNotes()[5]), true)
     assert.equal(scale.getNotes()[5].getName(), 'A3')
@@ -146,9 +145,18 @@ QUnit.test( "note.toScale", function( assert ) {
     note = solfege.note('Sol3')
     scale = note.toScale('minor')
     assert.equal(scale.getNotes().length, 8)
-    assert.equal(scale.getNotes().length, 8)
     assert.equal(Helpers.isNote(scale.getNotes()[5]), true)
     assert.equal(scale.getNotes()[5].getName(), 'Mib4')
+});
+QUnit.test( "note.toChord", function( assert ) {
+    let note, chord
+    
+    note = solfege.note('C3')
+    chord = note.toChord('major')
+    assert.equal(Helpers.isNote(chord.getNotes()[2]), true)
+    assert.equal(chord.getNotes()[2].getName(), 'G3')
+
+
 });
 
 //Interval
@@ -295,6 +303,10 @@ QUnit.test( "chordCreate", function( assert ) {
     note = solfege.note('C3')
 
     chord = solfege.chord(note,'major')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3'][i])
+    }
+    chord = solfege.chord('C3','major')
     for(let i = 0;i<chord.getNotes().length;i++){
         assert.equal(chord.getNotesName()[i],['C3','E3','G3'][i])
     }
