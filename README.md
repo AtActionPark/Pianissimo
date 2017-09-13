@@ -163,15 +163,21 @@ let scale  = note.toScale('minor')      // equivalent to solfege.scale('C3','min
 ```
 
 #### Methods:
-**.invert()** : returns the inverted interval. If it was defined with notes, 
+**.getChords()** : returns an array of chords built on the scale, along with diatonic function.
+Accepts an optional 'number' argument, to specify the number of notes per chord
 
 ```javascript
-    let interval = new interval('m3').invert();  
-    interval.getName();                                  // M6     
-
-    let interval2 = new interval('C3','G3').invert();   
-    interval.getName();                                 // M6    
-    interval.getNotesName();                            //['G3', 'C4']
+    let note = solfege.note('C3')
+    let scale = solfege.scale(note,'major')
+    let chords = scale.getChords(3)   
+    console.log(chords)    
+    //[ Chord { chord: [ 'C3', 'E3', 'G3' ], name: 'C major tonic' },
+    //Chord { chord: [ 'D3', 'F3', 'A3' ], name: 'C major supertonic' },
+    //Chord { chord: [ 'E3', 'G3', 'B3' ], name: 'C major mediant' },
+    //Chord { chord: [ 'F3', 'A3', 'C3' ], name: 'C major subdominant' },
+    //Chord { chord: [ 'G3', 'B3', 'D4' ], name: 'C major dominant' },
+    //Chord { chord: [ 'A3', 'C3', 'E4' ], name: 'C major submediant' },
+    //Chord { chord: [ 'B3', 'D4', 'F4' ], name: 'C major leadingNote' } ]                    
 ```
 
 ## Chord

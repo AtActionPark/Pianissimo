@@ -138,13 +138,13 @@ QUnit.test( "note.toScale", function( assert ) {
     
     note = solfege.note('C3')
     scale = note.toScale('major')
-    assert.equal(scale.getNotes().length, 8)
+    assert.equal(scale.getNotes().length, 7)
     assert.equal(Helpers.isNote(scale.getNotes()[5]), true)
     assert.equal(scale.getNotes()[5].getName(), 'A3')
 
     note = solfege.note('Sol3')
     scale = note.toScale('minor')
-    assert.equal(scale.getNotes().length, 8)
+    assert.equal(scale.getNotes().length, 7)
     assert.equal(Helpers.isNote(scale.getNotes()[5]), true)
     assert.equal(scale.getNotes()[5].getName(), 'Mib4')
 });
@@ -297,16 +297,32 @@ QUnit.test( "scaleCreate", function( assert ) {
     assert.equal(scale.getNotes()[4].getName() ,'G3');
 });
 
+QUnit.test( "scaleGetChords", function( assert ) {
+    let scale,chords;
+    scale = solfege.scale('C3','major')
+    chords = scale.getChords(4)
+    assert.equal(chords.length,7)
+    assert.equal(chords[4].name,'C major dominant')
+    assert.equal(chords[4].getNotesName()[3],'F4')
+});
+
 //Scale
 QUnit.test( "chordCreate", function( assert ) {
     let chord,note;
     note = solfege.note('C3')
 
+    //basic creation
     chord = solfege.chord(note,'major')
     for(let i = 0;i<chord.getNotes().length;i++){
         assert.equal(chord.getNotesName()[i],['C3','E3','G3'][i])
     }
+    //or with note name only
     chord = solfege.chord('C3','major')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3'][i])
+    }
+    // or with notes array
+    chord = solfege.chord(['C3','E3','G3'],'major')
     for(let i = 0;i<chord.getNotes().length;i++){
         assert.equal(chord.getNotesName()[i],['C3','E3','G3'][i])
     }
