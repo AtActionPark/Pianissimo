@@ -296,7 +296,6 @@ QUnit.test( "scaleCreate", function( assert ) {
     assert.equal(scale.getNotes()[0].getName() ,note.getName());
     assert.equal(scale.getNotes()[4].getName() ,'G3');
 });
-
 QUnit.test( "scaleGetChords", function( assert ) {
     let scale,chords;
     scale = solfege.scale('C3','major')
@@ -350,6 +349,11 @@ QUnit.test( "chordCreate", function( assert ) {
     chord = solfege.chord(note,'7sus4')
     for(let i = 0;i<chord.getNotes().length;i++){
         assert.equal(chord.getNotesName()[i],['C3', 'F3', 'G3', 'Bb3'][i])
+    }
+
+    chord = solfege.chord(note,'addb9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3', 'E3', 'G3', 'Db4' ][i])
     }
 
     chord = solfege.chord(note,'m(b9b5b7b11)')

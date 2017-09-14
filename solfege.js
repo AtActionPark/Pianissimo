@@ -52,13 +52,14 @@ let solfege = {
 exports = module.exports = solfege
 
 let note1 = solfege.note('C3')
-let scale = solfege.scale(note1,'major')
+let chord = note1.toChord('addb9')
+/* let scale = solfege.scale(note1,'major')
 let chords = scale.getChords(3)
-console.log(chords)
+console.log(chords) */
 
 
 
-//susb9?
+//addb9?
 
 
 
