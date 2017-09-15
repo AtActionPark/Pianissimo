@@ -5,9 +5,16 @@ Set of solfege helpers for notes, intervals, chords and scales
 Can be installed via nmp, or by copying the solfegeBundle.js in your project
 
 #### Create a solfege object
+If installed via nmp, require solfege first
 ```javascript
     const solfege = require('../solfege');
 ```
+If using the bundle.js file, assign the public module to a const
+```javascript
+    const solfege = module
+```
+
+
 #### Methods
 ```javascript
     solfege.note(name);                  //returns a note object from a name
