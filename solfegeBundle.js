@@ -63,9 +63,6 @@ Chord.prototype.getIntervals = function(){return this[_intervals]}
 Chord.prototype.getNotesName = function(){return this.getNotes().map(n => n.getName())};
 
 
-
-
-
 //Private
 //Setters
 const setTonic = function(chord,newTonic){chord[_tonic] = newTonic}
@@ -76,13 +73,25 @@ const setIntervals = function(chord,newIntervals){chord[_intervals] = newInterva
 
 const parseName = function(n){
   //look for special cases with 7th first
-  let maj7 = n.match(/maj7|M7/g)
+  let dim7 = n.match(/(Dim7|dim7|Diminished7|dimished7|o7|°7)/g)
+  n = n.replace('Dim7','');
+  n = n.replace('dim7','');
+  n = n.replace('Diminished7','');
+  n = n.replace('diminished7','');
+  let maj7 = n.match(/Major7|Maj7|maj7|M7|Δ7|Ma7|Δ/g)
   //maj7, M7 and min7 will be removed after beeing caught to not mess with the rest of the parsing
+  n = n.replace('Major7','');
+  n = n.replace('Maj7','');
   n = n.replace('maj7','');
+  n = n.replace('Ma7','');
   n = n.replace('M7','');
+  n = n.replace('Δ7','');
+  n = n.replace('Δ','');
 
-  let min7 = n.match(/min7/g)
+  let min7 = n.match(/min7|m7|-7/g)
   n = n.replace('min7','');
+  n = n.replace('m7','');
+  n = n.replace('-7','');
 
   let otherNum = n.match(/[^b]\d+/g)
   if(otherNum)
@@ -94,19 +103,36 @@ const parseName = function(n){
 
   
   //look for quality
-  let major = n.match(/M|Major|major/g)
+  
+  
+
+  
+
+  let aug = n.match(/(Aug|aug|Augmented|augmented|\+)/g)
+  n = n.replace('Augmented','');
+  n = n.replace('augmented','');
+  let dom = n.match(/(dom|Dom|dominant|Dominant)/g)
+  n = n.replace('dom','');
+  n = n.replace('Dom','');
+  n = n.replace('dominant','');
+  n = n.replace('Dominant','');
+  let halfDim = n.match(/ø|Ø/g)
+  let dim = n.match(/(Dim|dim|Diminished|diminished|°|[^j^n]o)/g)
+  n = n.replace('Dim','');
+  n = n.replace('dim','');
+  n = n.replace('Diminished','');
+  n = n.replace('diminished','');
+
+  let major = n.match(/M|Major|major|maj/g)
   n = n.replace('Major','');
   n = n.replace('major','');
-  let minor = n.match(/(m|min|Min|minor|Minor)/g)
-  n = n.replace('min','');
+  n = n.replace('maj','');
+  let minor = n.match(/(m|min|Min|minor|Minor|-)/g)
+  n = n.replace('m','');
   n = n.replace('minor','');
   n = n.replace('Minor','');
   n = n.replace('Min','');
-  let dim7 = n.match(/(Dim7|dim7|Diminished7|dimished7|o7|°7)/g)
-  let dim = n.match(/(Dim|dim|Diminished|dimished|o|°)/g)
-  let aug = n.match(/(Aug|aug|Augmented|augmented|\+)/g)
-  let dom = n.match(/(dom|Dom|dominant|Dominant)/g)
-  let halfDim = n.match(/ø/g)
+  n = n.replace('-','');
 
 
   //look for add
@@ -123,7 +149,7 @@ const parseName = function(n){
   //look for sus
   let sus = n.match(/sus\d+/g)
  
-/*console.log('major: ' + major)
+/*   console.log('major: ' + major)
   console.log('minor: ' + minor)
   console.log('maj7: ' + maj7)
   console.log('min7: ' + min7)
@@ -137,8 +163,8 @@ const parseName = function(n){
   console.log('adds: ' + adds)
   console.log('addss: ' + addss)
   console.log('addsb: ' + addsb)
-  console.log('sus: ' + sus)  */
-
+  console.log('sus: ' + sus)       */
+ 
   return {'major': major,
     'minor': minor,
     'maj7':maj7,
@@ -178,7 +204,7 @@ const buildChord = function(chord,parsed){
         intervals = addToIntervals(intervals,'P5')
         if(parsed['otherNum'][i].charAt(0) == 'm' ||parsed['otherNum'][i].charAt(0) == 'b'){
           intervals = addToIntervals(intervals,'m3')
-          intervals = addToIntervals(intervals,'m'+num)
+          intervals = addToIntervals(intervals,'M'+num)
         }
           
         else
@@ -229,19 +255,26 @@ const buildChord = function(chord,parsed){
   if(parsed['sharps'] != null){
     for(let i = 0;i<parsed['sharps'].length;i++){
       let s = parsed['sharps'][i].slice(1)
-      if(s>8){
-        intervals = addToIntervals(intervals,'m7')
-        for(let i=9;i<s;i+=2){
-          let quality =(i % 7 == 1 || i % 7 == 4|| i % 7 == 5) ? 'P': 'M'
-          intervals = addToIntervals(intervals,quality+i)
+      if(s == 7)
+      intervals = addToIntervals(intervals,'M7')
+      else{
+        if(s>8){
+
+          if(!hasNumber(intervals,7))
+            intervals = addToIntervals(intervals,'m7')
+          for(let i=9;i<s;i+=2){
+            let quality =(i % 7 == 1 || i % 7 == 4|| i % 7 == 5) ? 'P': 'M'
+            intervals = addToIntervals(intervals,quality+i)
+          }
         }
+        intervals = addToIntervals(intervals,'A'+s)
       }
-      intervals = addToIntervals(intervals,'A'+s)
     }
   }
   if(parsed['flats'] != null){
     for(let i = 0;i<parsed['flats'].length;i++){
       let f = parsed['flats'][i].slice(1)
+
       if(f>8){
         intervals = addToIntervals(intervals,'m7')
         for(let i=11;i<f;i+=2){
@@ -272,8 +305,11 @@ const buildChord = function(chord,parsed){
   if(parsed['addss']!= null){
     for(let i = 0;i<parsed['addss'].length;i++){
       let s = parsed['addss'][i].slice(4)
-      let quality = 'A'
-      intervals = addToIntervals(intervals,quality+s)
+      if(s % 7 == 0){
+        intervals = addToIntervals(intervals,'M'+f)
+      }
+      else
+        intervals = addToIntervals(intervals,'A'+s)
     }
   }
   if(parsed['sus'] != null){
@@ -290,7 +326,6 @@ const buildChord = function(chord,parsed){
   }
   
   intervals = sortIntervals(intervals)
-  //console.log(intervals)
   setIntervals(chord,intervals)
   let notes = [chord.getTonic()]
   for(let i = 1;i<intervals.length;i++){
@@ -1363,15 +1398,20 @@ exports = module.exports = solfege
 
 
 let note = solfege.note('C3')
-let chord = note.toChord('dim9')
+let chord = note.toChord('Ma7#9')
 
 console.log(chord.getIntervals())
 console.log(chord.getNotesName())
+ 
 
 
 
-
-
+//sus24
+//m6/9
+//m#7
+//C5 ?
+//dom7dim5
+//7/6
 
 
 
