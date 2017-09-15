@@ -53,8 +53,12 @@ exports = module.exports = solfege
 
 
 
+/* let note = solfege.note('C3')
+let chord = note.toChord('dim9')
 
-
+console.log(chord.getIntervals())
+console.log(chord.getNotesName())
+ */
 
 
 

@@ -73,7 +73,7 @@ QUnit.test( "chordCreate", function( assert ) {
     }
     chord = solfege.chord(note,'o7')
     for(let i = 0;i<chord.getNotes().length;i++){
-        assert.equal(chord.getNotesName()[i],['C3', 'Eb3', 'Gb3', 'Bb3'][i])
+        assert.equal(chord.getNotesName()[i],['C3', 'Eb3', 'Gb3', 'Bbb3'][i])
     }
 });
 

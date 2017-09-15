@@ -102,6 +102,7 @@ const parseName = function(n){
   n = n.replace('minor','');
   n = n.replace('Minor','');
   n = n.replace('Min','');
+  let dim7 = n.match(/(Dim7|dim7|Diminished7|dimished7|o7|°7)/g)
   let dim = n.match(/(Dim|dim|Diminished|dimished|o|°)/g)
   let aug = n.match(/(Aug|aug|Augmented|augmented|\+)/g)
   let dom = n.match(/(dom|Dom|dominant|Dominant)/g)
@@ -122,7 +123,7 @@ const parseName = function(n){
   //look for sus
   let sus = n.match(/sus\d+/g)
  
-/*   console.log('major: ' + major)
+/*console.log('major: ' + major)
   console.log('minor: ' + minor)
   console.log('maj7: ' + maj7)
   console.log('min7: ' + min7)
@@ -143,6 +144,7 @@ const parseName = function(n){
     'maj7':maj7,
     'min7':min7,
     'otherNum':otherNum,
+    'dim7':dim7,
     'dim':dim,
     'aug':aug,
     'dom':dom,
@@ -202,7 +204,11 @@ const buildChord = function(chord,parsed){
     intervals = addToIntervals(intervals,'P5')
     intervals = addToIntervals(intervals,'m7')
   }
-  
+  if(parsed['dim7'] != null){
+    intervals = addToIntervals(intervals,'m3')
+    intervals = addToIntervals(intervals,'d5')
+    intervals = addToIntervals(intervals,'d7')
+  }
   if(parsed['dim'] != null){
     intervals = addToIntervals(intervals,'m3')
     intervals = addToIntervals(intervals,'d5')
@@ -1356,7 +1362,11 @@ exports = module.exports = solfege
 
 
 
+let note = solfege.note('C3')
+let chord = note.toChord('dim9')
 
+console.log(chord.getIntervals())
+console.log(chord.getNotesName())
 
 
 
