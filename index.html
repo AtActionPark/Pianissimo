@@ -9,11 +9,38 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/qunit/qunit-2.0.1.js"></script>
-    
-
   </head>
 
   <body>
-    
+    <div class="main">
+      <h2>Chord Parser Test</h2>
+      <select id="note">
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option value="E">E</option>
+        <option value="F">F</option>
+        <option value="G">G</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+      </select>
+
+      <select id="alteration">
+        <option value=""></option>
+        <option value="#">#</option>
+        <option value="b">b</option>
+      </select>
+
+      <input id="chordName" type="text" placeholder="name (ex: min, add9, o7 ...)"></input>
+      <button id="button" >Parse</button>
+      </br>
+      <div class="txt" id="intervals">Intervals: </div>
+      <div class="txt" id="resultIntervals"></div>
+      </br>
+      <div class="result" id="notes">Notes: </div>
+      <div class="result" id="resultNotes"></div>
+    </div>
   </body>
+
+  <script src="solfegeBundle.js"></script>
+
 </html>
