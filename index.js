@@ -1,4 +1,4 @@
-let solfege = module
+const solfege = module
 
 document.getElementById("button").onclick = function () { 
     let note = $("#note").val()
