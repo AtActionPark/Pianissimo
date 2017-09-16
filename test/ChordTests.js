@@ -431,6 +431,214 @@ QUnit.test( "chordCreate2", function( assert ) {
     for(let i = 0;i<chord.getNotes().length;i++){
         assert.equal(chord.getNotesName()[i],['C3','D3','G3','Bb3'][i])
     }
+    //7#11
+    chord = solfege.chord(note,'7#11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','Bb3','F#4'][i])
+    }
+    //7M7#11
+    chord = solfege.chord(note,'M7#11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','B3','F#4'][i])
+    }
+    chord = solfege.chord(note,'Δ7#11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','B3','F#4'][i])
+    }
+    //m7#11
+    chord = solfege.chord(note,'m7#11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','Bb3','F#4'][i])
+    }
+    chord = solfege.chord(note,'-7#11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','Bb3','F#4'][i])
+    }
+    //7susb13
+    chord = solfege.chord(note,'7susb13')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','F3','G3','Bb3','Ab4'][i])
+    }
+    //M9
+    chord = solfege.chord(note,'M9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','B3','D4'][i])
+    }
+    chord = solfege.chord(note,'Δ9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','B3','D4'][i])
+    }
+    chord = solfege.chord(note,'maj9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','B3','D4'][i])
+    }
+    //9
+    chord = solfege.chord(note,'9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','Bb3','D4'][i])
+    }
+    chord = solfege.chord(note,'dom9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','Bb3','D4'][i])
+    }
+    //mM9
+    chord = solfege.chord(note,'mM9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','B3','D4'][i])
+    }
+    chord = solfege.chord(note,'-M9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','B3','D4'][i])
+    }
+    chord = solfege.chord(note,'minM9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','B3','D4'][i])
+    }
+    //m9
+    chord = solfege.chord(note,'m9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','Bb3','D4'][i])
+    }
+    chord = solfege.chord(note,'-9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','Bb3','D4'][i])
+    }
+    chord = solfege.chord(note,'min9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','Bb3','D4'][i])
+    }
+    //+M9
+    chord = solfege.chord(note,'+M9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G#3','B3','D4'][i])
+    }
+    chord = solfege.chord(note,'augmaj9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G#3','B3','D4'][i])
+    }
+    //+9
+    chord = solfege.chord(note,'+9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G#3','Bb3','D4'][i])
+    }
+    chord = solfege.chord(note,'9#5')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G#3','Bb3','D4'][i])
+    }
+    chord = solfege.chord(note,'aug9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G#3','Bb3','D4'][i])
+    }
+    //ø9
+    chord = solfege.chord(note,'ø9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','Gb3','Bb3','D4'][i])
+    }
+    //øb9
+    chord = solfege.chord(note,'øb9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','Gb3','Bb3','Db4'][i])
+    }
+    //dim9
+    chord = solfege.chord(note,'dim9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','Gb3','Bbb3','D4'][i])
+    }
+    chord = solfege.chord(note,'°9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','Gb3','Bbb3','D4'][i])
+    }
+    //dimb9
+    chord = solfege.chord(note,'dimb9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','Gb3','Bbb3','Db4'][i])
+    }
+    chord = solfege.chord(note,'°b9')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','Gb3','Bbb3','Db4'][i])
+    }
+    //M11
+    chord = solfege.chord(note,'M11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','B3','D4','F4'][i])
+    }
+    chord = solfege.chord(note,'Δ11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','B3','D4','F4'][i])
+    }
+    chord = solfege.chord(note,'maj11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','B3','D4','F4'][i])
+    }
+    //m11
+    chord = solfege.chord(note,'m11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','Bb3','D4','F4'][i])
+    }
+    chord = solfege.chord(note,'-11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','Bb3','D4','F4'][i])
+    }
+    chord = solfege.chord(note,'min11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','Bb3','D4','F4'][i])
+    }
+    //mM11
+    chord = solfege.chord(note,'mM11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','B3','D4','F4'][i])
+    }
+    chord = solfege.chord(note,'-M11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','B3','D4','F4'][i])
+    }
+    chord = solfege.chord(note,'minmaj11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','B3','D4','F4'][i])
+    }
+    //11
+    chord = solfege.chord(note,'11')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','Bb3','D4','F4'][i])
+    }
+    //M13
+    chord = solfege.chord(note,'M13')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','B3','D4','F4','A4'][i])
+    }
+    chord = solfege.chord(note,'Δ13')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','B3','D4','F4','A4'][i])
+    }
+    chord = solfege.chord(note,'maj13')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','B3','D4','F4','A4'][i])
+    }
+    //m13
+    chord = solfege.chord(note,'m13')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','Bb3','D4','F4','A4'][i])
+    }
+    chord = solfege.chord(note,'-13')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','Bb3','D4','F4','A4'][i])
+    }
+    chord = solfege.chord(note,'min13')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','Eb3','G3','Bb3','D4','F4','A4'][i])
+    }
+    //13
+    chord = solfege.chord(note,'13')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','Bb3','D4','F4','A4'][i])
+    }
+    chord = solfege.chord(note,'dom13')
+    for(let i = 0;i<chord.getNotes().length;i++){
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','Bb3','D4','F4','A4'][i])
+    }
+
+    
+
 });
 
 
