@@ -52,16 +52,12 @@ let solfege = {
 exports = module.exports = solfege
 
 
-
-//let note = solfege.note('C3')
-//let chord = note.toChord('susb9')
-
+let note = solfege.note('C3')
+let chord = note.toChord('dim7')
+console.log(chord.getIntervals())
 
  
-
 //C5 ?
-//dom7dim5
-//7/6
 
 
 
