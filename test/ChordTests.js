@@ -76,6 +76,10 @@ QUnit.test( "chordCreate", function( assert ) {
     for(let i = 0;i<4;i++){
         assert.equal(chord.getNotesName()[i],['C3', 'E3',  'Bb3','D4'][i])
     }
+    chord = solfege.chord(note,'dom7dim5')
+    for(let i = 0;i<4;i++){
+        assert.equal(chord.getNotesName()[i],['C3', 'E3', 'Gb3','Bb3'][i])
+    }
 });
 
 QUnit.test( "chordCreate2", function( assert ) {
