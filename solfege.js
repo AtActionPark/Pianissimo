@@ -52,9 +52,10 @@ let solfege = {
 exports = module.exports = solfege
 
 
-let note = solfege.note('C3')
-let chord = note.toChord('dom7dim5')
+
+let chord = solfege.chord('Sol#7b9')
 console.log(chord.getIntervals())
+console.log(chord.getNotesName())
 
  
 

@@ -19,8 +19,8 @@ function Chord(arg1,name){
   if(Array.isArray(arg1)){
     //for each note in the array, we'll need to check if its a note object or a note name, and act accordingly
     this[_tonic] = Helpers.isNote(arg1[0])? arg1[0]: new Note(arg1[0]);
-    this[_symbols] = '?';
-    this[_name] = name;
+    this[_symbols] = 'no name';
+    this[_name] = name || 'no name';
     this[_notes] = []
     this[_intervals] = []
     for(let i = 0;i<arg1.length;i++){
@@ -31,6 +31,12 @@ function Chord(arg1,name){
     //Standard name function for all objects
     this.name =  this.getName()
     return this
+  }
+  //if there is only one argument, assume it represents both the root and name in one combined string
+  if(name == undefined){
+    let parsed = parseRootPlusName(arg1)
+    name = parsed[1]
+    arg1 = parsed[0]
   }
   if(!Helpers.isNote(arg1))
     arg1 = new Note(arg1);
@@ -83,7 +89,7 @@ const parseName = function(n){
   let majx = n.match(/(Major|Maj|maj|M|Δ|Ma|Δ)\d+|Δ/g)
   n = n.replace(/(Major|Maj|maj|M|Δ|Ma|Δ)\d+|Δ/g,'');
 
-  let otherNum = n.match(/[^♯^♭^b^#^sus^add]\d+/g)
+  let otherNum = n.match(/[^♯♭b#sd]\d+/g)
 
   let aug = n.match(/(♯♯|##|Aug|aug|Augmented|augmented|\+)/g)
   n = n.replace(/(♯♯|##|Aug|aug|Augmented|augmented|\+)/g,'');
@@ -94,9 +100,9 @@ const parseName = function(n){
   let halfDim = n.match(/ø|Ø|hdin|halfDim/g)
   n = n.replace(/ø|Ø|hdin|halfDim/g,'');
 
-  let dim = n.match(/(♭♭|bb|Dim|dim|Diminished|diminished|°|[^j^n]o)♭*b*♯*#*\d*/g)
+  let dim = n.match(/(♭♭|bb|Dim|dim|Diminished|diminished|°|[^jnDSds]o)♭*b*♯*#*\d*/g)
   //dont remove the b&# as we need them to add the note later
-  n = n.replace(/(♭♭|bb|Dim|dim|Diminished|diminished|°|[^j^n]o)\d*/g,'');
+  n = n.replace(/(♭♭|bb|Dim|dim|Diminished|diminished|°|[^jnDSds]o)\d*/g,'');
 
   let major = n.match(/M|Major|major|maj/g)
   //dont remove M, as it is present in Minor
@@ -133,6 +139,13 @@ const parseName = function(n){
     'powerchord':powerchord,
     'no':no
   }
+}
+const parseRootPlusName = function(n){
+  let root,alt =' ',name;
+
+  root = n.match(/^(Do|do|Re|re|Mi|mi|Fa|fa|Sol|sol|La|la|Si|si|A|a|B|b|C|c|D|d|E|e|F|f|G|g)#*b*♯*♭*/g)[0]
+  n = n.replace(/^(Do|do|Re|re|Mi|mi|Fa|fa|Sol|sol|La|la|Si|si|A|a|B|b|C|c|D|d|E|e|F|f|G|g)#*b*♯*♭*/g,'');
+  return [root,n]
 }
 const buildChord = function(chord,parsed){
   let intervals = ['P1','M3','P5']
@@ -184,14 +197,12 @@ const buildChord = function(chord,parsed){
       }
       else{
         for(let j = 7;j<=nb;j+=2){
-          console.log(j)
           let q = j%7 == 4 ? 'P':'M'
           intervals = addToIntervals(intervals,q+j)
         }
       }
     }
   }
-
   if(parsed['minor'] != null){
     intervals = addToIntervals(intervals,'m3')
     intervals = addToIntervals(intervals,'P5')
@@ -211,10 +222,6 @@ const buildChord = function(chord,parsed){
       if(s == 7)
       intervals = addToIntervals(intervals,'M7')
       else{
-        if(s>8){
-          if(!hasNumber(intervals,7))
-            intervals = addToIntervals(intervals,'m7')
-        }
         intervals = addToIntervals(intervals,'A'+s)
       }
     }
@@ -222,10 +229,6 @@ const buildChord = function(chord,parsed){
   if(parsed['flats'] != null){
     for(let i = 0;i<parsed['flats'].length;i++){
       let f = parsed['flats'][i].match(/\d+/g)
-
-      if(f>8){
-        intervals = addToIntervals(intervals,'m7')
-      }
       if(f % 7 == 1 || f % 7 == 4 ||f % 7 ==5)
         intervals = addToIntervals(intervals,'d'+f)
       else
@@ -293,8 +296,7 @@ const buildChord = function(chord,parsed){
       intervals = removeArray(intervals,'A'+nb)
     }
   }
-  
-  
+
   intervals = sortIntervals(intervals)
   
   setIntervals(chord,intervals)
@@ -909,10 +911,9 @@ const parseName = function(note){
     setOctave(note,parseInt(note.getName().match(octaveRe)[0]))
   //if no octave is provided, assume 3
   else{
-    setName(note,note.getName() +'3');
+    setName(note,(note.getName() +'3').replace(/ /g,''));
     setOctave(note,3)
   }
-
   //The root will be everything but the numbers
   let rootRe = new RegExp('[^0-9)]+','g')
   setRoot(note,note.getName().match(rootRe)[0])
@@ -1367,9 +1368,10 @@ let solfege = {
 exports = module.exports = solfege
 
 
-let note = solfege.note('C3')
-let chord = note.toChord('dom7dim5')
+
+let chord = solfege.chord('Sol#7b9')
 console.log(chord.getIntervals())
+console.log(chord.getNotesName())
 
  
 

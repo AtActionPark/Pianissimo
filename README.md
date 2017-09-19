@@ -191,7 +191,7 @@ Accepts an optional 'number' argument, to specify the number of notes per chord
 
 ## Chord
 #### Creation:
-Chords are object created through the .chord(tonic,name) method.
+Chords are object usually created through the .chord(tonic,name) method.
 The chord constructor will try to parse the name to build the chord on the tonic.
 It should understand most of the usual symols (M,m,Minor,m7,ø,11,add, sus,+,o,dim,aug,...)
 
@@ -200,6 +200,19 @@ let chord1 = solfege.chord('C3','minor');              //C minor
 let chord2 = solfege.chord('C3','ø');                  //C half-diminished
 let chord2 = solfege.chord('C3','m(b9b5b7b11)sus4');   //why not
 ```
+
+Chords can also be created by supplying an array of notes (and a optional name)
+
+```javascript
+let chord = solfege.chord(['C3','F#4','Bbb4'],'custom chord');              
+```
+
+Or by supplying only a full chord name
+
+```javascript
+let chord = solfege.chord('Sol#7b9');            //['Sol#3', 'Si#3' ,'Re#4', 'Fa##4', 'La4']      
+```
+If thats the case, the octave can not be included in the name, and will be 3 by default
 
 chords can also be created from a note object:
 

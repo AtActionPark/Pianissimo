@@ -23,6 +23,11 @@ QUnit.test( "chordCreate", function( assert ) {
     for(let i = 0;i<3;i++){
         assert.equal(chord.getNotesName()[i],['C3','E3','G3'][i])
     }
+    // or with combined notation
+    chord = solfege.chord('Dob7b9')
+    for(let i = 0;i<3;i++){
+        assert.equal(chord.getNotesName()[i],['Dob3','Mib3','Solb3','Sibb3','Reb4'][i])
+    }
 
     chord = solfege.chord(note,'min')
     for(let i = 0;i<3;i++){
@@ -34,7 +39,7 @@ QUnit.test( "chordCreate", function( assert ) {
     }
     chord = solfege.chord(note,'#9')
     for(let i = 0;i<5;i++){
-        assert.equal(chord.getNotesName()[i],['C3','E3','G3','Bb3','D#4'][i])
+        assert.equal(chord.getNotesName()[i],['C3','E3','G3','D#4'][i])
     }
     chord = solfege.chord(note,'13#9b5')
     for(let i = 0;i<7;i++){
