@@ -72,7 +72,7 @@ Argument must be a string of type 'C3', 'C#2', 'Db', 'Solb4', 'fax' ...
 ```
 #### Methods:
 **.plusInterval(args)** : adds an interval to the note, and returns the resulting note object.
-Arguments can be an interval object, an interval name (order will be ascending, or an interval name and order)
+Arguments can be an interval object, an interval name (order will be ascending) or an interval name and order
 ```javascript
     note.plusInterval(interval)             //ex: let note2 = note.plusInterval(intervalObject) 
     note.plusInterval(intervalName)         //ex: let note2 = note.plusInterval('P5') 
@@ -223,11 +223,20 @@ let chord  = note.toChord('minor')      // equivalent to solfege.chord('C3','min
 
 #### Getters:
 ```javascript
-    scale.getTonic();       // 'C3'
-    scale.getSymbols();     // 'minor'
-    scale.getName();        // 'Cminor'
-    scale.getNotes();       // will return an array of note objects
-    scale.getNotesName();   // will return the name of the notes: ['C3','Eb3','Bb3']
-
+    chord.getTonic();       // 'C3'
+    chord.getSymbols();     // 'minor'
+    chord.getName();        // 'Cminor'
+    chord.getNotes();       // will return an array of note objects
+    chord.getNotesName();   // will return the name of the notes: ['C3','Eb3','Bb3']
 ```
+#### Methods:
+**.transpose()** : adds an interval to the chord, and returns the resulting chord object.
+Arguments can be an interval object, an interval name (order will be ascending) or an interval name and order
 
+
+```javascript
+    let chord = solfege.chord('C7b9')
+    chord.transpose('P5')
+    console.log(chords.getNotesName())    
+    //[ 'G3', 'B3', 'D4', 'F4', 'Ab4' ]                 
+```
