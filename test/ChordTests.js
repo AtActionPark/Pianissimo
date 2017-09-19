@@ -657,6 +657,18 @@ QUnit.test( "chordCreate2", function( assert ) {
 
 });
 
+QUnit.test('chordTranspose', function(assert){
+    let chord;
+
+    //basic creation
+    chord = solfege.chord('Cmajor')
+    chord.transpose('P5')
+    for(let i = 0;i<3;i++){
+        assert.equal(chord.getNotesName()[i],['G3','B3','D4'][i])
+    }
+
+});
+
 
 
 

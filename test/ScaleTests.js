@@ -12,7 +12,7 @@ QUnit.test( "scaleCreate", function( assert ) {
     scale = solfege.scale(note,'major')
     assert.equal(scale.getTonic() ,note);
     assert.equal(scale.getType() ,'major');
-    assert.equal(scale.getNotes()[0] ,note);
+    assert.equal(scale.getNotes()[0].getName() ,'C3');
     assert.equal(scale.getNotes()[4].getName() ,'G3');
 
     //Short hand creation

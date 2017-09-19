@@ -53,12 +53,7 @@ exports = module.exports = solfege
 
 
 
-let chord = solfege.chord('C7b9')
-console.log(chord.getIntervals())
-console.log(chord.getNotesName())
-chord.transpose('P5')
-console.log(chord.getIntervals())
-console.log(chord.getNotesName())
+
 
  
 
