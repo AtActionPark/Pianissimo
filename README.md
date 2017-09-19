@@ -38,8 +38,9 @@ If using the bundle.js file, assign the public module to a const
     let interval = solfege.interval(note2,'F#4');
     interval.invert();
     interval.getNotesName();                        // ['F#4', D5]
+    interval.getName();                             // d6
 
-    let note3 = interval.getNotes()[1];
+    let note3 = interval.getNotes()[1];             // D5
     let scale = note3.toScale('locrian');
     scale.getNotesName();                           // ['D5,'Eb5','F5','G5','Ab5','Bb5','C6','D6']
 
@@ -119,17 +120,18 @@ Intervals can also be created from a note object, like so:
 
 #### Getters:
 ```javascript
-    interval.getName();         // 'm3'
-    interval.getSemitonest();   // '3'
-    interval.getOrder();       // 'ascending'
-    interval.getNumber();       // 3
-    interval.getQuality();      // m
-    interval.getQualityText();  // minor
-    interval.getNumberText();   // third
-    interval.getNote1();        // undefined, or the note used to create the interval
-    interval.getNote2();        // undefined, or the note used to create the interval
-    interval.getNotes();        // returns [note1,note2]
-    interval.getNotesName();    // returns [note1.getName(),note2.getName()]
+    interval.getName();                 // 'm3'
+    interval.getSemitonest();           // '3'
+    interval.getOrder();                // 'ascending'
+    interval.getNumber();               // 3
+    interval.getQuality();              // m
+    interval.getQualityText();          // minor
+    interval.getNumberText();           // third
+    interval.getNote1();                // undefined, or the note used to create the interval
+    interval.getNote2();                // undefined, or the note used to create the interval
+    interval.getNotes();                // returns [note1,note2]
+    interval.getNotesName();            // returns [note1.getName(),note2.getName()]
+    interval.getNotesFrequencies();     // returns [note1.getFrequency(),note2.getFrequency()]
 ```
 
 #### Methods:
@@ -163,11 +165,12 @@ let scale  = note.toScale('minor')      // equivalent to solfege.scale('C3','min
 
 #### Getters:
 ```javascript
-    scale.getTonic();       // 'C3'
-    scale.getType();        // 'minor'
-    scale.getDegree();      // '1'
-    scale.getNotes();       // will return an array of note objects
-    scale.getNotesName();   // will return the name of the notes: ['C3','D3','Eb3','D3','G3','Ab3','Bb3','C4']
+    scale.getTonic();               // 'C3'
+    scale.getType();                // 'minor'
+    scale.getDegree();              // '1'
+    scale.getNotes();               // will return an array of note objects
+    scale.getNotesName();           // will return the name of the notes: ['C3','D3','Eb3','D3','G3','Ab3','Bb3','C4']
+    scale.getNotesFrequencies();    // will return the frequencies of the notes: [130.81, 145.83, 155.56, 174.61, 196, 207.65, 233.08]
 
 ```
 
@@ -223,11 +226,12 @@ let chord  = note.toChord('minor')      // equivalent to solfege.chord('C3','min
 
 #### Getters:
 ```javascript
-    chord.getTonic();       // 'C3'
-    chord.getSymbols();     // 'minor'
-    chord.getName();        // 'Cminor'
-    chord.getNotes();       // will return an array of note objects
-    chord.getNotesName();   // will return the name of the notes: ['C3','Eb3','Bb3']
+    chord.getTonic();               // 'C3'
+    chord.getSymbols();             // 'minor'
+    chord.getName();                // 'Cminor'
+    chord.getNotes();               // will return an array of note objects
+    chord.getNotesName();           // will return the name of the notes: ['C3','Eb3','Bb3']
+    chord.getNotesFrequencies();    // will return the frequencies of the notes: [130.8, 155.56, 233.08]
 ```
 #### Methods:
 **.transpose()** : adds an interval to the chord, and returns the resulting chord object.
