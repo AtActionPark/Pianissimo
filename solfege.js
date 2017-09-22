@@ -51,8 +51,9 @@ let solfege = {
 }
 exports = module.exports = solfege
 
-let n = solfege.note('C#3')
-console.log(n.getMidiNumber())
+let n = solfege.chord('CMajor/G#')
+console.log(n.getIntervals())
+console.log(n.getNotesName())
 
 
 
