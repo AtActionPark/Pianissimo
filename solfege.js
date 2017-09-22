@@ -51,8 +51,9 @@ let solfege = {
 }
 exports = module.exports = solfege
 
-let scale = solfege.scale('C3','minor')
-console.log(scale.getNotesFrequencies())
+let n = solfege.note('C#3')
+console.log(n.getMidiNumber())
+
 
 
 

@@ -53,13 +53,14 @@ If using the bundle.js file, assign the public module to a const
 ## Notes
 #### Creation:
 Notes are object created through the .note(arg) method.
-Argument must be a string of type 'C3', 'C#2', 'Db', 'Solb4', 'fax' ...
+Argument must be a string of type 'C3', 'C#2', 'Db', 'Solb4', 'fax' ... or a midi number
 
 ```javascript
     let note = solfege.note('C#4');
     let note2 = solfege.note('Solbb2');
     let note3 = solfege.note('D');        //octave will default to 3
     let note4 = solfege.note('Gx4');      
+    let note4 = solfege.note(127);       //midi ranges from C0 to G10
 ```
 
 #### Getters:
@@ -70,6 +71,7 @@ Argument must be a string of type 'C3', 'C#2', 'Db', 'Solb4', 'fax' ...
     note.getAlteration();    // '#'
     note.getOctave();        // 4
     note.getNotationType();  // letter (can be letter or name)
+    note.getMidiNumber();    // 49
 ```
 #### Methods:
 **.plusInterval(args)** : adds an interval to the note, and returns the resulting note object.

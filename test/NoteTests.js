@@ -61,6 +61,25 @@ QUnit.test( "noteCreate", function( assert ) {
     assert.equal( note.getOctave() ,'5');
     assert.equal( note.getAlteration() ,'x');
 
+    //with midi number
+    note = solfege.note(0)
+    assert.equal( note.getName() ,'C0');
+    assert.equal( note.getRoot() ,'C');
+    assert.equal( note.getOctave() ,'0');
+    assert.equal( note.getAlteration() ,'');
+
+    note = solfege.note(127)
+    assert.equal( note.getName() ,'G10');
+    assert.equal( note.getRoot() ,'G');
+    assert.equal( note.getOctave() ,'10');
+    assert.equal( note.getAlteration() ,'');
+
+    note = solfege.note(66)
+    assert.equal( note.getName() ,'F#5');
+    assert.equal( note.getRoot() ,'F#');
+    assert.equal( note.getOctave() ,'5');
+    assert.equal( note.getAlteration() ,'#');
+
     //no octave provided, should default to 3
     note = solfege.note('B')
     assert.equal( note.getName() ,'B3');
@@ -85,11 +104,11 @@ QUnit.test( "noteCreate", function( assert ) {
     //bad name, should throw error
     assert.throws(function(){
         solfege.note('H2')},
-        "H is not a valid alteration"
+        "H is not a note"
     );
     assert.throws(function(){
         solfege.note('Sil2')},
-        "Sil is not a valid alteration"
+        "Sil is not a note"
     );
 });
 QUnit.test( "note.getFrequency", function( assert ) {
