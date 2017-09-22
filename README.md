@@ -1,8 +1,10 @@
 # Solfege
 
-Set of solfege helpers for notes, intervals, chords and scales
+Set of solfege/musical theory helpers for notes, intervals, chords and scales
 
 Can be installed via nmp, or by copying the solfegeBundle.js in your project
+
+A demo of the chord parser current state can be found [here](https://atactionpark.github.io/Solfege/). It surely needs more testing
 
 #### Create a solfege object
 If installed via nmp, require solfege first
