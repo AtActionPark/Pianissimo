@@ -61,8 +61,11 @@ let solfege = {
 }
 exports = module.exports = solfege
 
-let chord = solfege.chord('Cdim7b9')
+let chord = solfege.chord('Cmajor/G')
+console.log(chord.getName() )
+console.log(chord.getNotesName() )
 chord.transpose('P5')
+console.log(chord.getName() )
 console.log(chord.getNotesName() )
 
 

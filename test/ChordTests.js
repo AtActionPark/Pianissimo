@@ -666,6 +666,21 @@ QUnit.test('chordTranspose', function(assert){
     for(let i = 0;i<3;i++){
         assert.equal(chord.getNotesName()[i],['G3','B3','D4'][i])
     }
+    assert.equal(chord.getName(),'Gmajor')
+
+    chord = solfege.chord('Cdim7')
+    chord.transpose('m2','descending')
+    for(let i = 0;i<3;i++){
+        assert.equal(chord.getNotesName()[i],['B2','D3','F3','Ab3'][i])
+    }
+    assert.equal(chord.getName(),'Bdim7')
+
+    chord = solfege.chord('Cmajor/G')
+    chord.transpose('P5')
+    for(let i = 0;i<3;i++){
+        assert.equal(chord.getNotesName()[i],['D3','G3','B3'][i])
+    }
+    assert.equal(chord.getName(),'Gmajor/D')
 
 });
 
