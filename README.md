@@ -4,14 +4,14 @@ Set of solfege/musical theory helpers for notes, intervals, chords and scales
 
 Can be installed via nmp, or by copying the solfegeBundle.js in your project
 
-A demo of the chord parser current state can be found [here](https://atactionpark.github.io/Solfege/). It surely needs more testing
+A demo of the chord parser current state can be found [here](https://atactionpark.github.io/Solfege/). It needs a lot more testing.
 
 #### Create a solfege object
 If installed via nmp, require solfege first
 ```javascript
     const solfege = require('../solfege');
 ```
-If using the bundle.js file, assign the public module to a const
+If using the solfegeBundle.js file, assign the public module to a const
 ```javascript
     const solfege = module
 ```
@@ -19,14 +19,17 @@ If using the bundle.js file, assign the public module to a const
 
 #### Methods
 ```javascript
-    solfege.note(name);                  //returns a note object from a name
-    solfege.interval(name,order);        //returns an interval object from a name and order
-    solfege.interval(note1,note2);       //returns an interval object from 2 notes
-    solfege.scale(tonic,type,degree);    //returns a scale object from a note, a scale name, and a degree (optional)
-    solfege.chord(tonic,name);           //returns a chord object from a note, and a chord name
-    solfege.randomNote();                //returns a random note object
-    solfege.randomInterval();            //returns a random interval object
-    solfege.setA4(frequency);            //sets the frequency of A4 (default: 440Hz)
+    solfege.note(name);                //returns a note object from a name or midi note number
+    solfege.interval(name,order);      //returns an interval object from a name and order (optional)
+    solfege.interval(note1,note2);     //returns an interval object from 2 notes
+    solfege.scale(tonic,type,degree);  //returns a scale object from a note, a scale name, and a degree (optional)
+    solfege.chord(tonic,name);         //returns a chord object from a note, and a chord name
+    solfege.chord(name);               //returns a chord object from a chord name
+    solfege.randomNote();              //returns a random note object
+    solfege.randomInterval();          //returns a random interval object
+    solfege.randomScale(tonic);        //returns a random scale object. The tonic is optional
+                                       // and will be random if not specified
+    solfege.setA4(frequency);          //sets the frequency of A4 (default: 440Hz)
 ```
 
 #### Examples
@@ -50,6 +53,11 @@ If using the bundle.js file, assign the public module to a const
     let scale = solfege.note('C3').plusInterval('m9').toInterval('F#4').invert().getNotes()[1].toScale('locrian').getNotesName();
     // ['D5,'Eb5','F5','G5','Ab5','Bb5','C6','D6']
 
+
+    let chord = solfege.chord('Cmaj7b9');
+    chord.transpose('P5')
+    chord.getNotesName();                           // ['G3','Bb3','Db4','Fb4','Ab4']   
+
 ```
 
 ## Notes
@@ -62,7 +70,7 @@ Argument must be a string of type 'C3', 'C#2', 'Db', 'Solb4', 'fax' ... or a mid
     let note2 = solfege.note('Solbb2');
     let note3 = solfege.note('D');        //octave will default to 3
     let note4 = solfege.note('Gx4');      
-    let note4 = solfege.note(127);       //midi ranges from C0 to G10
+    let note4 = solfege.note(127);        //midi ranges from C0 to G10
 ```
 
 #### Getters:
