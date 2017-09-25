@@ -62,7 +62,7 @@ let solfege = {
 exports = module.exports = solfege
 
 let c = solfege.chord(['C3','E3','G3'],'major')
-console.log(c)
+c.findName()
 
 
 
