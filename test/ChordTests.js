@@ -684,6 +684,51 @@ QUnit.test('chordTranspose', function(assert){
 
 });
 
+QUnit.test("chordNamer", function( assert ){
+    let chord;
+
+    chord = solfege.chord(['C3','E3','G3'])
+    assert.equal(chord.getName(),'C')
+
+    chord = solfege.chord(['C3','Eb3','G3'])
+    assert.equal(chord.getName(),'Cm')
+
+    chord = solfege.chord(['C3','E3','G#3'])
+    assert.equal(chord.getName(),'Caug')
+
+    chord = solfege.chord(['C3','E3','Gb3'])
+    assert.equal(chord.getName(),'Cb5')
+
+    chord = solfege.chord(['C3','Eb3','Gb3'])
+    assert.equal(chord.getName(),'Cdim')
+
+    chord = solfege.chord(['C3','D3','G3'])
+    assert.equal(chord.getName(),'Csus2')
+
+    chord = solfege.chord(['C3','F3','G3'])
+    assert.equal(chord.getName(),'Csus4')
+
+    chord = solfege.chord(['C3','E3','G3','A3'])
+    assert.equal(chord.getName(),'C6')
+
+    chord = solfege.chord(['C3','Eb3','G3','A3'])
+    assert.equal(chord.getName(),'Cm6')
+
+    chord = solfege.chord(['C3','E3','G3','Bb3'])
+    assert.equal(chord.getName(),'C7')
+
+    chord = solfege.chord(['C3','Eb3','G3','Bb3'])
+    assert.equal(chord.getName(),'Cm7')
+
+    chord = solfege.chord(['C3','E3','G3','B3'])
+    assert.equal(chord.getName(),'Cmaj7')
+
+    chord = solfege.chord(['C3','Eb3','G3','B3'])
+    assert.equal(chord.getName(),'CmMaj7')
+
+
+});
+
 
 
 
