@@ -652,9 +652,6 @@ QUnit.test( "chordCreate2", function( assert ) {
     for(let i = 0;i<7;i++){
         assert.equal(chord.getNotesName()[i],['C3','E3','G3','Bb3','D4','F4','A4'][i])
     }
-
-    
-
 });
 
 QUnit.test('chordTranspose', function(assert){
@@ -694,10 +691,10 @@ QUnit.test("chordNamer", function( assert ){
     assert.equal(chord.getName(),'Cm')
 
     chord = solfege.chord(['C3','E3','G#3'])
-    assert.equal(chord.getName(),'Caug')
+    assert.equal(chord.getName(),'C+')
 
     chord = solfege.chord(['C3','E3','Gb3'])
-    assert.equal(chord.getName(),'Cb5')
+    assert.equal(chord.getName(),'C♭5')
 
     chord = solfege.chord(['C3','Eb3','Gb3'])
     assert.equal(chord.getName(),'Cdim')
@@ -721,12 +718,103 @@ QUnit.test("chordNamer", function( assert ){
     assert.equal(chord.getName(),'Cm7')
 
     chord = solfege.chord(['C3','E3','G3','B3'])
-    assert.equal(chord.getName(),'Cmaj7')
+    assert.equal(chord.getName(),'CΔ')
 
     chord = solfege.chord(['C3','Eb3','G3','B3'])
-    assert.equal(chord.getName(),'CmMaj7')
+    assert.equal(chord.getName(),'CmΔ')
 
+    chord = solfege.chord(['C3','E3','G#3','B3'])
+    assert.equal(chord.getName(),'C+Δ')
 
+    chord = solfege.chord(['C3','E3','G#3','Bb3'])
+    assert.equal(chord.getName(),'C+7')
+
+    chord = solfege.chord(['C3','E3','Gb3','Bb3'])
+    assert.equal(chord.getName(),'C7♭5')
+
+    chord = solfege.chord(['C3','Eb3','Gb3','Bb3'])
+    assert.equal(chord.getName(),'Cø')
+
+    chord = solfege.chord(['C3','E3','G3','Bb3','D#4'])
+    assert.equal(chord.getName(),'C7♯9')
+
+    chord = solfege.chord(['C3','E3','G3','B3','D#4'])
+    assert.equal(chord.getName(),'CΔ♯9')
+
+    chord = solfege.chord(['C3','Eb3','G3','Bb3','D#4'])
+    assert.equal(chord.getName(),'Cm7♯9')
+
+    chord = solfege.chord(['C3','F3','G3','Bb3'])
+    assert.equal(chord.getName(),'C7sus4')
+
+    chord = solfege.chord(['C3','D3','G3','Bb3'])
+    assert.equal(chord.getName(),'C7sus2')
+
+    chord = solfege.chord(['C3','E3','G3','Bb3','F#4'])
+    assert.equal(chord.getName(),'C7♯11')
+
+    chord = solfege.chord(['C3','E3','G3','B3','F#4'])
+    assert.equal(chord.getName(),'CΔ♯11')
+
+    chord = solfege.chord(['C3','Eb3','G3','Bb3','F#4'])
+    assert.equal(chord.getName(),'Cm7♯11')
+
+    chord = solfege.chord(['C3','F3','G3','Bb3','Ab4'])
+    assert.equal(chord.getName(),'C7sus4♭13')
+
+    chord = solfege.chord(['C3','E3','G3','Bb3','D4'])
+    assert.equal(chord.getName(),'C9')
+
+    chord = solfege.chord(['C3','E3','G3','B3','D4'])
+    assert.equal(chord.getName(),'CΔ9')
+
+    chord = solfege.chord(['C3','Eb3','G3','B3','D4'])
+    assert.equal(chord.getName(),'CmΔ9')
+
+    chord = solfege.chord(['C3','Eb3','G3','Bb3','D4'])
+    assert.equal(chord.getName(),'Cm9')
+
+    chord = solfege.chord(['C3','E3','G#3','B3','D4'])
+    assert.equal(chord.getName(),'C+Δ9')
+
+    chord = solfege.chord(['C3','E3','G#3','Bb3','D4'])
+    assert.equal(chord.getName(),'C+9')
+
+    chord = solfege.chord(['C3','Eb3','Gb3','Bb3','D4'])
+    assert.equal(chord.getName(),'Cm9♭5')
+
+    chord = solfege.chord(['C3','Eb3','Gb3','Bb3','Db4'])
+    assert.equal(chord.getName(),'Cø♭9')
+
+    chord = solfege.chord(['C3','Eb3','Gb3','Bbb3','D4'])
+    assert.equal(chord.getName(),'Cdim9')
+
+    chord = solfege.chord(['C3','Eb3','Gb3','Bbb3','Db4'])
+    assert.equal(chord.getName(),'Cdim7♭9')
+
+    chord = solfege.chord(['C3','E3','G3','B3','D4','F4'])
+    assert.equal(chord.getName(),'CΔ11')
+
+    chord = solfege.chord(['C3','Eb3','G3','Bb3','D4','F4'])
+    assert.equal(chord.getName(),'Cm11')
+
+    chord = solfege.chord(['C3','Eb3','G3','B3','D4','F4'])
+    assert.equal(chord.getName(),'CmΔ11')
+
+    chord = solfege.chord(['C3','E3','G3','Bb3','D4','F4'])
+    assert.equal(chord.getName(),'C11')
+
+    chord = solfege.chord(['C3','E3','G3','B3','D4','F4','A4'])
+    assert.equal(chord.getName(),'CΔ13')
+
+    chord = solfege.chord(['C3','Eb3','G3','B3','D4','F4','A4'])
+    assert.equal(chord.getName(),'CmΔ13')
+
+    chord = solfege.chord(['C3','Eb3','G3','Bb3','D4','F4','A4'])
+    assert.equal(chord.getName(),'Cm13')
+
+    chord = solfege.chord(['C3','E3','G3','Bb3','D4','F4','A4'])
+    assert.equal(chord.getName(),'C13')
 });
 
 
