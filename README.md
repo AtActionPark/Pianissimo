@@ -216,12 +216,6 @@ let chord2 = solfege.chord('C3','ø');                  //C half-diminished
 let chord2 = solfege.chord('C3','m(b9b5b7b11)sus4');   //why not
 ```
 
-Chords can also be created by supplying an array of notes (and a optional name)
-
-```javascript
-let chord = solfege.chord(['C3','F#4','Bbb4'],'custom chord');              
-```
-
 Or by supplying only a full chord name
 
 ```javascript
@@ -229,12 +223,26 @@ let chord = solfege.chord('Sol#7b9');            //['Sol#3', 'Si#3' ,'Re#4', 'Fa
 ```
 If thats the case, the octave can not be included in the name, and will be 3 by default
 
-chords can also be created from a note object:
+Ahords can also be created from a note object:
 
 ```javascript
 let note = solfege.note('C3')
 let chord  = note.toChord('minor')      // equivalent to solfege.chord('C3','minor')
 ```
+
+Alternatively, chords can also be created by supplying an array of notes (and a optional name)
+
+```javascript
+let chord = solfege.chord(['C3','F#4','Bbb4'],'custom chord');              
+```
+
+If no name is supplied, the chord creator will naively try to guess the name of the chord and set it
+```javascript
+let chord = solfege.chord(['C3','Eb3','Gb3','Bb3']);  // name: Cdim7             
+```
+
+
+
 
 #### Getters:
 ```javascript
@@ -256,3 +264,34 @@ Arguments can be an interval object, an interval name (order will be ascending) 
     console.log(chords.getNotesName())    
     //[ 'G3', 'B3', 'D4', 'F4', 'Ab4' ]                 
 ```
+**.invert(order)** : will return an inverted version of the chord. Order will specify the number of inversions. Will default to 1 if no order is specified.
+
+```javascript
+    let chord = solfege.chord('C7')
+    chord.invert(1)
+    console.log(chords.getNotesName())    
+    //[ 'E3', 'G3', 'Bb3', 'C4' ]                 
+```
+
+**.findAlternateNames()** : will return a list of possible names for the chord, along with notes order and intervals
+
+```javascript
+    let chord = solfege.chord('C7')
+    console.log(chords.findAlternateNames())    
+    //[ 'C7 - Notes: C3,E3,G3,Bb3 - Intervals: P1,M3,P5,m7',
+    //'Edimadd♭6 - Notes: E3,G3,Bb3,C4 - Intervals: P1,m3,d5,m6',
+    //'Gm6no5add4 - Notes: G3,Bb3,C4,E4 - Intervals: P1,m3,P4,M6',
+    //'B6sus2no5add♯4 - Notes: Bb3,C4,E4,G4 - Intervals: P1,M2,A4,M6',
+    //'Edim/C - Notes: C3,E3,G3,Bb3 - Intervals: P1,m3,d5',
+    //'Gm6no5/C - Notes: C3,G3,Bb3,E4 - Intervals: P1,m3,M6',
+    //'cant find name - Notes: C3,Bb3,E4,G4 - Intervals: P1,A4,M6' ]                 
+```
+
+**.findBestName()** : will return the shortest name from the possible nams list and set it.
+
+```javascript
+    let c = solfege.chord(['C3','F#3','G3','D4'])
+    console.log(c.findBestName())   
+    // GΔsus4'          
+```
+
