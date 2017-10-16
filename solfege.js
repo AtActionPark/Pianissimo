@@ -65,6 +65,8 @@ let c = solfege.chord(['C3','F#3','G3','D4'])
 console.log(c) 
 console.log(c.findBestName()) 
 console.log(c) 
+let s = solfege.scale('C3','minor')
+console.log(s.getName())
 
 
 

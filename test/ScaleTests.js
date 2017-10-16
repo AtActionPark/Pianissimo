@@ -27,7 +27,7 @@ QUnit.test( "scaleGetChords", function( assert ) {
     scale = solfege.scale('C3','major')
     chords = scale.getChords(4)
     assert.equal(chords.length,7)
-    assert.equal(chords[4].name,'C major dominant')
+    assert.equal(chords[4].getName(),'C major dominant')
     assert.equal(chords[4].getNotesName()[3],'F4')
 });
 

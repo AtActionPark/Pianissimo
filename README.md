@@ -178,6 +178,7 @@ let scale  = note.toScale('minor')      // equivalent to solfege.scale('C3','min
 #### Getters:
 ```javascript
     scale.getTonic();               // 'C3'
+    scale.getName();                // 'C minor'
     scale.getType();                // 'minor'
     scale.getDegree();              // '1'
     scale.getNotes();               // will return an array of note objects
