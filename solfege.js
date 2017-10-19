@@ -62,10 +62,11 @@ let solfege = {
 exports = module.exports = solfege
 
 let c = solfege.chord(['C3','F#3','G3','D4'])
+let c2 = solfege.chord(['C3', 'F#3', 'G3', 'D4'])
 console.log(c) 
-console.log(c.findBestName()) 
-console.log(c) 
-c.
+c2.findBestName()
+console.log(c2) 
+
 
 
 //browserify solfege.js --s module > solfegeBundle.js
