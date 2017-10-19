@@ -15,19 +15,26 @@ var _intervals = Symbol(' intervals')
 
 function Chord(arg1,name){
   var Note = require('./note');
-  //if the first arg is an array, assume that we want to build he chord with an array of notes
+
+  //if the first arg is an array, assume that we want to build the chord with an array of notes
   if(Array.isArray(arg1)){
     //for each note in the array, we'll need to check if its a note object or a note name, and act accordingly
     this[_tonic] = Helpers.isNote(arg1[0])? arg1[0]: new Note(arg1[0]);
     this[_symbols] = 'no name';
     this[_name] = name || 'no name';
     this[_notes] = []
-    this[_intervals] = []
     this[_notes] = arg1.map(note => Helpers.isNote(note)? note : new Note(note))
+    this[_intervals] = findIntervalsFromNotes(this.getNotes())
+    
+    //if no name was specified, try to find one
+    if(name == undefined){
+      let possibleNames = findPossibleNames(this)
+      setName(this,possibleNames[0][0])
+    }
+      
     //Duplicate of the name, for debugging purpose, is public but has no impact on anything
     this.chord = this.getNotesName();
-    //Standard name function for all objects
-    this.name =  this.getName()
+
     return this
   }
   //if there is only one argument, assume it represents both the root and name in one combined string
@@ -46,15 +53,13 @@ function Chord(arg1,name){
   this[_intervals] = [];
 
   //parse everything we can find in the name
-  let n = this.getName();
-  let parsedName = parseName(n)
+  let parsedName = parseName(this.getName())
   
   buildChord(this,parsedName)
 
   //Duplicate of the name, for debugging purpose, is public but has no impact on anything
   this.chord = this[_notes];
-  //Standard name function for all objects
-  this.name =  n
+
 }
 //Public 
 //Getters
@@ -66,70 +71,110 @@ Chord.prototype.getIntervals = function(){return this[_intervals]}
 Chord.prototype.getNotesName = function(){return this.getNotes().map(n => n.getName())};
 Chord.prototype.getNotesFrequencies = function(){return this.getNotes().map(n => n.getFrequency())};
 
+
 Chord.prototype.transpose = function(interval,order){
-  let notes = this.getNotes().map(x => x.plusInterval(interval,order))
-  setNotes(this,notes)
-  setName(this,notes[0].getName())
+  //transpose each of the notes within the chord
+  let notes = this.getNotes().map(x => x.plusInterval(interval,order));
+  setNotes(this,notes);
+  //find the new name
+  let slash = this.getSymbols().match(/\/[^0-9]+/g,'');
+  let symbols = this.getSymbols().replace(/\/[^0-9]+/g,'');
+  let root = this.getTonic().plusInterval(interval,order).getRoot();
+  if(slash)
+    symbols+= '/'+notes[0].getRoot()
+  setName(this,root+symbols)
 }
+Chord.prototype.invert = function(order){
+  if(order<1)
+    return
+  order = order || 1
+
+  let notes = []
+  let intervals = []
+  for(let i = 0;i<order;i++){
+    let n = this.getNotes()
+    let first = n.shift().plusInterval('P8')
+    n.push(first)
+    notes = n
+    intervals = findIntervalsFromNotes(notes)
+  }
+  
+  setNotes(this,notes)
+  setIntervals(this, intervals)
+}
+Chord.prototype.findAlternateNames = function(){
+  return findPossibleNames(this).map(x=>x[1])
+}
+Chord.prototype.findBestName = function(){
+  let bestName = 'randomLongAssString';
+  let possibleNames = findPossibleNames(this).map(x=>x[0])
+  possibleNames.forEach(function(name){
+    if(name.length <bestName.length)
+      bestName = name
+  })
+  setName(this,bestName)
+  return bestName
+}
+
 
 //Private
 //Setters
 const setTonic = function(chord,newTonic){chord[_tonic] = newTonic}
 const setSymbols = function(chord,newSymbols){chord[_symbols] = newSymbols}
-const setName = function(chord,newName){chord[_name] = newName}
+const setName = function(chord,newName){chord[_name] = newName;chord.name = newName}
 const setNotes = function(chord,newNotes){chord[_notes] = newNotes}
 const setIntervals = function(chord,newIntervals){chord[_intervals] = newIntervals}
 
-const parseName = function(n){
+//takes a chord name and returns the characteristics of the chord
+const parseName = function(name){
+  let slash = name.match(/\/[^0-9]+/g)
+  name = name.replace(/\/[^0-9]+/g,'');
+  
   //special case for powerchords, if the first char is a 5
   let powerchord = false;
-  if(n.charAt(1) == '5')
+  if(name.charAt(1) == '5')
     powerchord = true;
 
-  let no = n.match(/no\d+/g)
-  n = n.replace(/no\d+/g,'');
+  let no = name.match(/no\d+/g)
+  name = name.replace(/no\d+/g,'');
 
-  let slash = n.match(/\/[^0-9]+/g)
-  n = n.replace(/\/[^0-9]+/g,'');
+  let majx = name.match(/(Major|Maj|maj|M|Δ|Ma|Δ)\d+|Δ/g)
+  name = name.replace(/(Major|Maj|maj|M|Δ|Ma|Δ)\d+|Δ/g,'');
 
+  let otherNum = name.match(/[^♯♭b#sd]\d+/g)
 
-  let majx = n.match(/(Major|Maj|maj|M|Δ|Ma|Δ)\d+|Δ/g)
-  n = n.replace(/(Major|Maj|maj|M|Δ|Ma|Δ)\d+|Δ/g,'');
-
-  let otherNum = n.match(/[^♯♭b#sd]\d+/g)
-
-  let aug = n.match(/(♯♯|##|Aug|aug|Augmented|augmented|\+)/g)
-  n = n.replace(/(♯♯|##|Aug|aug|Augmented|augmented|\+)/g,'');
+  let aug = name.match(/(♯♯|##|Aug|aug|Augmented|augmented|\+)/g)
+  name = name.replace(/(♯♯|##|Aug|aug|Augmented|augmented|\+)/g,'');
   
-  let dom = n.match(/(dom|Dom|dominant|Dominant)/g)
-  n = n.replace(/(dom|Dom|dominant|Dominant)/g,'');
+  let dom = name.match(/(dom|Dom|dominant|Dominant)/g)
+  name = name.replace(/(dom|Dom|dominant|Dominant)/g,'');
 
-  let halfDim = n.match(/ø|Ø|hdin|halfDim/g)
-  n = n.replace(/ø|Ø|hdin|halfDim/g,'');
+  let halfDim = name.match(/ø|Ø|hdin|halfDim/g)
+  name = name.replace(/ø|Ø|hdin|halfDim/g,'');
 
   //the o symbol is problematic as it can appear in a bunch of places. Make sure its not the o in major, minor, do or sol
-  let dim = n.match(/(♭♭|bb|Dim|dim|Diminished|diminished|°|[^jnDSds]o)♭*b*♯*#*\d*/g)
+  let dim = name.match(/(♭♭|bb|Dim|dim|Diminished|diminished|°|[^jnDSds]o)♭*b*♯*#*\d*/g)
   //dont remove the b&# as we need them to add the note later
-  n = n.replace(/(♭♭|bb|Dim|dim|Diminished|diminished|°|[^jnDSds]o)\d*/g,'');
+  name = name.replace(/(♭♭|bb|Dim|dim|Diminished|diminished|°|[^jnDSds]o)\d*/g,'');
 
-  let major = n.match(/M|Major|major|maj/g)
+  let major = name.match(/M|Major|major|maj/g)
   //dont remove M, as it is present in Minor
-  n = n.replace(/Major|major|maj/g,'');
+  name = name.replace(/Major|major|maj/g,'');
 
-  let minor = n.match(/(m|min|Min|minor|Minor|-)/g)
-  n = n.replace(/(m|min|Min|minor|Minor|-)/g,'');
+  let minor = name.match(/(m|min|Min|minor|Minor|-)/g)
+  name = name.replace(/(m|min|Min|minor|Minor|-)/g,'');
  
   //look for add
-  let add = n.match(/(\/|add(b*|#*|♭*|♯*))\d+/g)
-  n = n.replace(/(\/|add(b*|#*|♭*|♯*))\d+/g,'');
+  let add = name.match(/(\/|add(b*|#*|♭*|♯*))\d+/g)
+  name = name.replace(/(\/|add(b*|#*|♭*|♯*))\d+/g,'');
 
   //look for #/b
-  let sharps = n.match(/(♯|#|sharp)\d+/g)
-  let flats = n.match(/(♭|b|flat)\d+/g)
+  let sharps = name.match(/(♯|#|sharp)\d+/g)
+  let flats = name.match(/(♭|b|flat)\d+/g)
   
   //look for sus
  
-  let sus = n.match(/sus\d*/g)
+  let sus = name.match(/sus\d*/g)
  
   return {
     major,
@@ -149,12 +194,10 @@ const parseName = function(n){
     slash
   }
 }
-const parseRootPlusName = function(n){
-  let root,alt =' ',name;
-
-  root = n.match(/^(Do|do|Re|re|Mi|mi|Fa|fa|Sol|sol|La|la|Si|si|A|a|B|b|C|c|D|d|E|e|F|f|G|g)#*b*♯*♭*/g)[0]
-  n = n.replace(/^(Do|do|Re|re|Mi|mi|Fa|fa|Sol|sol|La|la|Si|si|A|a|B|b|C|c|D|d|E|e|F|f|G|g)#*b*♯*♭*/g,'');
-  return [root,n]
+const parseRootPlusName = function(name){
+  let root = name.match(/^(Do|do|Re|re|Mi|mi|Fa|fa|Sol|sol|La|la|Si|si|A|a|B|b|C|c|D|d|E|e|F|f|G|g)#*b*♯*♭*/g)[0]
+  name = name.replace(/^(Do|do|Re|re|Mi|mi|Fa|fa|Sol|sol|La|la|Si|si|A|a|B|b|C|c|D|d|E|e|F|f|G|g)#*b*♯*♭*/g,'');
+  return [root,name]
 }
 const buildChord = function(chord,parsed){
   let intervals = ['P1','M3','P5']
@@ -341,6 +384,7 @@ const buildChord = function(chord,parsed){
       setIntervals(chord,intervals)
       setNotes(chord,notes)
     }
+
   }
 }
 const removeArray = function(arr,el){
@@ -349,6 +393,15 @@ const removeArray = function(arr,el){
     arr.splice(index, 1);
   }
   return arr
+}
+const arrayRemoveCheck = function(arr,el){
+  var index = arr.indexOf(el);
+  let present = false;
+  if (index > -1) {
+    arr.splice(index, 1);
+    present = true
+  }
+  return present
 }
 const addToIntervals = function(intervals,interval){
   //intervals = removeArray(intervals,interval)
@@ -387,6 +440,249 @@ const hasNote = function(chord,note){
   }
   return -1;
 }
+const findPermutations = function(notes){
+  let roots = []
+  let intervals = []
+  let slashNotes = []
+  
+  //case no slash
+  for(let i = 0;i<notes.length;i++){
+    let c = new Chord(notes,'dummyChord')
+    c.invert(i)
+    let inter = findIntervalsFromNotes(c.getNotes())
+
+    roots.push(c.getNotes()[0])
+    intervals.push(inter)
+    slashNotes.push(null)
+  }
+  //case slash
+  let slash = notes[0]
+  let rNotes = notes.slice(1)
+  for(let i = 0;i<rNotes.length;i++){
+    let c = new Chord(rNotes,'dummyChord')
+    c.invert(i)
+    let inter = findIntervalsFromNotes(c.getNotes())
+
+    roots.push(c.getNotes()[0])
+    intervals.push(inter)
+    slashNotes.push(slash)
+  }
+
+  return [roots,intervals,slashNotes]
+}
+const findNameFromPermutation = function(root,intervals,slash){
+  intervals = intervals.map(x=>x.getName())
+
+  let name = root.getRootName();
+  let mods = '';
+  let number = '';
+  let powerChord = false;
+  let no3 = false
+
+  //check 3rd first
+  if (arrayRemoveCheck(intervals, 'M3')) {
+    if (arrayRemoveCheck(intervals, 'P5')) {
+    } else if (arrayRemoveCheck(intervals, 'A5')) {
+        name += '+';
+    } else if (arrayRemoveCheck(intervals, 'd5')) {
+        mods += '♭5';
+    } else {
+        mods += 'no5';
+    }
+    if (arrayRemoveCheck(intervals, 'M6')) {
+      number+='6'
+    }
+  } else if (arrayRemoveCheck(intervals, 'm3')) {
+    if (arrayRemoveCheck(intervals, 'P5')) {
+        name += 'm';
+    } else if (arrayRemoveCheck(intervals, 'd5')) {
+        name += 'dim';
+    } else if (arrayRemoveCheck(intervals, 'A5')) {
+        name += 'm';
+        mods += '#5';
+    } else {
+        name += 'm';
+        mods += 'no5';
+    }
+    if (arrayRemoveCheck(intervals, 'M6')) {
+      number+='6'
+    }
+  } else if (arrayRemoveCheck(intervals, 'M2')) {
+    mods += 'sus2';
+    if (arrayRemoveCheck(intervals, 'P4'))
+    mods += '4'
+    if (!arrayRemoveCheck(intervals, 'P5')) {
+        mods += 'no5';
+    }
+    if (arrayRemoveCheck(intervals, 'M6')) {
+      number+='6'
+    }  
+  } else if (arrayRemoveCheck(intervals, 'P4')) {
+      mods += 'sus4';
+      if (!arrayRemoveCheck(intervals, 'P5')) {
+          mods += 'no5';
+      }
+      if (arrayRemoveCheck(intervals, 'M6')) {
+        number+='6'
+      }
+  
+  } else if (arrayRemoveCheck(intervals, 'P5')) {
+      if (arrayRemoveCheck(intervals, 'P8'))
+        powerChord = true;
+      else{
+        no3 = true
+        if (arrayRemoveCheck(intervals, 'M6')) {
+          number+='6'
+        }
+    }
+  } else {
+      return 'cant find name';
+  }
+  if (arrayRemoveCheck(intervals, 'm7')) {
+    number = '7';
+    if (name.indexOf('dim') != -1) {
+        if (mods.indexOf('♭5') == -1) mods += '♭5';
+          name = name.replace('dim', 'm');
+    }
+    if (arrayRemoveCheck(intervals, 'M9')) {
+      number = '9';
+    }
+    if (arrayRemoveCheck(intervals, 'P11')) {
+      number = '11';
+    }
+    if (arrayRemoveCheck(intervals, 'M13')) {
+      number = '13';
+    }
+  } else if (arrayRemoveCheck(intervals, 'M7')) {
+      number = 'Δ';
+      if (name.indexOf('dim') != -1) {
+          if (mods.indexOf('♭5') == -1) mods += '♭5';
+          name = name.replace('dim', 'm');
+      }
+      if (arrayRemoveCheck(intervals, 'M9')) {
+        number = 'Δ9';
+      }
+      if (arrayRemoveCheck(intervals, 'P11')) {
+        number = 'Δ11';
+      }
+      if (arrayRemoveCheck(intervals, 'M13')) {
+        number = 'Δ13';
+      }
+  } else if (arrayRemoveCheck(intervals, 'd7')) {
+      number = '7';
+      if (arrayRemoveCheck(intervals, 'M9')) {
+        number = '9';
+      }
+      if (arrayRemoveCheck(intervals, 'P11')) {
+        number = '11';
+      }
+      if (arrayRemoveCheck(intervals, 'M13')) {
+        number = '13';
+      }
+  }
+
+  for(let i = 1;i<intervals.length;i++){
+    let x = intervals[i]
+    if(x == 'A9')
+      mods+='♯9'
+    else if(x == 'm9')
+      mods+='♭9'
+    else if(x == 'A11')
+      mods+='♯11'
+    else if(x == 'd11')
+      mods+='♭11'
+    else if(x == 'A13')
+      mods+='♯13'
+    else if(x == 'm13')
+      mods+='♭13'
+    else{
+      let n = x.match(/\d+/g)
+      let q = x.slice(0,1)
+      if (n % 7 == 1 || n % 7 == 4 || n % 7 == 5){
+        if(q == 'P')
+          mods+='add' + n
+        else if(q == 'A')
+          mods+='add♯' + n 
+        else if(q == 'd')
+          mods+='add♭' + n 
+      }
+      else{
+        if(q == 'M')
+          mods+='add' + n
+        else if(q == 'm')
+          mods+='add♭' + n 
+        else if(q == 'A')
+          mods+='add♯' + n 
+        else if(q == 'd')
+          mods+='add♭♭' + n 
+      }
+    }
+  }
+  
+  if (powerChord) {
+    if (number) {
+        mods += 'no3';
+    } else {
+        number = '5';
+    }
+  }
+  if(no3)
+    mods+='no3'
+
+  if(slash != null)
+    mods+= '/' + slash.getRoot()
+
+  let r = name+number+mods
+
+  r = r.replace(/m7♭5/g,'ø')
+
+  
+  return r
+
+}
+const findIntervalsFromNotes = function(notes){
+ let tonic = notes[0]
+ let intervals = []
+
+ for(let i = 0; i< notes.length;i++){
+   let inter = new Interval(tonic,notes[i])
+   if(inter.getOrder() == 'descending')
+    inter = inter.invert()
+   intervals.push(inter)
+ }
+
+ return intervals
+}
+const findPossibleNames = function(chord){
+  let permutations = findPermutations(chord.getNotes())
+  let length = permutations[0].length
+  let possibleNames = []
+  let slash = null
+ 
+  for(let i = 0;i<length;i++){
+    let name = findNameFromPermutation(permutations[0][i],permutations[1][i],permutations[2][i])
+ 
+    let x = []
+    for(let j = 0;j<permutations[1][i].length;j++){
+      let p = permutations[0][i].plusInterval(permutations[1][i][j])
+      if(p != 'impossible to compute')
+       x.push(p)
+      if(permutations[2][i]!=null)
+        slash = permutations[2][i]
+    }
+    if(slash !=null)
+      x.unshift(slash)
+    x = x.map(n =>n.getName())
+    let s = name + ' - Notes: '+x + ' - Intervals: '+permutations[1][i].map(interval =>interval.getName()) 
+   
+   possibleNames.push([name,s])
+  }
+  return possibleNames
+}
+
+
+
+
 
 },{"./helper":2,"./interval":3,"./note":4,"./theory":6}],2:[function(require,module,exports){
 'use strict';
@@ -399,11 +695,11 @@ module.exports = {
     return Math.floor(Math.random()*(b - a + 1)) + a;
   },
   pickRandomProperty(obj) {
-      let keys = Object.keys(obj)
-      return keys[ keys.length * Math.random() << 0 ];
+    let keys = Object.keys(obj)
+    return keys[ keys.length * Math.random() << 0 ];
   },
   pickRandomArray(arr) {
-      return arr[arr.length * Math.random() << 0 ];
+    return arr[arr.length * Math.random() << 0 ];
   },
   getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
@@ -444,6 +740,14 @@ module.exports = {
     let root = Theory.midiNotesList[midi%12]
 
     return root+octave
+  },
+  isValidAlteration(alteration){
+    return alteration == "" ||
+    alteration == "#" ||
+    alteration == "b" ||
+    alteration == "##" ||
+    alteration == "x" ||
+    alteration == "bb"
   }
 }
     
@@ -472,12 +776,14 @@ exports = module.exports = Interval
 function Interval(arg1,arg2){
   var Note = require('./note');
   
+  //if 2 note objects are given
   if(Helpers.isNote(arg1) && Helpers.isNote(arg2)){
     this[_note1] = arg1
     this[_note2] = arg2
     computeFromNotes(this)
   }
   
+  //else if we give a combination of note object and note notation
   else if(Helpers.isNote(arg1)  && Helpers.isValidNoteNotation(arg2)){
     this[_note1] = arg1;
     this[_note2] = new Note(arg2);
@@ -493,6 +799,7 @@ function Interval(arg1,arg2){
     this[_note2] = new Note(arg2);
     computeFromNotes(this)
   }
+  //else, if we define the interval without notes
   else{
     this[_name] = arg1;
     this[_order] = arg2;
@@ -500,11 +807,8 @@ function Interval(arg1,arg2){
     parseName(this,this.getName(),this.getOrder())
   }
   
-
   //Duplicate of the name, for debugging purpose, is public but has no impact on anything
   this.interval = this[_name];
-  //Standard name function for all objects
-  this.name = this.getName
 }
 
 //Public getters
@@ -640,7 +944,7 @@ const setIntervalQuality = function(interval){
         quality = 'P';
       else if(nb == 2)
         quality = 'd';
-      else if(nb == 7)
+      else if(nb % 7 == 0)
         quality = 'A';
       break;
     case 1:
@@ -692,21 +996,23 @@ const setIntervalQuality = function(interval){
         quality = 'm';
       break;
     case 9:
-      if(nb == 7)
+      if(nb % 7 == 0)
+        quality = 'd';
+      else if(nb == 7)
         quality = 'd';
       else if(nb == 6)
         quality = 'M';
       break;
     case 10:
-      if(nb == 7)
+      if(nb % 7 == 0)
         quality = 'm';
       else if(nb == 6)
         quality = 'A';
       break;
     case 11:
-      if(nb == 7)
+      if(nb % 7 == 0)
         quality = 'M';
-      else if(nb == 8 || nb ==  1)
+      else if(nb % 7 == 1)
         quality = 'd';
       break;
     case 12:
@@ -718,6 +1024,7 @@ const setIntervalQuality = function(interval){
         quality = 'd';
       break;
   }
+
   setQuality(interval, quality );
   if(interval.getQuality() == undefined) setQuality(interval, '$')
 }
@@ -799,11 +1106,11 @@ var _notationType = Symbol('notationType');
 
 exports = module.exports = Note
 
-//name needs to be a capital letter + alterations/octave (D#2)  or a note name+ alt/octave (solb2)
+//Name needs to be a capital letter + alterations/octave (D#2)  or a note name+ alt/octave (solb2)
 function Note(name){
   //if name is integer, assume midi note model
   if(Number.isInteger(name)){
-    name = Helpers.midiToName(name)
+    name = Helpers.midiToName(name);
   }
   
   this[_name] = name;
@@ -812,8 +1119,6 @@ function Note(name){
 
   //Duplicate of the name, for debugging purpose, is public but has no impact on anything
   this.note = this[_name];
-  //Standard name function for all objects
-  this.name = this.getName
 }
 
 //Public getters - ex for C#3
@@ -832,7 +1137,6 @@ Note.prototype.getRootAsLetter = function(){
 Note.prototype.getRootNameAsLetter = function(){
   return Theory.wholeNotesOrder[this.getRootName()] != undefined? this.getRootName(): Theory.nameToLetter[this.getRootName().toLowerCase()]
 }
-
 //Returns the note you end up on when adding an interval to the current note
 Note.prototype.plusInterval = function(interval,intervalOrder){
   if(typeof interval == 'string'){
@@ -896,32 +1200,32 @@ Note.prototype.plusInterval = function(interval,intervalOrder){
   }
   
   // we checked the difference between the full initial note name and the target note name without alteration
-  // if there is a difference, we need to alterate the result note
-  let d = order*diffFromNames-semitones
+  // if there is a difference, we need to alter the result note
+  let remainingDiff = order*diffFromNames-semitones
   
-  while(d>12)
-    d-=12
-  while(d<-12)
-    d+=12
-  if(d>2)
-    d-=12
-  if(d<-2)
-    d+=12
+  while(remainingDiff>12)
+    remainingDiff-=12
+  while(remainingDiff<-12)
+    remainingDiff+=12
+  if(remainingDiff>2)
+    remainingDiff-=12
+  if(remainingDiff<-2)
+    remainingDiff+=12
 
   let mod = ''
-  if(d == 1)
+  if(remainingDiff == 1)
     mod = 'b'
-  if(d == -1)
+  if(remainingDiff == -1)
     mod = '#' 
 
-  if(d == 2 )
+  if(remainingDiff == 2 )
     mod = 'bb'
-  if(d == -2)
+  if(remainingDiff == -2)
     mod = '##'
 
 
   //looking for impossible intervals/triple alteration (ex cant build an ascending D2 on Ab)
-  if(d>=3 || d <=-3){
+  if(remainingDiff>2 || remainingDiff <-2){
     return 'impossible to compute'
   }
   
@@ -949,6 +1253,7 @@ Note.prototype.getFrequency = function(){
   let a = Math.pow(2,1/12)
   let n = Theory.notesOrder[this.getRootAsLetter()] - Theory.notesOrder['A'] + (this.getOctave()-4)*12
 
+  //round to 2 decimals
   return Math.round(f0 * Math.pow(a,n) * 100) / 100
 }
 
@@ -963,7 +1268,6 @@ const setNotationType = function(note,newNotationType){note[_notationType] = new
 
 //will try to read the name argument, and fill all props from it
 const parseName = function(note){
-
   let octaveRe = new RegExp('[0-9]+','g')
   //if we find some numbers, take them as octave
   if(note.getName().match(octaveRe))
@@ -987,18 +1291,13 @@ const parseName = function(note){
   setRootName(note,name.match(/[^#bx0-9)]+/g)[0])
 
   if(!Helpers.isValidNoteName(note.getRootName()))
-    throw note.getRootName + ' is not a note'
+    throw note.getRootName() + ' is not a note'
 
   //the alterations have to be #,b or x
   let alteration = name.match(/[#bx)]+/g)
   alteration = alteration?alteration[0]:''
   
-  if (alteration != '' 
-    && alteration != '#'
-    && alteration != '##'
-    && alteration != 'x'
-    && alteration != 'b'
-    && alteration != 'bb' )
+  if (!Helpers.isValidAlteration(alteration))
     throw alteration + ' is not a valid alteration'
 
   setAlteration(note,alteration)
@@ -1007,7 +1306,7 @@ const parseName = function(note){
 }
 //Add the interval number to the root note to find the result note
 //We dont care about alterations, just about the note index in the wholeNotesOrder list
-const findNoteNameFromInterval=function(note,interval){
+const findNoteNameFromInterval = function(note,interval){
   //Add the interval number to the root note to find the result note
   //We dont care about alterations, just about the note index in the wholeNotesOrder list
   let rootNote = note.getRootAsLetter();
@@ -1060,12 +1359,12 @@ function Scale(tonic,type,degree){
 
     //Duplicate of the name, for debugging purpose, is public but has no impact on anything
     this.scale = this[_notes];
-    //Standard name function for all objects
-    this.name = this.getTonic().getName() + ' ' + this.getType()
+
 }
 //Public Getters
 Scale.prototype.getTonic = function(){return this[_tonic]};  
 Scale.prototype.getType = function(){return this[_type]};  
+Scale.prototype.getName = function(){return this.getTonic().getRootName() + ' ' + this.getType()};  
 Scale.prototype.getDegree  = function(){return this[_degree]};  
 Scale.prototype.getNotes  = function(){return this[_notes]};  
 Scale.prototype.getNotesName = function(){return this.getNotes().map(n => n.getName())};
@@ -1264,65 +1563,6 @@ module.exports = {
         'A7': 12,
         'A8': 13
     },
-    chordsDict : {
-        'Major': ['M3','P5'],
-
-        'Minor': ['m3','P5'],
-        'm': ['m3','P5'],
-
-        'Augmented': ['M3','A5'],
-        'aug': ['M3','A5'],
-        '+': ['M3','A5'],
-
-        'Dimished': ['m3','D5'],
-        'dim': ['m3','D5'],
-        '°': ['m3','D5'],
-
-        'SuspendedFourth': ['P4','P5'],
-        'sus4': ['P4','P5'],
-        'SuspendedSecond': ['M2','P5'],
-        'sus2': ['M2','P5'],
-
-        'MinorSixth': ['m3','P5','M6'],
-        'm6': ['m3','P5','M6'],
-        'MajorSixth': ['M3','P5','M6'],
-        '6': ['M3','P5','M6'],
-        'SixthAddNinth': ['M3','P5','M6','M9'],
-        '6add9': ['M3','P5','M6','M9'],
-        'Ninth': ['M3','P5','m7','M9'],
-        '9': ['M3','P5','m7','M9'],
-        'MinorNinth': ['m3','P5','m7','M9'],
-        'm9': ['m3','P5','m7','M9'],
-        'MajorNinth': ['M3','P5','M7','M9'],
-        'm9': ['M3','P5','M7','M9'],
-
-        'DominantSeventh': ['M3','P5','m7'],
-        '7': ['M3','P5','m7'],
-        'MinorSeventh': ['m3','P5','m7'],
-        'm7': ['m3','P5','m7'],
-        'MajorSeventh': ['M3','P5','M7'],
-        'M7': ['M3','P5','M7'],
-
-        'AugmentedDominantSeventh': ['M3','A5','m7'],
-        'aug7': ['M3','A5','m7'],
-        '+7': ['M3','A5','m7'],
-        'AugmentedMinorSeventh': ['m3','A5','m7'],
-        'augm7': ['m3','A5','m7'],
-        '+m7': ['m3','A5','m7'],
-        'AugmentedMajorSeventh': ['M3','A5','M7'],
-        'augM7': ['M3','A5','M7'],
-        '+M7': ['M3','A5','M7'],
-
-        //dimished 7s
-        'DiminishedSeventh': ['m3','d5','d7'],
-        'dim7': ['m3','d5','d7'],
-        '°7': ['m3','d5','d7'],
-        // half dimished
-        'MinorSeventhFlatFifth': ['m3','d5','m7'],
-        'HalfDiminishedSeventh': ['m3','d5','m7'],
-        'm7b5': ['m3','d5','m7'],
-        'ø': ['m3','d5','m7'],
-    },
     scalesDict:{
         //5 notes
         majorpentatonic: ['P1','M2', 'M3', 'P5', 'M6'],
@@ -1398,6 +1638,8 @@ function chordConstructor(arg1,arg2){
     return new Chord(arg1,arg2)
 }
 function getRandomNote(octave1,octave2){
+    octave1 = octave1||3
+    octave2 = octave2||3
     let note =  Helpers.pickRandomArray(Theory.fullNotesList)
     let octave = Helpers.getRandomInt(octave1,octave2)
   
@@ -1409,6 +1651,13 @@ function getRandomInterval(){
   
     return new Interval(intervalName, intervalOrder)
 }
+function getRandomScale(note){
+    note = note || getRandomNote();
+    let scaleType = Helpers.pickRandomProperty(Theory.scalesDict)
+
+    return new Scale(note,scaleType)
+}   
+
 function setA4(frequency){
     Theory.A4Freq = frequency
 }
@@ -1420,6 +1669,7 @@ let solfege = {
     chord:chordConstructor,
     randomNote:getRandomNote,
     randomInterval:getRandomInterval,
+    randomScale:getRandomScale,
     setA4:setA4,
     Note:Note,
     Interval:Interval,
@@ -1428,9 +1678,17 @@ let solfege = {
 }
 exports = module.exports = solfege
 
-let n = solfege.chord('CMajor/G#')
-console.log(n.getIntervals())
-console.log(n.getNotesName())
+let c = solfege.chord(['C3','F#3','G3','D4'])
+console.log(c) 
+console.log(c.findBestName()) 
+console.log(c) 
+
+
+//browserify solfege.js --s module > solfegeBundle.js
+
+
+
+
 
 
 
