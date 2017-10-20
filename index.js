@@ -7,9 +7,20 @@ document.getElementById("chordName").addEventListener("keydown", function (e) {
     }
 });
 
-document.getElementById("button").onclick = function () {
+document.getElementById("notesList").addEventListener("keydown", function (e) {
+    if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+        let notes = $("#notesList").val()
+        ex2(notes)    
+    }
+});
+
+document.getElementById("button1").onclick = function () {
     let name = $("#chordName").val()
     ex(name)
+};
+document.getElementById("button2").onclick = function () {
+    let notes = $("#notesList").val()
+    ex2(notes)
 };
 
 const ex = function (name) {
@@ -34,4 +45,13 @@ const ex = function (name) {
 
     $("#resultIntervals").html(intervalsResult)
     $("#resultNotes").html(notesResult)
+}
+
+const ex2 = function (notes) {
+    let n = notes.split(" ")
+    console.log(n)
+    let chord = solfege.chord(n)
+    let best = chord.findBestName()
+
+    $("#resultChord").html(best)
 }
