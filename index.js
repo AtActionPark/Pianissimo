@@ -1,5 +1,5 @@
-const solfege = module
 
+let solfege = Solfege
 document.getElementById("chordName").addEventListener("keydown", function (e) {
     if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
         let name = $("#chordName").val()
