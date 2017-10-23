@@ -4,7 +4,9 @@
   "description": "Helpers for notes, intervals, chords and scales building",
   "main": "solfege.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --progress ",
+    "watch": "webpack --progress --watch"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,11 @@
   "bugs": {
     "url": "https://github.com/AtActionPark/Solfege/issues"
   },
-  "homepage": "https://github.com/AtActionPark/Solfege#readme"
+  "homepage": "https://github.com/AtActionPark/Solfege#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "webpack": "^3.8.1"
+  }
 }

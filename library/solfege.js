@@ -7,7 +7,6 @@ var Scale = require('./lib/scale');
 var Helpers = require('./lib/helper');
 var Theory = require('./lib/theory');
 
-
 function noteConstructor(name){
     return new Note(name)
 }
@@ -61,11 +60,6 @@ let solfege = {
 }
 exports = module.exports = solfege
 
-let c = solfege.chord(['C3','F#3','G3','D4'])
-let c2 = solfege.chord(['C3', 'F#3', 'G3', 'D4'])
-console.log(c) 
-c2.findBestName()
-console.log(c2) 
 
 
 
