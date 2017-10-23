@@ -1,33 +1,32 @@
-
 let solfege = Solfege
+
 document.getElementById("chordName").addEventListener("keydown", function (e) {
     if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
         let name = $("#chordName").val()
-        ex(name)
+        nameToNotes(name)
     }
 });
 
 document.getElementById("notesList").addEventListener("keydown", function (e) {
     if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
         let notes = $("#notesList").val()
-        ex2(notes)    
+        notesToName(notes)
     }
 });
 
 document.getElementById("button1").onclick = function () {
     let name = $("#chordName").val()
-    ex(name)
+    nameToNotes(name)
 };
 document.getElementById("button2").onclick = function () {
     let notes = $("#notesList").val()
-    ex2(notes)
+    notesToName(notes)
 };
 
-const ex = function (name) {
+const nameToNotes = function (name) {
     let chord = solfege.chord(name)
     let notes = chord.getNotesName()
     let intervals = chord.getIntervals()
-    console.log(chord)
 
     let notesResult = ''
     for (let i = 0; i < notes.length; i++) {
@@ -47,9 +46,8 @@ const ex = function (name) {
     $("#resultNotes").html(notesResult)
 }
 
-const ex2 = function (notes) {
+const notesToName = function (notes) {
     let n = notes.split(" ")
-    console.log(n)
     let chord = solfege.chord(n)
     let best = chord.findBestName()
 

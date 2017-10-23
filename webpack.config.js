@@ -4,8 +4,8 @@ const path = require('path');
 
 // Constant with our paths
 const paths = {
-  DIST: path.resolve(__dirname, 'dist'),
-  JS: path.resolve(__dirname, ''),
+  DIST: path.resolve(__dirname, 'library/dist'),
+  JS: path.resolve(__dirname, 'library'),
 };
 
 // Webpack configuration
@@ -13,7 +13,7 @@ module.exports = {
   entry: path.join(paths.JS, 'solfege.js'),
   output: {
     path: paths.DIST,
-    filename: 'app.bundle.js',
+    filename: 'solfege.bundle.js',
     library: "Solfege",
     libraryTarget: "umd"
   },

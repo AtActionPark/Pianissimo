@@ -1792,9 +1792,6 @@ console.log(c2)
 
 
 
-//browserify solfege.js --s module > solfegeBundle.js
-
-
 
 
 
