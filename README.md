@@ -2,7 +2,7 @@
 
 Set of solfege/musical theory helpers for notes, intervals, chords and scales
 
-Can be installed via nmp, or by copying the solfege.bundle.js in your project
+Can be installed via nmp, or by copying the bundled js file in your project
 
 A demo of the chord parser current state can be found [here](https://atactionpark.github.io/Solfege/). It needs a lot more testing.
 

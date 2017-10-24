@@ -5,8 +5,8 @@ var webpack = require('webpack');
 
 // Constant with our paths
 const paths = {
-  DIST: path.resolve(__dirname, 'library/dist'),
-  JS: path.resolve(__dirname, 'library'),
+  DIST: path.resolve(__dirname, 'dist'),
+  JS: path.resolve(__dirname, ''),
 };
 
 // Webpack configuration
