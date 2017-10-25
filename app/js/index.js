@@ -1,4 +1,3 @@
-let solfege = Solfege
 
 document.getElementById("chordName").addEventListener("keydown", function (e) {
     if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
@@ -6,6 +5,10 @@ document.getElementById("chordName").addEventListener("keydown", function (e) {
         nameToNotes(name)
     }
 });
+document.getElementById("parseButton").onclick = function () {
+    let name = $("#chordName").val()
+    nameToNotes(name)
+};
 
 document.getElementById("notesList").addEventListener("keydown", function (e) {
     if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
@@ -13,18 +16,13 @@ document.getElementById("notesList").addEventListener("keydown", function (e) {
         notesToName(notes)
     }
 });
-
-document.getElementById("button1").onclick = function () {
-    let name = $("#chordName").val()
-    nameToNotes(name)
-};
-document.getElementById("button2").onclick = function () {
+document.getElementById("nameButton").onclick = function () {
     let notes = $("#notesList").val()
     notesToName(notes)
 };
 
 const nameToNotes = function (name) {
-    let chord = solfege.chord(name)
+    let chord = Solfege.chord(name)
     let notes = chord.getNotesName()
     let intervals = chord.getIntervals()
 
@@ -48,7 +46,7 @@ const nameToNotes = function (name) {
 
 const notesToName = function (notes) {
     let n = notes.split(" ")
-    let chord = solfege.chord(n)
+    let chord = Solfege.chord(n)
     let best = chord.findBestName()
 
     $("#resultChord").html(best)
