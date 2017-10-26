@@ -1,41 +1,41 @@
-# Solfege
+# Pianissimo
 
-Set of solfege/musical theory helpers for notes, intervals, chords and scales
+Set of musical theory helpers for notes, intervals, chords and scales
 
 Can be installed via nmp, or by copying the bundled js file in your project
 
-A demo of the chord parser current state can be found [here](https://atactionpark.github.io/Solfege/). It needs a lot more testing.
+A demo of the chord parser current state can be found [here](https://atactionpark.github.io/Pianissimo/). It needs a lot more testing.
 
-#### Create a solfege object
-If installed via nmp, require solfege first
+#### Create a pianissimo object
+If installed via nmp, require Pianissimo first
 ```javascript
-    const Solfege = require('../solfege');
+    const pianissimo = require('../pianissimo');
 ```
 
 #### Methods
 ```javascript
-    Solfege.note(name);                //returns a note object from a name or midi note number
-    Solfege.interval(name,order);      //returns an interval object from a name and order (optional)
-    Solfege.interval(note1,note2);     //returns an interval object from 2 notes
-    Solfege.scale(tonic,type,degree);  //returns a scale object from a note, a scale name, and a degree (optional)
-    Solfege.chord(tonic,name);         //returns a chord object from a note, and a chord name
-    Solfege.chord(name);               //returns a chord object from a chord name
-    Solfege.randomNote();              //returns a random note object
-    Solfege.randomInterval();          //returns a random interval object
-    Solfege.randomScale(tonic);        //returns a random scale object. The tonic is optional
+    pianissimo.note(name);                //returns a note object from a name or midi note number
+    pianissimo.interval(name,order);      //returns an interval object from a name and order (optional)
+    pianissimo.interval(note1,note2);     //returns an interval object from 2 notes
+    pianissimo.scale(tonic,type,degree);  //returns a scale object from a note, a scale name, and a degree (optional)
+    pianissimo.chord(tonic,name);         //returns a chord object from a note, and a chord name
+    pianissimo.chord(name);               //returns a chord object from a chord name
+    pianissimo.randomNote();              //returns a random note object
+    pianissimo.randomInterval();          //returns a random interval object
+    pianissimo.randomScale(tonic);        //returns a random scale object. The tonic is optional
                                        // and will be random if not specified
-    Solfege.setA4(frequency);          //sets the frequency of A4 (default: 440Hz)
+    pianissimo.setA4(frequency);          //sets the frequency of A4 (default: 440Hz)
 ```
 
 #### Examples
 ```javascript
-    const Solfege = require('../solfege');
+    const pianissimo = require('../pianissimo');
 
-    let note1 = Solfege.note('C3');
+    let note1 = pianissimo.note('C3');
     let note2 = note1.plusInterval('m9');
     note2.getName();                                // Db4
 
-    let interval = Solfege.interval(note2,'F#4');
+    let interval = pianissimo.interval(note2,'F#4');
     interval.invert();
     interval.getNotesName();                        // ['F#4', D5]
     interval.getName();                             // d6
@@ -45,11 +45,11 @@ If installed via nmp, require solfege first
     scale.getNotesName();                           // ['D5,'Eb5','F5','G5','Ab5','Bb5','C6','D6']
 
     //or, chained, for decreased readability
-    let scale = Solfege.note('C3').plusInterval('m9').toInterval('F#4').invert().getNotes()[1].toScale('locrian').getNotesName();
+    let scale = pianissimo.note('C3').plusInterval('m9').toInterval('F#4').invert().getNotes()[1].toScale('locrian').getNotesName();
     // ['D5,'Eb5','F5','G5','Ab5','Bb5','C6','D6']
 
 
-    let chord = Solfege.chord('Cmaj7b9');
+    let chord = pianissimo.chord('Cmaj7b9');
     chord.transpose('P5')
     chord.getNotesName();                           // ['G3','Bb3','Db4','Fb4','Ab4']   
 
@@ -61,11 +61,11 @@ Notes are object created through the .note(arg) method.
 Argument must be a string of type 'C3', 'C#2', 'Db', 'Solb4', 'fax' ... or a midi number
 
 ```javascript
-    let note = Solfege.note('C#4');
-    let note2 = Solfege.note('Solbb2');
-    let note3 = Solfege.note('D');        //octave will default to 3
-    let note4 = Solfege.note('Gx4');      
-    let note4 = Solfege.note(127);        //midi ranges from C0 to G10
+    let note = pianissimo.note('C#4');
+    let note2 = pianissimo.note('Solbb2');
+    let note3 = pianissimo.note('D');        //octave will default to 3
+    let note4 = pianissimo.note('Gx4');      
+    let note4 = pianissimo.note(127);        //midi ranges from C0 to G10
 ```
 
 #### Getters:
@@ -90,7 +90,7 @@ Arguments can be an interval object, an interval name (order will be ascending) 
 **.toInterval(note)** : returns a scale object built on the current note.
 Arguments can be the name of the scale, and the degree to start on (optional)
 ```javascript
-    let note = Solfege.note('C3')
+    let note = pianissimo.note('C3')
     note.toInterval('G3')             //returns a P5 interval 
 ```
 
@@ -109,18 +109,18 @@ Arg1 is the name of the interval (m3, P5,d18...)
 Arg 2 is optional and is the order (ascending, descending, -, +)
 
 ```javascript
-let interval1 = Solfege.note('m3', 'descending');
-let interval2 = Solfege.note('d5');                  //order will default to ascending
-let interval3 = Solfege.note('P8','-');
+let interval1 = pianissimo.note('m3', 'descending');
+let interval2 = pianissimo.note('d5');                  //order will default to ascending
+let interval3 = pianissimo.note('P8','-');
 ```
 
 The second way is by giving 2 notes.
 Arg1 and Arg2 are 2 notes objects or note names
 ```javascript
-let interval1 = Solfege.note('C3', 'G3');
-let interval2 = Solfege.note(note1,note2);
-let interval3 = Solfege.note('C3',note2);
-let interval3 = Solfege.note(note1,'Sol#');
+let interval1 = pianissimo.note('C3', 'G3');
+let interval2 = pianissimo.note(note1,note2);
+let interval3 = pianissimo.note('C3',note2);
+let interval3 = pianissimo.note(note1,'Sol#');
 ```
 Intervals can also be created from a note object, like so: 
 
@@ -159,15 +159,15 @@ Scales are object created through the .scale(tonic,type,degree) method.
 Degree is optional, with default value 1, and used to start a scale on a different degree
 
 ```javascript
-let scale1 = Solfege.scale('C3','minor');              //C minor
-let scale2 = Solfege.scale('C3','harmonicMinor',5);    //5th mode of the harmonic minor: C phrygian dominant
+let scale1 = pianissimo.scale('C3','minor');              //C minor
+let scale2 = pianissimo.scale('C3','harmonicMinor',5);    //5th mode of the harmonic minor: C phrygian dominant
 ```
 
 Scales can also be created from a note object:
 
 ```javascript
-let note = Solfege.note('C3')
-let scale  = note.toScale('minor')      // equivalent to Solfege.scale('C3','minor')
+let note = pianissimo.note('C3')
+let scale  = note.toScale('minor')      // equivalent to pianissimo.scale('C3','minor')
 ```
 
 #### Getters:
@@ -187,8 +187,8 @@ let scale  = note.toScale('minor')      // equivalent to Solfege.scale('C3','min
 Accepts an optional 'number' argument, to specify the number of notes per chord
 
 ```javascript
-    let note = Solfege.note('C3')
-    let scale = Solfege.scale(note,'major')
+    let note = pianissimo.note('C3')
+    let scale = pianissimo.scale(note,'major')
     let chords = scale.getChords(3)   
     console.log(chords)    
     //[ Chord { chord: [ 'C3', 'E3', 'G3' ], name: 'C major tonic' },
@@ -207,34 +207,34 @@ The chord constructor will try to parse the name to build the chord on the tonic
 It should understand most of the usual symols (M,m,Minor,m7,ø,11,add, sus,+,o,dim,aug,...)
 
 ```javascript
-let chord1 = Solfege.chord('C3','minor');              //C minor
-let chord2 = Solfege.chord('C3','ø');                  //C half-diminished
-let chord2 = Solfege.chord('C3','m(b9b5b7b11)sus4');   //why not
+let chord1 = pianissimo.chord('C3','minor');              //C minor
+let chord2 = pianissimo.chord('C3','ø');                  //C half-diminished
+let chord2 = pianissimo.chord('C3','m(b9b5b7b11)sus4');   //why not
 ```
 
 Or by supplying only a full chord name
 
 ```javascript
-let chord = Solfege.chord('Sol#7b9');            //['Sol#3', 'Si#3' ,'Re#4', 'Fa##4', 'La4']      
+let chord = pianissimo.chord('Sol#7b9');            //['Sol#3', 'Si#3' ,'Re#4', 'Fa##4', 'La4']      
 ```
 If thats the case, the octave can not be included in the name, and will be 3 by default
 
 Ahords can also be created from a note object:
 
 ```javascript
-let note = Solfege.note('C3')
-let chord  = note.toChord('minor')      // equivalent to Solfege.chord('C3','minor')
+let note = pianissimo.note('C3')
+let chord  = note.toChord('minor')      // equivalent to pianissimo.chord('C3','minor')
 ```
 
 Alternatively, chords can also be created by supplying an array of notes (and a optional name)
 
 ```javascript
-let chord = Solfege.chord(['C3','F#4','Bbb4'],'custom chord');              
+let chord = pianissimo.chord(['C3','F#4','Bbb4'],'custom chord');              
 ```
 
 If no name is supplied, the chord creator will naively try to guess the name of the chord and set it
 ```javascript
-let chord = Solfege.chord(['C3','Eb3','Gb3','Bb3']);  // name: Cdim7             
+let chord = pianissimo.chord(['C3','Eb3','Gb3','Bb3']);  // name: Cdim7             
 ```
 
 
@@ -255,7 +255,7 @@ Arguments can be an interval object, an interval name (order will be ascending) 
 
 
 ```javascript
-    let chord = Solfege.chord('C7b9')
+    let chord = pianissimo.chord('C7b9')
     chord.transpose('P5')
     console.log(chords.getNotesName())    
     //[ 'G3', 'B3', 'D4', 'F4', 'Ab4' ]                 
@@ -263,7 +263,7 @@ Arguments can be an interval object, an interval name (order will be ascending) 
 **.invert(order)** : will return an inverted version of the chord. Order will specify the number of inversions. Will default to 1 if no order is specified.
 
 ```javascript
-    let chord = Solfege.chord('C7')
+    let chord = pianissimo.chord('C7')
     chord.invert(1)
     console.log(chords.getNotesName())    
     //[ 'E3', 'G3', 'Bb3', 'C4' ]                 
@@ -272,7 +272,7 @@ Arguments can be an interval object, an interval name (order will be ascending) 
 **.findAlternateNames()** : will return a list of possible names for the chord, along with notes order and intervals
 
 ```javascript
-    let chord = Solfege.chord('C7')
+    let chord = pianissimo.chord('C7')
     console.log(chords.findAlternateNames())    
     //[ 'C7 - Notes: C3,E3,G3,Bb3 - Intervals: P1,M3,P5,m7',
     //'Edimadd♭6 - Notes: E3,G3,Bb3,C4 - Intervals: P1,m3,d5,m6',
@@ -286,7 +286,7 @@ Arguments can be an interval object, an interval name (order will be ascending) 
 **.findBestName()** : will return the shortest name from the possible nams list and set it.
 
 ```javascript
-    let c = Solfege.chord(['C3','F#3','G3','D4'])
+    let c = pianissimo.chord(['C3','F#3','G3','D4'])
     console.log(c.findBestName())   
     // GΔsus4'          
 ```

@@ -12,13 +12,13 @@ const paths = {
 // Webpack configuration
 module.exports = {
   entry: {
-    "solfege.bundle": path.join(paths.JS, 'solfege.js'),
-    "solfege.bundle.min": path.join(paths.JS, 'dist/solfege.bundle.js'),
+    "pianissimo.bundle": path.join(paths.JS, 'pianissimo.js'),
+    "pianissimo.bundle.min": path.join(paths.JS, 'dist/pianissimo.bundle.js'),
   },
   output: {
     path: paths.DIST,
     filename: '[name].js',
-    library: "Solfege",
+    library: "pianissimo",
     libraryTarget: "umd"
   },
   module: {

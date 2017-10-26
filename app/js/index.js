@@ -22,7 +22,7 @@ document.getElementById("nameButton").onclick = function () {
 };
 
 const nameToNotes = function (name) {
-    let chord = Solfege.chord(name)
+    let chord = pianissimo.chord(name)
     let notes = chord.getNotesName()
     let intervals = chord.getIntervals()
 
@@ -46,7 +46,7 @@ const nameToNotes = function (name) {
 
 const notesToName = function (notes) {
     let n = notes.split(" ")
-    let chord = Solfege.chord(n)
+    let chord = pianissimo.chord(n)
     let best = chord.findBestName()
 
     $("#resultChord").html(best)

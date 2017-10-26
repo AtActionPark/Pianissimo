@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["Solfege"] = factory();
+		exports["pianissimo"] = factory();
 	else
-		root["Solfege"] = factory();
+		root["pianissimo"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -1730,7 +1730,7 @@ function setA4(frequency) {
     Theory.A4Freq = frequency;
 }
 
-var solfege = {
+var pianissimo = {
     note: noteConstructor,
     interval: intervalConstructor,
     scale: scaleConstructor,
@@ -1744,7 +1744,7 @@ var solfege = {
     Chord: Chord,
     Scale: Scale
 };
-exports = module.exports = solfege;
+exports = module.exports = pianissimo;
 
 /***/ })
 /******/ ]);

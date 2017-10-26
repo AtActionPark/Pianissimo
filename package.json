@@ -1,8 +1,8 @@
 {
-  "name": "solfege",
+  "name": "pianissimo",
   "version": "1.0.0",
   "description": "Helpers for notes, intervals, chords and scales building",
-  "main": "solfege.js",
+  "main": "pianissimo.js",
   "scripts": {
     "build": "webpack --progress ",
     "watch": "webpack --progress --watch",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AtActionPark/Solfege.git"
+    "url": "git+https://github.com/AtActionPark/Pianissimo.git"
   },
   "author": "Clément Matheron",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AtActionPark/Solfege/issues"
+    "url": "https://github.com/AtActionPark/Pianissimo/issues"
   },
-  "homepage": "https://github.com/AtActionPark/Solfege#readme",
+  "homepage": "https://github.com/AtActionPark/Pianissimo#readme",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
