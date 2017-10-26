@@ -2,14 +2,13 @@
 
 Set of musical theory helpers for notes, intervals, chords and scales
 
-Can be installed via nmp, or by copying the bundled js file in your project
+Can be installed via nmp, or by copying the dist/pianissimo bundle file in your project
 
-A demo of the chord parser current state can be found [here](https://atactionpark.github.io/Pianissimo/). It needs a lot more testing.
 
 #### Create a pianissimo object
 If installed via nmp, require Pianissimo first
 ```javascript
-    const pianissimo = require('../pianissimo');
+    const pianissimo = require('pianissimo');
 ```
 
 #### Methods
@@ -23,13 +22,13 @@ If installed via nmp, require Pianissimo first
     pianissimo.randomNote();              //returns a random note object
     pianissimo.randomInterval();          //returns a random interval object
     pianissimo.randomScale(tonic);        //returns a random scale object. The tonic is optional
-                                       // and will be random if not specified
+                                          // and will be random if not specified
     pianissimo.setA4(frequency);          //sets the frequency of A4 (default: 440Hz)
 ```
 
 #### Examples
 ```javascript
-    const pianissimo = require('../pianissimo');
+    const pianissimo = require('pianissimo');
 
     let note1 = pianissimo.note('C3');
     let note2 = note1.plusInterval('m9');

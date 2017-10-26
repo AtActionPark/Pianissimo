@@ -1,4 +1,3 @@
-
 document.getElementById("chordName").addEventListener("keydown", function (e) {
     if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
         let name = $("#chordName").val()
@@ -43,7 +42,6 @@ const nameToNotes = function (name) {
     $("#resultIntervals").html(intervalsResult)
     $("#resultNotes").html(notesResult)
 }
-
 const notesToName = function (notes) {
     let n = notes.split(" ")
     let chord = pianissimo.chord(n)
