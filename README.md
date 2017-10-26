@@ -10,7 +10,6 @@ If installed via nmp, require Pianissimo first
 ```javascript
     const pianissimo = require('pianissimo');
 ```
-
 If the script is copied, the pianissimo object will be available
 
 #### Examples
