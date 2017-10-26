@@ -1,4 +1,4 @@
-# Pianissimo
+# [Pianissimo](https://github.com/AtActionPark/Pianissimo)
 
 Set of musical theory helpers for notes, intervals, chords and scales
 
