@@ -11,20 +11,7 @@ If installed via nmp, require Pianissimo first
     const pianissimo = require('pianissimo');
 ```
 
-#### Methods
-```javascript
-    pianissimo.note(name);                //returns a note object from a name or midi note number
-    pianissimo.interval(name,order);      //returns an interval object from a name and order (optional)
-    pianissimo.interval(note1,note2);     //returns an interval object from 2 notes
-    pianissimo.scale(tonic,type,degree);  //returns a scale object from a note, a scale name, and a degree (optional)
-    pianissimo.chord(tonic,name);         //returns a chord object from a note, and a chord name
-    pianissimo.chord(name);               //returns a chord object from a chord name
-    pianissimo.randomNote();              //returns a random note object
-    pianissimo.randomInterval();          //returns a random interval object
-    pianissimo.randomScale(tonic);        //returns a random scale object. The tonic is optional
-                                          // and will be random if not specified
-    pianissimo.setA4(frequency);          //sets the frequency of A4 (default: 440Hz)
-```
+If the script is copied, the pianissimo object will be available
 
 #### Examples
 ```javascript
@@ -52,6 +39,24 @@ If installed via nmp, require Pianissimo first
     chord.transpose('P5')
     chord.getNotesName();                           // ['G3','Bb3','Db4','Fb4','Ab4']   
 
+    let chord2 = pianissimo.chord(['C3','F#3','G3','D4'])
+    c.findBestName()                                // GΔsus4'        
+```
+
+
+#### Methods
+```javascript
+    pianissimo.note(name);                //returns a note object from a name or midi note number
+    pianissimo.interval(name,order);      //returns an interval object from a name and order (optional)
+    pianissimo.interval(note1,note2);     //returns an interval object from 2 notes
+    pianissimo.scale(tonic,type,degree);  //returns a scale object from a note, a scale name, and a degree (optional)
+    pianissimo.chord(tonic,name);         //returns a chord object from a note, and a chord name
+    pianissimo.chord(name);               //returns a chord object from a chord name
+    pianissimo.randomNote();              //returns a random note object
+    pianissimo.randomInterval();          //returns a random interval object
+    pianissimo.randomScale(tonic);        //returns a random scale object. The tonic is optional
+                                          // and will be random if not specified
+    pianissimo.setA4(frequency);          //sets the frequency of A4 (default: 440Hz)
 ```
 
 ## Notes
