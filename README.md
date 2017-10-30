@@ -10,15 +10,15 @@ If installed via nmp, require Pianissimo first
 ```javascript
     const pianissimo = require('pianissimo');
 ```
-If the script is copied, the pianissimo object will be available
+If the script is copied, the pianissimo object will be available globally
 
 #### Examples
 ```javascript
     const pianissimo = require('pianissimo');
 
     let note1 = pianissimo.note('C3');
-    let note2 = note1.plusInterval('m9');
-    note2.getName();                                // Db4
+    let note2 = note1.plusInterval('M9');
+    note2.getName();                                // D4
 
     let interval = pianissimo.interval(note2,'F#4');
     interval.invert();
@@ -27,11 +27,11 @@ If the script is copied, the pianissimo object will be available
 
     let note3 = interval.getNotes()[1];             // D5
     let scale = note3.toScale('locrian');
-    scale.getNotesName();                           // ['D5,'Eb5','F5','G5','Ab5','Bb5','C6','D6']
+    scale.getNotesName();                           // ['D5,'Eb5','F5','G5','Ab5','Bb5','C6']
 
     //or, chained, for decreased readability
     let scale = pianissimo.note('C3').plusInterval('m9').toInterval('F#4').invert().getNotes()[1].toScale('locrian').getNotesName();
-    // ['D5,'Eb5','F5','G5','Ab5','Bb5','C6','D6']
+    // ['D5,'Eb5','F5','G5','Ab5','Bb5','C6']
 
 
     let chord = pianissimo.chord('Cmaj7b9');
