@@ -1,12 +1,13 @@
 {
   "name": "pianissimo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Helpers for notes, intervals, chords and scales building",
   "main": "pianissimo.js",
   "scripts": {
     "build": "webpack --progress ",
     "watch": "webpack --progress --watch",
-    "test": "qunit"
+    "test": "qunit",
+    "lint": "eslint --config .eslintrc.js --format compact ."
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
+    "eslint-config-google": "^0.9.1",
     "webpack": "^3.8.1"
   }
 }
