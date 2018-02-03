@@ -1,7 +1,7 @@
 'use strict';
 
 const pianissimo = require('../pianissimo');
-const Helpers = require('../lib/helper');
+const Note = require('../lib/note');
 
 // Note
 QUnit.test('noteCreate', function(assert) {
@@ -145,18 +145,18 @@ QUnit.test('note.toScale', function(assert) {
   let note = pianissimo.note('C3');
   let scale = note.toScale('major');
   assert.equal(scale.getNotes().length, 7);
-  assert.equal(Helpers.isNote(scale.getNotes()[5]), true);
+  assert.equal(scale.getNotes()[5] instanceof Note, true);
   assert.equal(scale.getNotes()[5].getName(), 'A3');
 
   note = pianissimo.note('Sol3');
   scale = note.toScale('minor');
   assert.equal(scale.getNotes().length, 7);
-  assert.equal(Helpers.isNote(scale.getNotes()[5]), true);
+  assert.equal(scale.getNotes()[5] instanceof Note, true);
   assert.equal(scale.getNotes()[5].getName(), 'Mib4');
 });
 QUnit.test('note.toChord', function(assert) {
   const note = pianissimo.note('C3');
   const chord = note.toChord('major');
-  assert.equal(Helpers.isNote(chord.getNotes()[2]), true);
+  assert.equal(chord.getNotes()[2] instanceof Note, true);
   assert.equal(chord.getNotes()[2].getName(), 'G3');
 });
