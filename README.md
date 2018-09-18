@@ -132,19 +132,19 @@ Arg1 is the name of the interval (m3, P5,d18...)
 Arg 2 is optional and is the order (ascending, descending, -, +)
 
 ```javascript
-let interval1 = pianissimo.note("m3", "descending");
-let interval2 = pianissimo.note("d5"); //order will default to ascending
-let interval3 = pianissimo.note("P8", "-");
+let interval1 = pianissimo.interval("m3", "descending");
+let interval2 = pianissimo.interval("d5"); //order will default to ascending
+let interval3 = pianissimo.interval("P8", "-");
 ```
 
 The second way is by giving 2 notes.
 Arg1 and Arg2 are 2 notes objects or note names
 
 ```javascript
-let interval1 = pianissimo.note("C3", "G3");
-let interval2 = pianissimo.note(note1, note2);
-let interval3 = pianissimo.note("C3", note2);
-let interval3 = pianissimo.note(note1, "Sol#");
+let interval1 = pianissimo.interval("C3", "G3");
+let interval2 = pianissimo.interval(note1, note2);
+let interval3 = pianissimo.interval("C3", note2);
+let interval3 = pianissimo.interval(note1, "Sol#");
 ```
 
 Intervals can also be created from a note object, like so:
