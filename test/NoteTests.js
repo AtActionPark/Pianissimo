@@ -60,6 +60,7 @@ QUnit.test('noteCreate', function(assert) {
   assert.equal(note.getAlteration(), 'x');
 
   // with midi number (cf. http://www.inspiredacoustics.com/en/MIDI_note_numbers_and_center_frequencies)
+  // or here https://newt.phys.unsw.edu.au/jw/notes.html
   assert.equal(pianissimo.note(21).getName(), 'A0');
   assert.equal(pianissimo.note(22).getName(), 'A#0');
   assert.equal(pianissimo.note(23).getName(), 'B0');
@@ -355,5 +356,11 @@ QUnit.test('note.getMidiNumber', function(assert) {
     pianissimo.note('D♭♭3').getMidiNumber(),
     pianissimo.note('C3').getMidiNumber(),
     'Notes created with ♭♭ have a valid midi number assigned'
+  );
+
+  assert.equal(
+    pianissimo.note('La5').getMidiNumber(),
+    pianissimo.note('A5').getMidiNumber(),
+    'Notes created with names have a valid midi number assigned'
   );
 });
