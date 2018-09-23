@@ -297,4 +297,34 @@ QUnit.test('note.getMidiNumber', function(assert) {
   for (let i=20; i<128; i++) {
     assert.equal(pianissimo.note(i).getMidiNumber(), i);
   }
+
+  assert.equal(
+    pianissimo.note('E#3').getMidiNumber(),
+    pianissimo.note('F3').getMidiNumber(),
+    'Notes created with # have a valid midi number assigned'
+  );
+
+  assert.equal(
+    pianissimo.note('C##3').getMidiNumber(),
+    pianissimo.note('D3').getMidiNumber(),
+    'Notes created with ## have a valid midi number assigned'
+  );
+
+  assert.equal(
+    pianissimo.note('Cx3').getMidiNumber(),
+    pianissimo.note('D3').getMidiNumber(),
+    'Notes created with x have a valid midi number assigned'
+  );
+
+  assert.equal(
+    pianissimo.note('Fb3').getMidiNumber(),
+    pianissimo.note('E3').getMidiNumber(),
+    'Notes created with b have a valid midi number assigned'
+  );
+
+  assert.equal(
+    pianissimo.note('Dbb3').getMidiNumber(),
+    pianissimo.note('C3').getMidiNumber(),
+    'Notes created with bb have a valid midi number assigned'
+  );
 });
