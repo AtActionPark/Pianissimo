@@ -311,6 +311,23 @@ QUnit.test('note.getMidiNumber', function(assert) {
   );
 
   assert.equal(
+    pianissimo.note('E♯3').getMidiNumber(),
+    pianissimo.note('F3').getMidiNumber(),
+    'Notes created with ♯ have a valid midi number assigned'
+  );
+
+  assert.equal(
+    pianissimo.note('C♯♯3').getAlteration(),
+    '##'
+  );
+
+  assert.equal(
+    pianissimo.note('C♯♯3').getMidiNumber(),
+    pianissimo.note('D3').getMidiNumber(),
+    'Notes created with ♯♯ have a valid midi number assigned'
+  );
+
+  assert.equal(
     pianissimo.note('Cx3').getMidiNumber(),
     pianissimo.note('D3').getMidiNumber(),
     'Notes created with x have a valid midi number assigned'
@@ -326,5 +343,17 @@ QUnit.test('note.getMidiNumber', function(assert) {
     pianissimo.note('Dbb3').getMidiNumber(),
     pianissimo.note('C3').getMidiNumber(),
     'Notes created with bb have a valid midi number assigned'
+  );
+
+  assert.equal(
+    pianissimo.note('F♭3').getMidiNumber(),
+    pianissimo.note('E3').getMidiNumber(),
+    'Notes created with ♭ have a valid midi number assigned'
+  );
+
+  assert.equal(
+    pianissimo.note('D♭♭3').getMidiNumber(),
+    pianissimo.note('C3').getMidiNumber(),
+    'Notes created with ♭♭ have a valid midi number assigned'
   );
 });
