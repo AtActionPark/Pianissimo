@@ -190,33 +190,52 @@ QUnit.test('noteCreate', function(assert) {
   // bad alteration, should throw error
   assert.throws(function() {
     pianissimo.note('B#b2');
-  }, '#b is not a valid alteration');
+  },
+  function( err ) {
+    return err.toString() === '#b is not a valid alteration';
+  });
   assert.throws(function() {
     pianissimo.note('B###b2');
-  }, '### is not a valid alteration');
+  },
+  function( err ) {
+    return err.toString() === '###b is not a valid alteration';
+  });
   assert.throws(function() {
     pianissimo.note('Solb#bb2');
-  }, 'b#bb is not a valid alteration');
+  },
+  function( err ) {
+    return err.toString() === 'b#bb is not a valid alteration';
+  });
 
   // bad name, should throw error
   assert.throws(function() {
     pianissimo.note('H2');
-  }, 'H is not a note');
+  },
+  function( err ) {
+    return err.toString() === 'H is not a note';
+  });
   assert.throws(function() {
     pianissimo.note('Sil2');
-  }, 'Sil is not a note');
+  },
+  function( err ) {
+    return err.toString() === 'Sil is not a note';
+  });
 
   // bad midi note number should throw error
   for (let i=0; i<20; i++) {
     assert.throws(function() {
       pianissimo.note(i);
-    }, new RegExp('^' + i + ' is not a midi note number'),
-    'valid midi note numbers are from 20..127');
+    },
+    function( err ) {
+      return err.toString() === i + ' is not a midi note number';
+    });
   }
   assert.throws(function() {
     pianissimo.note(128);
-  }, new RegExp('^128 is not a midi note number$'),
-  'valid midi note numbers are from 20..127');
+  },
+  function( err ) {
+    return err.toString() === '128 is not a midi note number';
+  });
 });
 QUnit.test('note.getFrequency', function(assert) {
   pianissimo.setA4(440);
