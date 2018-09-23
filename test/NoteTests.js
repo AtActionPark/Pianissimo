@@ -205,6 +205,18 @@ QUnit.test('noteCreate', function(assert) {
   assert.throws(function() {
     pianissimo.note('Sil2');
   }, 'Sil is not a note');
+
+  // bad midi note number should throw error
+  for (let i=0; i<20; i++) {
+    assert.throws(function() {
+      pianissimo.note(i);
+    }, new RegExp('^' + i + ' is not a midi note number'),
+    'valid midi note numbers are from 20..127');
+  }
+  assert.throws(function() {
+    pianissimo.note(128);
+  }, new RegExp('^128 is not a midi note number$'),
+  'valid midi note numbers are from 20..127');
 });
 QUnit.test('note.getFrequency', function(assert) {
   pianissimo.setA4(440);
