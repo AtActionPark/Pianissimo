@@ -1,6 +1,6 @@
 {
   "name": "pianissimo",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "Helpers for notes, intervals, chords and scales building",
   "main": "pianissimo.js",
   "scripts": {
@@ -25,5 +25,6 @@
     "babel-preset-env": "^1.6.1",
     "eslint-config-google": "^0.9.1",
     "webpack": "^3.8.1"
-  }
+  },
+  "dependencies": {}
 }

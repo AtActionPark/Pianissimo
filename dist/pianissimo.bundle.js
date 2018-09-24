@@ -268,75 +268,11 @@ module.exports = {
 "use strict";
 
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Theory = __webpack_require__(0);
-
-// Helpers
-module.exports = {
-  getRandomInt: function getRandomInt(a, b) {
-    return Math.floor(Math.random() * (b - a + 1)) + a;
-  },
-  pickRandomProperty: function pickRandomProperty(obj) {
-    var keys = Object.keys(obj);
-    return keys[keys.length * Math.random() << 0];
-  },
-  pickRandomArray: function pickRandomArray(arr) {
-    return arr[arr.length * Math.random() << 0];
-  },
-  getKeyByValue: function getKeyByValue(object, value) {
-    return Object.keys(object).find(function (key) {
-      return object[key] === value;
-    });
-  },
-  isNote: function isNote(obj) {
-    return (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) == 'object' && obj.getRootAsLetter() != undefined;
-  },
-  isValidNoteName: function isValidNoteName(name) {
-    return Theory.wholeNotesOrder[name] != undefined || this.getKeyByValue(Theory.letterToName, name.toLowerCase()) != undefined;
-  },
-  isValidNoteNotation: function isValidNoteNotation(name) {
-    if (this.isNote(name)) return true;
-    var rootRe = new RegExp('[^0-9#bx)]+', 'g');
-    var root = name.match(rootRe)[0];
-    return Theory.wholeNotesOrder[root] != undefined || this.getKeyByValue(Theory.letterToName, root.toLowerCase()) != undefined;
-  },
-  capitalizeFirstLetter: function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  },
-  isInterval: function isInterval(name) {
-    var quality = name.slice(0, 1);
-    var nb = name.slice(1);
-
-    return (quality == P || quality == M || quality == m || quality == d || quality == A) && Number.isInteger(parseInt(nb));
-  },
-  nameToMidi: function nameToMidi(root, octave) {
-    console.log(root);
-    return 12 * octave + Theory.midiNotesList.indexOf(root);
-  },
-  midiToName: function midiToName(midi) {
-    var octave = Math.floor(midi / 12);
-    var root = Theory.midiNotesList[midi % 12];
-
-    return root + octave;
-  },
-  isValidAlteration: function isValidAlteration(alteration) {
-    return alteration == '' || alteration == '#' || alteration == 'b' || alteration == '##' || alteration == 'x' || alteration == 'bb';
-  }
-};
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 var Theory = __webpack_require__(0);
 var Interval = __webpack_require__(3);
 var Scale = __webpack_require__(5);
 var Chord = __webpack_require__(4);
-var Helpers = __webpack_require__(1);
+var Helpers = __webpack_require__(2);
 
 // Use symbols for emulating private variables
 var _name = Symbol('name');
@@ -352,6 +288,7 @@ exports = module.exports = Note;
 function Note(name) {
   // if name is integer, assume midi note model
   if (Number.isInteger(name)) {
+    if (!Helpers.isValidMidiNoteNumber(name)) throw name + ' is not a midi note number';
     name = Helpers.midiToName(name);
   }
 
@@ -529,8 +466,8 @@ var parseName = function parseName(note) {
 
   // from now on we work with only one set of symbols
   var name = note.getName();
-  name = name.replace('♯', '#');
-  name = name.replace('♭', 'b');
+  name = name.replace(/♯/g, '#');
+  name = name.replace(/♭/g, 'b');
   name = name.replace('♮', '');
 
   // The root will be everything but the numbers
@@ -576,13 +513,79 @@ var formatName = function formatName(note) {
 };
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var Theory = __webpack_require__(0);
+
+// Helpers
+module.exports = {
+  getRandomInt: function getRandomInt(a, b) {
+    return Math.floor(Math.random() * (b - a + 1)) + a;
+  },
+  pickRandomProperty: function pickRandomProperty(obj) {
+    var keys = Object.keys(obj);
+    return keys[keys.length * Math.random() << 0];
+  },
+  pickRandomArray: function pickRandomArray(arr) {
+    return arr[arr.length * Math.random() << 0];
+  },
+  getKeyByValue: function getKeyByValue(object, value) {
+    return Object.keys(object).find(function (key) {
+      return object[key] === value;
+    });
+  },
+  isValidMidiNoteNumber: function isValidMidiNoteNumber(midi) {
+    return 20 <= midi && midi <= 127;
+  },
+  isNote: function isNote(obj) {
+    return (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) == 'object' && obj.getRootAsLetter() != undefined;
+  },
+  isValidNoteName: function isValidNoteName(name) {
+    return Theory.wholeNotesOrder[name] != undefined || this.getKeyByValue(Theory.letterToName, name.toLowerCase()) != undefined;
+  },
+  isValidNoteNotation: function isValidNoteNotation(name) {
+    if (this.isNote(name)) return true;
+    var rootRe = new RegExp('[^0-9#bx)]+', 'g');
+    var root = name.match(rootRe)[0];
+    return Theory.wholeNotesOrder[root] != undefined || this.getKeyByValue(Theory.letterToName, root.toLowerCase()) != undefined;
+  },
+  capitalizeFirstLetter: function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  },
+  isInterval: function isInterval(name) {
+    var quality = name.slice(0, 1);
+    var nb = name.slice(1);
+
+    return (quality == P || quality == M || quality == m || quality == d || quality == A) && Number.isInteger(parseInt(nb));
+  },
+  nameToMidi: function nameToMidi(rootAsLetter, octave) {
+    return 12 * (octave + 1) + Theory.notesOrder[rootAsLetter];
+  },
+  midiToName: function midiToName(midi) {
+    var octave = Math.floor(midi / 12) - 1;
+    var root = Theory.midiNotesList[midi % 12];
+
+    return root + octave;
+  },
+  isValidAlteration: function isValidAlteration(alteration) {
+    return alteration == '' || alteration == '#' || alteration == 'b' || alteration == '##' || alteration == 'x' || alteration == 'bb';
+  }
+};
+
+/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Helpers = __webpack_require__(1);
+var Helpers = __webpack_require__(2);
 var Theory = __webpack_require__(0);
 
 // Use symbols for emulating private variables
@@ -602,19 +605,19 @@ exports = module.exports = Interval;
 // or by giving 2 notes
 // Accepted names are a combination of quality (P,M,m,A,d) and note name(C,Db,F#,Solbb ...)
 function Interval(arg1, arg2) {
-  var Note = __webpack_require__(2);
+  var Note = __webpack_require__(1);
 
   // if 2 note objects are given
-  if (Helpers.isNote(arg1) && Helpers.isNote(arg2)) {
+  if (arg1 instanceof Note && arg2 instanceof Note) {
     this[_note1] = arg1;
     this[_note2] = arg2;
     computeFromNotes(this);
-  } else if (Helpers.isNote(arg1) && Helpers.isValidNoteNotation(arg2)) {
+  } else if (arg1 instanceof Note && Helpers.isValidNoteNotation(arg2)) {
     // else if we give a combination of note object and note notation
     this[_note1] = arg1;
     this[_note2] = new Note(arg2);
     computeFromNotes(this);
-  } else if (Helpers.isValidNoteNotation(arg1) && arg2 && Helpers.isNote(arg2)) {
+  } else if (Helpers.isValidNoteNotation(arg1) && arg2 && arg2 instanceof Note) {
     this[_note1] = new Note(arg1);
     this[_note2] = arg2;
     computeFromNotes(this);
@@ -880,7 +883,6 @@ var setSemitonesFromName = function setSemitonesFromName(interval) {
 
 
 var Interval = __webpack_require__(3);
-var Helpers = __webpack_require__(1);
 
 module.exports = Chord;
 
@@ -891,16 +893,16 @@ var _notes = Symbol('notes');
 var _intervals = Symbol('intervals');
 
 function Chord(arg1, name) {
-  var Note = __webpack_require__(2);
+  var Note = __webpack_require__(1);
 
   // if the first arg is an array, assume that we want to build the chord with an array of notes
   if (Array.isArray(arg1)) {
     // for each note in the array, we'll need to check if its a note object or a note name, and act accordingly
-    this[_tonic] = Helpers.isNote(arg1[0]) ? arg1[0] : new Note(arg1[0]);
+    this[_tonic] = arg1[0] instanceof Note ? arg1[0] : new Note(arg1[0]);
     this[_symbols] = 'not specified';
     this[_name] = name || 'no name';
     this[_notes] = arg1.map(function (note) {
-      return Helpers.isNote(note) ? note : new Note(note);
+      return note instanceof Note ? note : new Note(note);
     });
     this[_intervals] = findIntervalsFromNotes(this.getNotes());
 
@@ -920,7 +922,7 @@ function Chord(arg1, name) {
     name = parsed[1];
     arg1 = parsed[0];
   }
-  if (!Helpers.isNote(arg1)) {
+  if (!(arg1 instanceof Note)) {
     arg1 = new Note(arg1);
   }
 
@@ -1612,7 +1614,7 @@ var findPossibleNames = function findPossibleNames(chord) {
 
 
 var Chord = __webpack_require__(4);
-var Helpers = __webpack_require__(1);
+var Helpers = __webpack_require__(2);
 var Theory = __webpack_require__(0);
 
 exports = module.exports = Scale;
@@ -1624,9 +1626,9 @@ var _degree = Symbol('degree');
 var _notes = Symbol('notes');
 
 function Scale(tonic, type, degree) {
-  var Note = __webpack_require__(2);
+  var Note = __webpack_require__(1);
 
-  this[_tonic] = Helpers.isNote(tonic) ? tonic : new Note(tonic);
+  this[_tonic] = tonic instanceof Note ? tonic : new Note(tonic);
   this[_type] = type;
   this[_degree] = degree || 1;
   this[_notes] = [this.getTonic()];
@@ -1733,11 +1735,11 @@ var buildScale = function buildScale(scale, degree) {
 "use strict";
 
 
-var Note = __webpack_require__(2);
+var Note = __webpack_require__(1);
 var Interval = __webpack_require__(3);
 var Chord = __webpack_require__(4);
 var Scale = __webpack_require__(5);
-var Helpers = __webpack_require__(1);
+var Helpers = __webpack_require__(2);
 var Theory = __webpack_require__(0);
 
 function noteConstructor(name) {
