@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "Helpers for notes, intervals, chords and scales building",
   "main": "pianissimo.js",
+  "types": "pianissimo.d.ts",
   "scripts": {
     "build": "webpack --progress ",
     "watch": "webpack --progress --watch",
@@ -24,6 +25,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "eslint-config-google": "^0.9.1",
+    "qunit": "^2.11.3",
     "webpack": "^3.8.1"
   },
   "dependencies": {}
