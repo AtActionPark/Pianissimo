@@ -153,7 +153,7 @@ Intervals can also be created from a note object, like so:
 
 ```javascript
 interval.getName(); // 'm3'
-interval.getSemitonest(); // '3'
+interval.getSemitones(); // 3
 interval.getOrder(); // 'ascending'
 interval.getNumber(); // 3
 interval.getQuality(); // m
@@ -201,7 +201,7 @@ let scale = note.toScale("minor"); // equivalent to pianissimo.scale('C3','minor
 #### Getters:
 
 ```javascript
-scale.getTonic(); // 'C3'
+scale.getTonic(); // 'C3' (as a note object)
 scale.getName(); // 'C minor'
 scale.getType(); // 'minor'
 scale.getDegree(); // '1'
@@ -273,7 +273,7 @@ let chord = pianissimo.chord(["C3", "Eb3", "Gb3", "Bb3"]); // name: Cdim7
 #### Getters:
 
 ```javascript
-chord.getTonic(); // 'C3'
+chord.getTonic(); // 'C3' (as a note object)
 chord.getSymbols(); // 'minor'
 chord.getName(); // 'Cminor'
 chord.getNotes(); // will return an array of note objects
